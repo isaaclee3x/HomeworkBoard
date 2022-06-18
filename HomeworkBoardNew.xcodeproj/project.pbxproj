@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF163121285C0EE200DB8A6E /* ClassesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF163120285C0EE200DB8A6E /* ClassesView.swift */; };
+		FF163123285C0EEA00DB8A6E /* ClassManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF163122285C0EEA00DB8A6E /* ClassManager.swift */; };
+		FF163125285C1E9600DB8A6E /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF163124285C1E9600DB8A6E /* Enums.swift */; };
+		FF374CC2285B81D10035891F /* NewAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF374CC1285B81D10035891F /* NewAccountView.swift */; };
 		FF4F5A4F285B6226000E727A /* HomeworkBoardNewApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A4E285B6226000E727A /* HomeworkBoardNewApp.swift */; };
 		FF4F5A51285B6226000E727A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A50285B6226000E727A /* ContentView.swift */; };
 		FF4F5A53285B6229000E727A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF4F5A52285B6229000E727A /* Assets.xcassets */; };
@@ -14,6 +18,14 @@
 		FF4F5A60285B6229000E727A /* HomeworkBoardNewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A5F285B6229000E727A /* HomeworkBoardNewTests.swift */; };
 		FF4F5A6A285B622A000E727A /* HomeworkBoardNewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A69285B622A000E727A /* HomeworkBoardNewUITests.swift */; };
 		FF4F5A6C285B622A000E727A /* HomeworkBoardNewUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A6B285B622A000E727A /* HomeworkBoardNewUITestsLaunchTests.swift */; };
+		FF4F5A79285B6401000E727A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FF4F5A78285B6401000E727A /* GoogleService-Info.plist */; };
+		FF4F5A7B285B647F000E727A /* AuthenticateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A7A285B647F000E727A /* AuthenticateView.swift */; };
+		FF4F5A7D285B6487000E727A /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A7C285B6487000E727A /* AccountManager.swift */; };
+		FF4F5A80285B650F000E727A /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FF4F5A7F285B650F000E727A /* FirebaseDatabaseSwift */; };
+		FF4F5A83285B65A1000E727A /* SwiftyBase64 in Frameworks */ = {isa = PBXBuildFile; productRef = FF4F5A82285B65A1000E727A /* SwiftyBase64 */; };
+		FF4F5A85285B6606000E727A /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A84285B6606000E727A /* Structs.swift */; };
+		FF9A8F97285DF68C009F363F /* CreateClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A8F96285DF68C009F363F /* CreateClassView.swift */; };
+		FF9A8F99285E21F6009F363F /* DeleteClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A8F98285E21F6009F363F /* DeleteClassView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +46,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FF163120285C0EE200DB8A6E /* ClassesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassesView.swift; sourceTree = "<group>"; };
+		FF163122285C0EEA00DB8A6E /* ClassManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassManager.swift; sourceTree = "<group>"; };
+		FF163124285C1E9600DB8A6E /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		FF374CC1285B81D10035891F /* NewAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAccountView.swift; sourceTree = "<group>"; };
 		FF4F5A4B285B6226000E727A /* HomeworkBoardNew.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HomeworkBoardNew.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF4F5A4E285B6226000E727A /* HomeworkBoardNewApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeworkBoardNewApp.swift; sourceTree = "<group>"; };
 		FF4F5A50285B6226000E727A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -44,6 +60,12 @@
 		FF4F5A65285B622A000E727A /* HomeworkBoardNewUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HomeworkBoardNewUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF4F5A69285B622A000E727A /* HomeworkBoardNewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeworkBoardNewUITests.swift; sourceTree = "<group>"; };
 		FF4F5A6B285B622A000E727A /* HomeworkBoardNewUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeworkBoardNewUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		FF4F5A78285B6401000E727A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		FF4F5A7A285B647F000E727A /* AuthenticateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticateView.swift; sourceTree = "<group>"; };
+		FF4F5A7C285B6487000E727A /* AccountManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountManager.swift; sourceTree = "<group>"; };
+		FF4F5A84285B6606000E727A /* Structs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Structs.swift; sourceTree = "<group>"; };
+		FF9A8F96285DF68C009F363F /* CreateClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateClassView.swift; sourceTree = "<group>"; };
+		FF9A8F98285E21F6009F363F /* DeleteClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteClassView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +73,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF4F5A80285B650F000E727A /* FirebaseDatabaseSwift in Frameworks */,
+				FF4F5A83285B65A1000E727A /* SwiftyBase64 in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,8 +118,18 @@
 		FF4F5A4D285B6226000E727A /* HomeworkBoardNew */ = {
 			isa = PBXGroup;
 			children = (
+				FF4F5A78285B6401000E727A /* GoogleService-Info.plist */,
 				FF4F5A4E285B6226000E727A /* HomeworkBoardNewApp.swift */,
+				FF374CC1285B81D10035891F /* NewAccountView.swift */,
 				FF4F5A50285B6226000E727A /* ContentView.swift */,
+				FF163120285C0EE200DB8A6E /* ClassesView.swift */,
+				FF9A8F98285E21F6009F363F /* DeleteClassView.swift */,
+				FF9A8F96285DF68C009F363F /* CreateClassView.swift */,
+				FF4F5A7A285B647F000E727A /* AuthenticateView.swift */,
+				FF4F5A7C285B6487000E727A /* AccountManager.swift */,
+				FF163122285C0EEA00DB8A6E /* ClassManager.swift */,
+				FF4F5A84285B6606000E727A /* Structs.swift */,
+				FF163124285C1E9600DB8A6E /* Enums.swift */,
 				FF4F5A52285B6229000E727A /* Assets.xcassets */,
 				FF4F5A54285B6229000E727A /* Preview Content */,
 			);
@@ -143,6 +177,10 @@
 			dependencies = (
 			);
 			name = HomeworkBoardNew;
+			packageProductDependencies = (
+				FF4F5A7F285B650F000E727A /* FirebaseDatabaseSwift */,
+				FF4F5A82285B65A1000E727A /* SwiftyBase64 */,
+			);
 			productName = HomeworkBoardNew;
 			productReference = FF4F5A4B285B6226000E727A /* HomeworkBoardNew.app */;
 			productType = "com.apple.product-type.application";
@@ -215,6 +253,10 @@
 				Base,
 			);
 			mainGroup = FF4F5A42285B6226000E727A;
+			packageReferences = (
+				FF4F5A7E285B650F000E727A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				FF4F5A81285B65A1000E727A /* XCRemoteSwiftPackageReference "SwiftyBase64" */,
+			);
 			productRefGroup = FF4F5A4C285B6226000E727A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -233,6 +275,7 @@
 			files = (
 				FF4F5A56285B6229000E727A /* Preview Assets.xcassets in Resources */,
 				FF4F5A53285B6229000E727A /* Assets.xcassets in Resources */,
+				FF4F5A79285B6401000E727A /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,8 +300,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF9A8F99285E21F6009F363F /* DeleteClassView.swift in Sources */,
+				FF163123285C0EEA00DB8A6E /* ClassManager.swift in Sources */,
 				FF4F5A51285B6226000E727A /* ContentView.swift in Sources */,
+				FF374CC2285B81D10035891F /* NewAccountView.swift in Sources */,
 				FF4F5A4F285B6226000E727A /* HomeworkBoardNewApp.swift in Sources */,
+				FF9A8F97285DF68C009F363F /* CreateClassView.swift in Sources */,
+				FF4F5A85285B6606000E727A /* Structs.swift in Sources */,
+				FF4F5A7B285B647F000E727A /* AuthenticateView.swift in Sources */,
+				FF4F5A7D285B6487000E727A /* AccountManager.swift in Sources */,
+				FF163125285C1E9600DB8A6E /* Enums.swift in Sources */,
+				FF163121285C0EE200DB8A6E /* ClassesView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,11 +471,13 @@
 				DEVELOPMENT_ASSET_PATHS = "\"HomeworkBoardNew/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Homework Board";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -431,9 +485,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = sg.ytss.HomeworkBoardNew;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_DOCUMENTATION_COMPILER = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -447,11 +505,13 @@
 				DEVELOPMENT_ASSET_PATHS = "\"HomeworkBoardNew/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Homework Board";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -459,9 +519,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = sg.ytss.HomeworkBoardNew;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_DOCUMENTATION_COMPILER = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -577,6 +641,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FF4F5A7E285B650F000E727A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		FF4F5A81285B65A1000E727A /* XCRemoteSwiftPackageReference "SwiftyBase64" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/drichardson/SwiftyBase64";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FF4F5A7F285B650F000E727A /* FirebaseDatabaseSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF4F5A7E285B650F000E727A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabaseSwift;
+		};
+		FF4F5A82285B65A1000E727A /* SwiftyBase64 */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF4F5A81285B65A1000E727A /* XCRemoteSwiftPackageReference "SwiftyBase64" */;
+			productName = SwiftyBase64;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = FF4F5A43285B6226000E727A /* Project object */;
 }
