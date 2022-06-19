@@ -17,7 +17,7 @@ class ClassManager: ObservableObject {
     private var ref = Database.database().reference()
     
     
-    /// Getting the JSON object for the class
+    /// Getting the JSON object for all the class
     ///
     /// It also decodes the JSON object into the Class Struct (can be injected into other views)
     func getClasses() async {
@@ -41,13 +41,31 @@ class ClassManager: ObservableObject {
         try? await Task.sleep(nanoseconds: 100_000_000)
     }
     
+    /// Gets the JSON object from one class
+    ///
+    /// It also decodes the JSON object into the Class Struct (can be injected into other views)
+    ///  - Parameter name: Name of the class
+    func getClass(name: String) async {
+        ref.child("classes").child(name).observeSingleEvent(of: .value) { snapshot in
+            
+            let value = snapshot.value as? String
+            var classes: [Class] = []
+            let decoder = JSONDecoder()
+            let data = value!.data(using: .utf8)!
+            let decodedClas = try? decoder.decode(Class.self, from: data)
+            classes.append(decodedClas!)
+            self.classes = classes
+        }
+        try? await Task.sleep(nanoseconds: 100_000_000)
+    }
     /// Creates a new class
     ///
     /// Note that it saves the class as a JSON object so that it can be more easily decoded into the Class struct
     /// - Parameter name: Name of the class
-    func saveClass(name: String) {
+    func createClass(name: String) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd MMMM yyyy"
+        dateFormatter.locale = .current
         let clas = Class(name: name, date: dateFormatter.string(from: Date()))
         let encoder = JSONEncoder()
         let encodedClas = try? encoder.encode(clas)

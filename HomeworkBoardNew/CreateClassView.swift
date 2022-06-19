@@ -23,7 +23,7 @@ struct CreateClassView: View {
             
             Button {
                 Task {
-                    CM.saveClass(name: name)
+                    CM.createClass(name: name)
                     await CM.getClasses()
                     isSheetPresented = false
                 }

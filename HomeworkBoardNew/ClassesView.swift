@@ -12,29 +12,45 @@ struct ClassesView: View {
     @State var createClass = false
     @State var deleteClass = false
     
+    @State var clas = Class(name: "", date: "")
+    @State var classes = [Class(name: "", date: "")]
+    
     @ObservedObject var MM: AccountManager
     @StateObject var CM = ClassManager()
     
     let columns = [
-           GridItem(.flexible()),
-           GridItem(.flexible())
-       ]
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
     
     var body: some View {
         LazyVGrid(columns: columns) {
             if MM.account?.perm == .member || MM.account?.perm == .subLeader {
-                Text(MM.account!.clas)
+                NavigationLink {
+                    BoardView(clas: $clas, CM: CM)
+                } label: {
+                    Text((MM.account?.clas) ?? "")
+                }
+                
+                
             } else {
-                if let classes = CM.classes {
-                    ForEach(classes) { clas in
+                ForEach($classes) { $clas in
+                    NavigationLink {
+                        BoardView(clas: $clas, CM: CM)
+                    } label: {
                         Text(clas.name)
                     }
                 }
+                
             }
         }
         .onAppear {
             Task {
                 await CM.getClasses()
+                classes = CM.classes!
+                await CM.getClass(name: MM.account!.clas)
+                clas = CM.classes![0]
+                
             }
         }
         .toolbar {
@@ -57,13 +73,7 @@ struct ClassesView: View {
             CreateClassView(CM: CM, isSheetPresented: $createClass)
         }
         .sheet(isPresented: $deleteClass) {
-            
+            DeleteClassView(CM: CM)
         }
-    }
-}
-
-struct ClassesView_Previews: PreviewProvider {
-    static var previews: some View {
-        ClassesView(MM: AccountManager())
     }
 }

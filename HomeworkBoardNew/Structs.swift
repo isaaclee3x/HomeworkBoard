@@ -61,8 +61,13 @@ struct Board: Identifiable, Equatable, Codable {
 }
 
 struct Entry: Identifiable, Equatable, Codable {
+    
+    init() {
+        self.entry = " "
+    }
+    
     var id = UUID()
     
     var entry: String
-    var due: Date
+    var due: Date?
 }

@@ -26,6 +26,7 @@
 		FF4F5A85285B6606000E727A /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A84285B6606000E727A /* Structs.swift */; };
 		FF9A8F97285DF68C009F363F /* CreateClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A8F96285DF68C009F363F /* CreateClassView.swift */; };
 		FF9A8F99285E21F6009F363F /* DeleteClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A8F98285E21F6009F363F /* DeleteClassView.swift */; };
+		FF9A8F9D285E2377009F363F /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A8F9C285E2377009F363F /* BoardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +67,7 @@
 		FF4F5A84285B6606000E727A /* Structs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Structs.swift; sourceTree = "<group>"; };
 		FF9A8F96285DF68C009F363F /* CreateClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateClassView.swift; sourceTree = "<group>"; };
 		FF9A8F98285E21F6009F363F /* DeleteClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteClassView.swift; sourceTree = "<group>"; };
+		FF9A8F9C285E2377009F363F /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +125,7 @@
 				FF374CC1285B81D10035891F /* NewAccountView.swift */,
 				FF4F5A50285B6226000E727A /* ContentView.swift */,
 				FF163120285C0EE200DB8A6E /* ClassesView.swift */,
+				FF9A8F9C285E2377009F363F /* BoardView.swift */,
 				FF9A8F98285E21F6009F363F /* DeleteClassView.swift */,
 				FF9A8F96285DF68C009F363F /* CreateClassView.swift */,
 				FF4F5A7A285B647F000E727A /* AuthenticateView.swift */,
@@ -309,6 +312,7 @@
 				FF4F5A85285B6606000E727A /* Structs.swift in Sources */,
 				FF4F5A7B285B647F000E727A /* AuthenticateView.swift in Sources */,
 				FF4F5A7D285B6487000E727A /* AccountManager.swift in Sources */,
+				FF9A8F9D285E2377009F363F /* BoardView.swift in Sources */,
 				FF163125285C1E9600DB8A6E /* Enums.swift in Sources */,
 				FF163121285C0EE200DB8A6E /* ClassesView.swift in Sources */,
 			);
