@@ -31,8 +31,6 @@ struct ClassesView: View {
                 } label: {
                     Text((MM.account?.clas) ?? "")
                 }
-                
-                
             } else {
                 ForEach($classes) { $clas in
                     NavigationLink {
@@ -54,7 +52,7 @@ struct ClassesView: View {
             }
         }
         .toolbar {
-            ToolbarItemGroup {
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
                 Button {
                     createClass = true
                 } label: {
@@ -70,9 +68,19 @@ struct ClassesView: View {
         }
         .navigationTitle(MM.account?.perm == .member || MM.account?.perm == .subLeader ? "Class" : "Classes")
         .sheet(isPresented: $createClass) {
+            Task {
+                await CM.getClasses()
+                classes = CM.classes!
+            }
+        } content: {
             CreateClassView(CM: CM, isSheetPresented: $createClass)
         }
         .sheet(isPresented: $deleteClass) {
+            Task {
+                await CM.getClasses()
+                classes = CM.classes!
+            }
+        } content: {
             DeleteClassView(CM: CM)
         }
     }

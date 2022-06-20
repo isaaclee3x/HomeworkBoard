@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF03D7DF285F5E9700D8DACD /* CreateEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF03D7DE285F5E9700D8DACD /* CreateEntryView.swift */; };
+		FF03D7E1285F5EB800D8DACD /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF03D7E0285F5EB800D8DACD /* CacheManager.swift */; };
 		FF163121285C0EE200DB8A6E /* ClassesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF163120285C0EE200DB8A6E /* ClassesView.swift */; };
 		FF163123285C0EEA00DB8A6E /* ClassManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF163122285C0EEA00DB8A6E /* ClassManager.swift */; };
 		FF163125285C1E9600DB8A6E /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF163124285C1E9600DB8A6E /* Enums.swift */; };
@@ -47,6 +49,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FF03D7DE285F5E9700D8DACD /* CreateEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEntryView.swift; sourceTree = "<group>"; };
+		FF03D7E0285F5EB800D8DACD /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		FF163120285C0EE200DB8A6E /* ClassesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassesView.swift; sourceTree = "<group>"; };
 		FF163122285C0EEA00DB8A6E /* ClassManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassManager.swift; sourceTree = "<group>"; };
 		FF163124285C1E9600DB8A6E /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
@@ -126,11 +130,13 @@
 				FF4F5A50285B6226000E727A /* ContentView.swift */,
 				FF163120285C0EE200DB8A6E /* ClassesView.swift */,
 				FF9A8F9C285E2377009F363F /* BoardView.swift */,
+				FF03D7DE285F5E9700D8DACD /* CreateEntryView.swift */,
 				FF9A8F98285E21F6009F363F /* DeleteClassView.swift */,
 				FF9A8F96285DF68C009F363F /* CreateClassView.swift */,
 				FF4F5A7A285B647F000E727A /* AuthenticateView.swift */,
 				FF4F5A7C285B6487000E727A /* AccountManager.swift */,
 				FF163122285C0EEA00DB8A6E /* ClassManager.swift */,
+				FF03D7E0285F5EB800D8DACD /* CacheManager.swift */,
 				FF4F5A84285B6606000E727A /* Structs.swift */,
 				FF163124285C1E9600DB8A6E /* Enums.swift */,
 				FF4F5A52285B6229000E727A /* Assets.xcassets */,
@@ -305,9 +311,11 @@
 			files = (
 				FF9A8F99285E21F6009F363F /* DeleteClassView.swift in Sources */,
 				FF163123285C0EEA00DB8A6E /* ClassManager.swift in Sources */,
+				FF03D7E1285F5EB800D8DACD /* CacheManager.swift in Sources */,
 				FF4F5A51285B6226000E727A /* ContentView.swift in Sources */,
 				FF374CC2285B81D10035891F /* NewAccountView.swift in Sources */,
 				FF4F5A4F285B6226000E727A /* HomeworkBoardNewApp.swift in Sources */,
+				FF03D7DF285F5E9700D8DACD /* CreateEntryView.swift in Sources */,
 				FF9A8F97285DF68C009F363F /* CreateClassView.swift in Sources */,
 				FF4F5A85285B6606000E727A /* Structs.swift in Sources */,
 				FF4F5A7B285B647F000E727A /* AuthenticateView.swift in Sources */,

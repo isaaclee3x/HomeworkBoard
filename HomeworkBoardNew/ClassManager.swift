@@ -66,16 +66,46 @@ class ClassManager: ObservableObject {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd MMMM yyyy"
         dateFormatter.locale = .current
-        let clas = Class(name: name, date: dateFormatter.string(from: Date()))
+        let formattedDate = dateFormatter.string(from: Date())
+        var clas = Class(name: name, date: formattedDate)
+        clas.board.entries[formattedDate] = []
+        for _ in 0 ..< 10 {
+            clas.board.entries[formattedDate]?.append(Entry(entry: nil, due: nil))
+        }
         let encoder = JSONEncoder()
         let encodedClas = try? encoder.encode(clas)
         let stringEncoded = String(data: encodedClas!, encoding: .utf8)
         ref.child("classes").child(name).setValue(stringEncoded)
     }
     
+    
+    /// Takes the data of an updated class and saves it under the class' path
+    /// - Parameter clas: The class' data to encode
+    func saveClass(clas: Class) async {
+        let encoder = JSONEncoder()
+        let encodedClas = try? encoder.encode(clas)
+        let stringEncoded = String(data: encodedClas!, encoding: .utf8)
+        try! await ref.child("classes").child(clas.name).setValue(stringEncoded)
+        await self.getClass(name: clas.name)
+    }
+    
     /// Deletes the class by setting its value to nil
     ///  - Parameter name: Name of the class to delete
     func deleteClass(name: String) {
         ref.child("classes").child(name).setValue("")
+    }
+    
+    /// Creates a new board if the clas.board[date] value is nil
+    /// - Parameters:
+    ///   - clas: The class to save the new entries in
+    ///   - date: The key to save in
+    func createBoard(clas: Class, date: String) async {
+        
+        var clas = clas
+        clas.board.entries[date] = []
+        for _ in 0 ..< 10 {
+            clas.board.entries[date]?.append(Entry(entry: nil, due: nil))
+        }
+        await self.saveClass(clas: clas)
     }
 }
