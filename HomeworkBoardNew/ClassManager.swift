@@ -15,7 +15,8 @@ class ClassManager: ObservableObject {
     
     @Published var classes: [Class]?
     private var ref = Database.database().reference()
-    
+    private var encoder = JSONEncoder()
+    private var decoder = JSONDecoder()
     
     /// Getting the JSON object for all the class
     ///
@@ -23,17 +24,17 @@ class ClassManager: ObservableObject {
     func getClasses() async {
         ref.child("classes").observeSingleEvent(of: .value) { snapshot in
             let value = snapshot.value as? NSDictionary
-            let decoder = JSONDecoder()
             var strings: [String] = []
             var classes: [Class] = []
-            let keys = value?.allKeys as! [String]
-            for key in keys {
+            guard let keys = value?.allKeys else { self.classes = nil; return }
+            
+            for key in keys as! [String] {
                 strings.append(value?[key] as! String)
             }
             
             for clas in strings {
                 let data = clas.data(using: .utf8)!
-                let decodedClas = try? decoder.decode(Class.self, from: data)
+                let decodedClas = try? self.decoder.decode(Class.self, from: data)
                 classes.append(decodedClas!)
             }   
             self.classes = classes
@@ -50,9 +51,8 @@ class ClassManager: ObservableObject {
             
             let value = snapshot.value as? String
             var classes: [Class] = []
-            let decoder = JSONDecoder()
             let data = value!.data(using: .utf8)!
-            let decodedClas = try? decoder.decode(Class.self, from: data)
+            let decodedClas = try? self.decoder.decode(Class.self, from: data)
             classes.append(decodedClas!)
             self.classes = classes
         }
@@ -63,17 +63,21 @@ class ClassManager: ObservableObject {
     /// Note that it saves the class as a JSON object so that it can be more easily decoded into the Class struct
     /// - Parameter name: Name of the class
     func createClass(name: String) {
+        var date = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd MMMM yyyy"
         dateFormatter.locale = .current
-        let formattedDate = dateFormatter.string(from: Date())
+        let formattedDate = dateFormatter.string(from: date)
         var clas = Class(name: name, date: formattedDate)
-        clas.board.entries[formattedDate] = []
-        for _ in 0 ..< 10 {
-            clas.board.entries[formattedDate]?.append(Entry(entry: nil, due: nil))
+        for i in 0 ..< 2 {
+            let formattedDate = dateFormatter.string(from: date)
+            clas.board.entries[formattedDate] = []
+            for _ in 0 ..< 10 {
+                clas.board.entries[formattedDate]?.append(Entry(entry: nil, due: nil))
+            }
+            date = Date() + Double((i + 1) * 86400)
         }
-        let encoder = JSONEncoder()
-        let encodedClas = try? encoder.encode(clas)
+        let encodedClas = try? self.encoder.encode(clas)
         let stringEncoded = String(data: encodedClas!, encoding: .utf8)
         ref.child("classes").child(name).setValue(stringEncoded)
     }
@@ -82,30 +86,28 @@ class ClassManager: ObservableObject {
     /// Takes the data of an updated class and saves it under the class' path
     /// - Parameter clas: The class' data to encode
     func saveClass(clas: Class) async {
-        let encoder = JSONEncoder()
-        let encodedClas = try? encoder.encode(clas)
+        let encodedClas = try? self.encoder.encode(clas)
         let stringEncoded = String(data: encodedClas!, encoding: .utf8)
         try! await ref.child("classes").child(clas.name).setValue(stringEncoded)
-        await self.getClass(name: clas.name)
     }
     
     /// Deletes the class by setting its value to nil
     ///  - Parameter name: Name of the class to delete
     func deleteClass(name: String) {
-        ref.child("classes").child(name).setValue("")
+        ref.child("classes").child(name).removeValue()
     }
     
     /// Creates a new board if the clas.board[date] value is nil
     /// - Parameters:
     ///   - clas: The class to save the new entries in
     ///   - date: The key to save in
-    func createBoard(clas: Class, date: String) async {
-        
+    func createBoard(clas: Class, date: String) async -> Class {
         var clas = clas
-        clas.board.entries[date] = []
-        for _ in 0 ..< 10 {
+        clas.board.entries[date] = [Entry(entry: nil, due: nil)]
+        for _ in 0 ..< 9 {
             clas.board.entries[date]?.append(Entry(entry: nil, due: nil))
         }
         await self.saveClass(clas: clas)
+        return clas
     }
 }

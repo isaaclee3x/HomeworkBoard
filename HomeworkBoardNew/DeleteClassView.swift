@@ -10,6 +10,8 @@ import SwiftUI
 struct DeleteClassView: View {
     
     @State var name = ""
+    
+    @Binding var isSheetPresented: Bool
     @ObservedObject var CM: ClassManager
     
     var body: some View {
@@ -20,6 +22,7 @@ struct DeleteClassView: View {
             
             Button {
                 CM.deleteClass(name: name)
+                isSheetPresented = false
             } label: {
                 Text("Delete")
             }
@@ -29,6 +32,6 @@ struct DeleteClassView: View {
 
 struct DeleteClassView_Previews: PreviewProvider {
     static var previews: some View {
-        DeleteClassView(CM: ClassManager())
+        DeleteClassView(isSheetPresented: .constant(true) ,CM: ClassManager())
     }
 }

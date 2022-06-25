@@ -12,7 +12,6 @@ struct ClassesView: View {
     @State var createClass = false
     @State var deleteClass = false
     
-    @State var clas = Class(name: "", date: "")
     @State var classes = [Class(name: "", date: "")]
     
     @ObservedObject var MM: AccountManager
@@ -25,12 +24,8 @@ struct ClassesView: View {
     
     var body: some View {
         LazyVGrid(columns: columns) {
-            if MM.account?.perm == .member || MM.account?.perm == .subLeader {
-                NavigationLink {
-                    BoardView(clas: $clas, CM: CM)
-                } label: {
-                    Text((MM.account?.clas) ?? "")
-                }
+            if classes.isEmpty {
+                Text("Either there are no classes or something terrible happened")
             } else {
                 ForEach($classes) { $clas in
                     NavigationLink {
@@ -39,16 +34,17 @@ struct ClassesView: View {
                         Text(clas.name)
                     }
                 }
-                
             }
         }
         .onAppear {
             Task {
-                await CM.getClasses()
-                classes = CM.classes!
-                await CM.getClass(name: MM.account!.clas)
-                clas = CM.classes![0]
-                
+                if MM.account?.perm == .admin || MM.account?.perm == .teacher {
+                    await CM.getClasses()
+                    classes = CM.classes ?? []
+                } else {
+                    await CM.getClass(name: MM.account!.clas)
+                    classes = CM.classes ?? []
+                }
             }
         }
         .toolbar {
@@ -64,6 +60,21 @@ struct ClassesView: View {
                 } label: {
                     Text("Delete")
                 }
+                
+                Button {
+                    Task {
+                        if MM.account?.perm == .admin || MM.account?.perm == .teacher {
+                            await CM.getClasses()
+                            classes = CM.classes ?? []
+                        } else {
+                            await CM.getClass(name: MM.account!.clas)
+                            classes = CM.classes ?? []
+                        }
+                    }
+                } label: {
+                    Text("Reload")
+                }
+
             }
         }
         .navigationTitle(MM.account?.perm == .member || MM.account?.perm == .subLeader ? "Class" : "Classes")
@@ -81,7 +92,7 @@ struct ClassesView: View {
                 classes = CM.classes!
             }
         } content: {
-            DeleteClassView(CM: CM)
+            DeleteClassView(isSheetPresented: $deleteClass, CM: CM)
         }
     }
 }

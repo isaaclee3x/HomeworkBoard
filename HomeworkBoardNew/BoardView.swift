@@ -9,7 +9,7 @@ import SwiftUI
 
 struct BoardView: View {
     
-    @State var daysFromToday: Double = 0
+    @State var daysFromToday = 0
     @State var date = ""
     
     @State var createEntry = false
@@ -54,9 +54,11 @@ struct BoardView: View {
                                 }
                                 
                                 Button {
-                                    index = entries.firstIndex(of: entry)!
-                                    clas.board.entries[date]![index].entry = " "
-                                    CM.saveClass(clas: clas)
+                                    Task {
+                                        index = entries.firstIndex(of: entry)!
+                                        clas.board.entries[date]![index].entry = " "
+                                        await CM.saveClass(clas: clas)
+                                    }
                                 } label: {
                                     Image(systemName: "trash")
                                 }
@@ -68,8 +70,13 @@ struct BoardView: View {
         }
         .navigationTitle(clas.name)
         .onAppear {
-            dateFormatter.dateFormat = "dd MMMM yyyy"
-            date = dateFormatter.string(from: Date().addingTimeInterval(daysFromToday * 86400))
+            Task {
+                dateFormatter.dateFormat = "dd MMMM yyyy"
+                dateFormatter.locale = .current
+                self.date = dateFormatter.string(from: Date())
+                
+                await CM.getClass(name: clas.name)
+            }
         }
         .sheet(isPresented: $createEntry) {
             Task {
@@ -80,10 +87,15 @@ struct BoardView: View {
         }
         .onChange(of: daysFromToday) { newValue in
             Task {
-                date = dateFormatter.string(from: Date().addingTimeInterval(daysFromToday * 86400))
+                dateFormatter.locale = .current
+                dateFormatter.dateFormat = "dd MMMM yyyy"
+                let tomorrow = Date().addingTimeInterval(TimeInterval(newValue * 86400))
+                let date = dateFormatter.string(from: tomorrow)
+                self.date = date
                 if clas.board.entries[date] == nil {
-                    await CM.createBoard(clas: clas, date: date)
-                    try await Task.sleep(nanoseconds: 100_000)
+                    self.clas = await CM.createBoard(clas: clas, date: date)
+                    await CM.getClass(name: clas.name)
+
                 }
             }
         }

@@ -29,9 +29,10 @@ struct CreateEntryView: View {
             DatePicker("Due", selection: $dueDate)
             
             Button {
-                clas.board.entries[date]![index] = Entry(entry: name, due: dueDate)
-                CM.saveClass(clas: clas)
-                
+                Task {
+                    clas.board.entries[date]![index] = Entry(entry: name, due: dueDate)
+                    await CM.saveClass(clas: clas)
+                }
             } label: {
                 Text("Submit")
             }
