@@ -37,12 +37,14 @@ struct AuthenticateView: View {
                 }
             } label: {
                 Text("Login")
+                    .foregroundColor(.black)
                     .bold()
             }
             .bottomButton()
             
             HStack {
                 Text("Create Account")
+                    .foregroundColor(.black)
                     .onTapGesture {
                         createNewAccount = true
                     }

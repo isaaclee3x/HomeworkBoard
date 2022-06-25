@@ -14,9 +14,12 @@ import FirebaseDatabaseSwift
 class ClassManager: ObservableObject {
     
     @Published var classes: [Class]?
+    
     private var ref = Database.database().reference()
     private var encoder = JSONEncoder()
     private var decoder = JSONDecoder()
+    
+    static var allEntries: [Entry] = []
     
     /// Getting the JSON object for all the class
     ///
@@ -58,6 +61,7 @@ class ClassManager: ObservableObject {
         }
         try? await Task.sleep(nanoseconds: 100_000_000)
     }
+    
     /// Creates a new class
     ///
     /// Note that it saves the class as a JSON object so that it can be more easily decoded into the Class struct
@@ -81,7 +85,6 @@ class ClassManager: ObservableObject {
         let stringEncoded = String(data: encodedClas!, encoding: .utf8)
         ref.child("classes").child(name).setValue(stringEncoded)
     }
-    
     
     /// Takes the data of an updated class and saves it under the class' path
     /// - Parameter clas: The class' data to encode
@@ -109,5 +112,11 @@ class ClassManager: ObservableObject {
         }
         await self.saveClass(clas: clas)
         return clas
+    }
+    
+    func whatsDue(on day: String) -> [Entry] {
+        let entries = ClassManager.allEntries
+        let entriesDueOnDay = entries.filter() { $0.due == day }
+        return entriesDueOnDay
     }
 }

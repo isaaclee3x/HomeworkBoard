@@ -22,6 +22,7 @@ struct BoardView: View {
     
     @Binding var clas: Class
     @ObservedObject var CM: ClassManager
+    let CCM = CacheManager()
     
     var member: Member
     
@@ -51,9 +52,14 @@ struct BoardView: View {
                     ForEach(entries) { entry in
                         VStack {
                             Text(entry.entry)
+                                .bold()
                             
                             if entry.due != nil {
                                 Text(entry.due!)
+                                    .italic()
+                                    .font(.system(size: 10))
+                                    .foregroundColor(.gray)
+                                    .opacity(0.7)
                             }
                         }
                         .swipeActions(edge: .trailing) {
@@ -66,6 +72,9 @@ struct BoardView: View {
                                 Task {
                                     index = entries.firstIndex(of: entry)!
                                     clas.board.entries[date]![index].entry = " "
+                                    clas.board.entries[date]![index].due = nil
+                                    
+                                    await CCM.updateCache(clas: clas, did: "\(member.username) REMOVED ENTRY \(entries[index])")
                                     await CM.saveClass(clas: clas)
                                 }
                             }
@@ -119,6 +128,7 @@ struct BoardView: View {
         }
         .onChange(of: daysFromToday) { newValue in
             Task {
+                CM.whatsDue(on: "26 June 2022")
                 dateFormatter.locale = .current
                 dateFormatter.dateFormat = "dd MMMM yyyy"
                 let tomorrow = Date().addingTimeInterval(TimeInterval(newValue * 86400))

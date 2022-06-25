@@ -20,10 +20,10 @@ struct ContentView: View {
         NavigationView {
             if !success {
                 AuthenticateView(success: $success, MM: MM)
-                    .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
+                    .background(color: "lightestBlue")
             } else {
                 ClassesView(MM: MM)
-                    .background(color: "lightestBlue")
+                    .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
             }
         }
     }

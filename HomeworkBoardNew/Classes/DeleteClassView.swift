@@ -19,7 +19,7 @@ struct DeleteClassView: View {
     var body: some View {
         VStack {
             Text("Delete a class")
-                .credStyle(dimensions: (300,60))
+                .header()
             
             TextField("Class", text: $name)
                 .disableAutocorrection(true)
@@ -34,7 +34,7 @@ struct DeleteClassView: View {
             }
             .bottomButton()
         }
-        .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
+        .background(color: "lightestBlue")
     }
 }
 

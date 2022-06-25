@@ -9,8 +9,6 @@ import SwiftUI
 
 struct CreateEntryView: View {
     
-    @Environment(\.colorScheme) var colorScheme
-    
     var username: String
     
     var date: String
@@ -34,19 +32,25 @@ struct CreateEntryView: View {
             
             TextField("Entry", text: $name)
                 .credStyle(dimensions: (300,60))
+                .foregroundColor(.black)
             
             DatePicker("Due", selection: $dueDate)
                 .datePickerStyle(.compact)
                 .frame(width: 300, height: 50)
+                .foregroundColor(.black)
             
             Button {
                 Task {
                     dateFormatter.dateFormat = "dd MMMM yyyy"
                     dateFormatter.locale = .current
+                    
                     let date = dateFormatter.string(from: dueDate)
                     clas.board.entries[self.date]![index] = Entry(entry: name, due: date)
+                    
+                    CCM.updateCache(clas: clas, did: "\(username) CREATED ENTRY \(name)")
                     await CM.saveClass(clas: clas)
-                    await CCM.updateCache(clas: clas, did: "\(username) CREATED ENTRY \(name)")
+                    
+                    ClassManager.allEntries.append(Entry(entry: name, due: date))
                     isSheetPresented = false
                 }
             } label: {
@@ -55,6 +59,6 @@ struct CreateEntryView: View {
             }
             .bottomButton()
         }
-        .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
+        .background(color: "lightestBlue")
     }
 }

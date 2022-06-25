@@ -9,14 +9,16 @@ import SwiftUI
 
 struct NewAccountView: View {
     
-    @Environment(\.colorScheme) var colorScheme
-    
     @State var member = Member()
     @Binding var isSheetPresented: Bool
     @ObservedObject var MM: AccountManager
     
     var body: some View {
         VStack {
+            
+            Text("Create a new account")
+                .header()
+            
             TextField("Username", text: $member.username)
                 .disableAutocorrection(true)
                 .credStyle(dimensions: (300, 60))
@@ -40,7 +42,7 @@ struct NewAccountView: View {
             }
             .bottomButton()
         }
-        .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
+        .background(color: "lightestBlue")
     }
 }
 

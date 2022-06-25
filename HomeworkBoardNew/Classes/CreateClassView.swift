@@ -9,8 +9,6 @@ import SwiftUI
 
 struct CreateClassView: View {
     
-    @Environment(\.colorScheme) var colorScheme
-    
     @State var name = ""
     
     @ObservedObject var CM: ClassManager
@@ -46,7 +44,7 @@ struct CreateClassView: View {
             }
             .bottomButton()
         }
-        .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
+        .background(color: "lightestBlue")
     }
 }
 

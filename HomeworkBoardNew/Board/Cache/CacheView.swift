@@ -15,8 +15,6 @@ struct CacheView: View {
     
     var body: some View {
         VStack {
-            Text("If you see this and you're not an admin or teacher.... errrr")
-            
             if board.cache.isEmpty {
                 Text("No items in the cache yet")
             } else {
