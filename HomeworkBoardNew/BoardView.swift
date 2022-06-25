@@ -15,9 +15,12 @@ struct BoardView: View {
     @State var createEntry = false
     @State var index = 0
     @State var deleteEntry = false
+    @State var showCache = false
     
     @Binding var clas: Class
     @ObservedObject var CM: ClassManager
+    
+    var member: Member
     
     let dateFormatter = DateFormatter()
     
@@ -89,7 +92,27 @@ struct BoardView: View {
                 await CM.getClass(name: clas.name)
             }
         } content: {
-            CreateEntryView(date: date, index: index, isSheetPresented: $createEntry, clas: $clas, CM: CM)
+            CreateEntryView(username: member.username ,date: date, index: index, isSheetPresented: $createEntry, clas: $clas, CM: CM)
+        }
+        .sheet(isPresented: $showCache) {
+            CacheView(board: clas.board)
+        }
+        .toolbar {
+            ToolbarItem {
+                Button {
+                    Task { await CM.getClass(name: clas.name) }
+                } label: {
+                    Text("Reload")
+                }
+                
+                if member.perm == .admin || member.perm == .teacher {
+                    Button {
+                        showCache = true
+                    } label: {
+                        Text("Cache")
+                    }
+                }
+            }
         }
         .onChange(of: daysFromToday) { newValue in
             Task {

@@ -8,3 +8,13 @@
 import Foundation
 import SwiftUI
 
+class CacheManager {
+    
+    @ObservedObject var CM = ClassManager()
+    
+    func updateCache(clas: Class, did what: String) async {
+        var clas = clas
+        clas.board.cache.append(what)
+        await CM.saveClass(clas: clas)
+    }
+}

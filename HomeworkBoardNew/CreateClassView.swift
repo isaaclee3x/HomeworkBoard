@@ -12,6 +12,7 @@ struct CreateClassView: View {
     @State var name = ""
     
     @ObservedObject var CM: ClassManager
+    var CCM = CacheManager()
     
     @Binding var isSheetPresented: Bool
     
@@ -25,6 +26,13 @@ struct CreateClassView: View {
                 Task {
                     CM.createClass(name: name)
                     await CM.getClasses()
+                    if let classes = CM.classes {
+                        let i = classes.firstIndex(where: { clas in
+                            clas.name == name
+                        })
+                        let index: Int = classes.distance(from: classes.startIndex, to: i!)
+                        await CCM.updateCache(clas: classes[index], did: "ADMIN CREATED CLASS \(name)")
+                    }
                     isSheetPresented = false
                 }
             } label: {

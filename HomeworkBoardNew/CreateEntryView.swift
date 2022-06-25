@@ -9,6 +9,8 @@ import SwiftUI
 
 struct CreateEntryView: View {
     
+    var username: String
+    
     var date: String
     var index: Int
     
@@ -19,6 +21,7 @@ struct CreateEntryView: View {
     @Binding var clas: Class
     
     @ObservedObject var CM: ClassManager
+    var CCM = CacheManager()
     
     var body: some View {
         VStack {
@@ -32,6 +35,7 @@ struct CreateEntryView: View {
                 Task {
                     clas.board.entries[date]![index] = Entry(entry: name, due: dueDate)
                     await CM.saveClass(clas: clas)
+                    await CCM.updateCache(clas: clas, did: "\(username) CREATED ENTRY \(name)")
                 }
             } label: {
                 Text("Submit")

@@ -29,7 +29,7 @@ struct ClassesView: View {
             } else {
                 ForEach($classes) { $clas in
                     NavigationLink {
-                        BoardView(clas: $clas, CM: CM)
+                        BoardView(clas: $clas, CM: CM, member: MM.account!)
                     } label: {
                         Text(clas.name)
                     }
