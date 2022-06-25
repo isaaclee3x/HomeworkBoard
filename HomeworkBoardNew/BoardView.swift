@@ -47,7 +47,7 @@ struct BoardView: View {
                 List {
                     ForEach(entries) { entry in
                         let due = dateFormatter.string(from: entry.due ?? Date().addingTimeInterval(-86400))
-                        HStack {
+                        VStack {
                             Text(entry.entry)
                             
                             if dateFormatter.date(from: due)! > Date() {
@@ -98,7 +98,7 @@ struct BoardView: View {
             CacheView(board: clas.board)
         }
         .toolbar {
-            ToolbarItem {
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
                 Button {
                     Task { await CM.getClass(name: clas.name) }
                 } label: {
