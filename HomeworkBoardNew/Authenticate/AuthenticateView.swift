@@ -20,10 +20,14 @@ struct AuthenticateView: View {
     var body: some View {
         VStack {
             Text("Login to your account")
+                .header()
             
             TextField("Username", text: $username)
+                .disableAutocorrection(true)
+                .credStyle(dimensions: (300, 60))
             
             SecureField("Password", text: $password)
+                .credStyle(dimensions: (300, 60))
             
             Button {
                 Task {
@@ -33,7 +37,9 @@ struct AuthenticateView: View {
                 }
             } label: {
                 Text("Login")
+                    .bold()
             }
+            .bottomButton()
             
             HStack {
                 Text("Create Account")

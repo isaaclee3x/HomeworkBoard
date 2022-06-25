@@ -62,7 +62,7 @@ struct Board: Identifiable, Equatable, Codable {
 
 struct Entry: Identifiable, Equatable, Codable {
     
-    init(entry: String?, due: Date?) {
+    init(entry: String?, due: String?) {
         if entry == nil {
             self.entry = " "
         } else {
@@ -74,5 +74,5 @@ struct Entry: Identifiable, Equatable, Codable {
     var id = UUID()
     
     var entry: String
-    var due: Date?
+    var due: String?
 }

@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     
+    @Environment(\.colorScheme) var colorScheme
+    
     @StateObject var MM = AccountManager()
     @StateObject var CM = ClassManager()
     
@@ -18,8 +20,10 @@ struct ContentView: View {
         NavigationView {
             if !success {
                 AuthenticateView(success: $success, MM: MM)
+                    .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
             } else {
                 ClassesView(MM: MM)
+                    .background(color: "lightestBlue")
             }
         }
     }

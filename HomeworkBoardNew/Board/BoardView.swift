@@ -9,6 +9,8 @@ import SwiftUI
 
 struct BoardView: View {
     
+    @Environment(\.colorScheme) var colorScheme
+    
     @State var daysFromToday = 0
     @State var date = ""
     
@@ -16,6 +18,7 @@ struct BoardView: View {
     @State var index = 0
     @State var deleteEntry = false
     @State var showCache = false
+    @State var dueDates: [String] = []
     
     @Binding var clas: Class
     @ObservedObject var CM: ClassManager
@@ -46,30 +49,25 @@ struct BoardView: View {
             if let entries = clas.board.entries[date] {
                 List {
                     ForEach(entries) { entry in
-                        let due = dateFormatter.string(from: entry.due ?? Date().addingTimeInterval(-86400))
                         VStack {
                             Text(entry.entry)
                             
-                            if dateFormatter.date(from: due)! > Date() {
-                                Text(due)
+                            if entry.due != nil {
+                                Text(entry.due!)
                             }
                         }
                         .swipeActions(edge: .trailing) {
-                            Button {
+                            Button("Create") {
                                 createEntry = true
                                 index = entries.firstIndex(of: entry)!
-                            } label: {
-                                Text("Create")
                             }
                             
-                            Button {
+                            Button("Delete") {
                                 Task {
                                     index = entries.firstIndex(of: entry)!
                                     clas.board.entries[date]![index].entry = " "
                                     await CM.saveClass(clas: clas)
                                 }
-                            } label: {
-                                Image(systemName: "trash")
                             }
                             .tint(.red)
                         }
@@ -78,8 +76,9 @@ struct BoardView: View {
             }
         }
         .navigationTitle(clas.name)
+        .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
         .onAppear {
-            Task {
+            Task(priority: .high) {
                 dateFormatter.locale = .current
                 dateFormatter.dateFormat = "dd MMMM yyyy"
                 self.date = dateFormatter.string(from: Date())
@@ -103,6 +102,8 @@ struct BoardView: View {
                     Task { await CM.getClass(name: clas.name) }
                 } label: {
                     Text("Reload")
+                        .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
+                        .bold()
                 }
                 
                 if member.perm == .admin || member.perm == .teacher {
@@ -110,6 +111,8 @@ struct BoardView: View {
                         showCache = true
                     } label: {
                         Text("Cache")
+                            .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
+                            .bold()
                     }
                 }
             }

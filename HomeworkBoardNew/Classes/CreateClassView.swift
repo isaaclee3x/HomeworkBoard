@@ -9,6 +9,8 @@ import SwiftUI
 
 struct CreateClassView: View {
     
+    @Environment(\.colorScheme) var colorScheme
+    
     @State var name = ""
     
     @ObservedObject var CM: ClassManager
@@ -19,8 +21,11 @@ struct CreateClassView: View {
     var body: some View {
         VStack {
             Text("Create a new class")
+                .header()
             
             TextField("Name", text: $name)
+                .disableAutocorrection(true)
+                .credStyle(dimensions: (300,60))
             
             Button {
                 Task {
@@ -37,9 +42,11 @@ struct CreateClassView: View {
                 }
             } label: {
                 Text("Create")
+                    .bold()
             }
-
+            .bottomButton()
         }
+        .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
     }
 }
 

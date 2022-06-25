@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ClassesView: View {
     
+    @Environment(\.colorScheme) var colorScheme
+    
     @State var createClass = false
     @State var deleteClass = false
     
@@ -25,13 +27,18 @@ struct ClassesView: View {
     var body: some View {
         LazyVGrid(columns: columns) {
             if classes.isEmpty {
-                Text("Either there are no classes or something terrible happened")
+                Text("No Classes Yet")
+                    .frame(maxWidth: 400)
+                    .multilineTextAlignment(.center)
+                    .opacity(0.4)
+                    
             } else {
                 ForEach($classes) { $clas in
                     NavigationLink {
                         BoardView(clas: $clas, CM: CM, member: MM.account!)
                     } label: {
                         Text(clas.name)
+                            .blockDisplay()
                     }
                 }
             }
@@ -53,12 +60,16 @@ struct ClassesView: View {
                     createClass = true
                 } label: {
                     Text("Create")
+                        .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
+                        .bold()
                 }
                 
                 Button {
                     deleteClass = true
                 } label: {
                     Text("Delete")
+                        .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
+                        .bold()
                 }
                 
                 Button {
@@ -73,8 +84,9 @@ struct ClassesView: View {
                     }
                 } label: {
                     Text("Reload")
+                        .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
+                        .bold()
                 }
-
             }
         }
         .navigationTitle(MM.account?.perm == .member || MM.account?.perm == .subLeader ? "Class" : "Classes")
@@ -89,7 +101,7 @@ struct ClassesView: View {
         .sheet(isPresented: $deleteClass) {
             Task {
                 await CM.getClasses()
-                classes = CM.classes!
+                classes = CM.classes ?? []
             }
         } content: {
             DeleteClassView(isSheetPresented: $deleteClass, CM: CM)

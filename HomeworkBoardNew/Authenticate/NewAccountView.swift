@@ -9,6 +9,8 @@ import SwiftUI
 
 struct NewAccountView: View {
     
+    @Environment(\.colorScheme) var colorScheme
+    
     @State var member = Member()
     @Binding var isSheetPresented: Bool
     @ObservedObject var MM: AccountManager
@@ -16,8 +18,16 @@ struct NewAccountView: View {
     var body: some View {
         VStack {
             TextField("Username", text: $member.username)
+                .disableAutocorrection(true)
+                .credStyle(dimensions: (300, 60))
+            
+            
             SecureField("Password", text: $member.password)
+                .credStyle(dimensions: (300, 60))
+            
             TextField("Class In", text: $member.clas)
+                .disableAutocorrection(true)
+                .credStyle(dimensions: (300, 60))
             
             Button {
                 Task {
@@ -26,9 +36,11 @@ struct NewAccountView: View {
                 }
             } label: {
                 Text("Save")
+                    .bold()
             }
-            
+            .bottomButton()
         }
+        .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
     }
 }
 

@@ -9,6 +9,8 @@ import SwiftUI
 
 struct CacheView: View {
     
+    @Environment(\.colorScheme) var colorScheme
+    
     var board: Board
     
     var body: some View {
@@ -24,5 +26,6 @@ struct CacheView: View {
             }
         }
         .navigationTitle("Cache")
+        .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
     }
 }
