@@ -23,7 +23,6 @@ struct BoardView: View {
     
     var body: some View {
         VStack {
-            
             Text(date)
             HStack {
                 Button {
@@ -44,26 +43,33 @@ struct BoardView: View {
             if let entries = clas.board.entries[date] {
                 List {
                     ForEach(entries) { entry in
-                        Text(entry.entry)
-                            .swipeActions(edge: .trailing) {
-                                Button {
-                                    createEntry = true
-                                    index = entries.firstIndex(of: entry)!
-                                } label: {
-                                    Text("Create")
-                                }
-                                
-                                Button {
-                                    Task {
-                                        index = entries.firstIndex(of: entry)!
-                                        clas.board.entries[date]![index].entry = " "
-                                        await CM.saveClass(clas: clas)
-                                    }
-                                } label: {
-                                    Image(systemName: "trash")
-                                }
-                                .tint(.red)
+                        let due = dateFormatter.string(from: entry.due ?? Date().addingTimeInterval(-86400))
+                        HStack {
+                            Text(entry.entry)
+                            
+                            if dateFormatter.date(from: due)! > Date() {
+                                Text(due)
                             }
+                        }
+                        .swipeActions(edge: .trailing) {
+                            Button {
+                                createEntry = true
+                                index = entries.firstIndex(of: entry)!
+                            } label: {
+                                Text("Create")
+                            }
+                            
+                            Button {
+                                Task {
+                                    index = entries.firstIndex(of: entry)!
+                                    clas.board.entries[date]![index].entry = " "
+                                    await CM.saveClass(clas: clas)
+                                }
+                            } label: {
+                                Image(systemName: "trash")
+                            }
+                            .tint(.red)
+                        }
                     }
                 }
             }
@@ -71,8 +77,8 @@ struct BoardView: View {
         .navigationTitle(clas.name)
         .onAppear {
             Task {
-                dateFormatter.dateFormat = "dd MMMM yyyy"
                 dateFormatter.locale = .current
+                dateFormatter.dateFormat = "dd MMMM yyyy"
                 self.date = dateFormatter.string(from: Date())
                 
                 await CM.getClass(name: clas.name)
@@ -95,7 +101,7 @@ struct BoardView: View {
                 if clas.board.entries[date] == nil {
                     self.clas = await CM.createBoard(clas: clas, date: date)
                     await CM.getClass(name: clas.name)
-
+                    
                 }
             }
         }
