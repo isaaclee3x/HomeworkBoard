@@ -27,7 +27,6 @@ class AccountManager: ObservableObject {
     /// - Parameter member: The member to save
     func saveAccount(member: Member) async {
         
-        guard !member.password.isTrulyEmpty() else { return }
         guard await !member.username.exists(in: "member") else { return }
         guard await member.clas.exists(in: "class") else { return }
         
@@ -49,7 +48,8 @@ class AccountManager: ObservableObject {
     ///   - password: Locally inputed password
     ///   - what: What to do if the authentication is successful
     func auth(username: String, password: String, do what: () -> Void) async {
-        let _ = await self.getAccount(username: username)
+        await self.getAccount(username: username)
+        print(self.account)
         if account?.username == username && account?.password == password {
             what()
         }
@@ -60,9 +60,6 @@ class AccountManager: ObservableObject {
     /// Decodes the data into the Member struct
     /// - Parameter username: The account to pull
     func getAccount(username: String) async {
-        
-        guard !username.isTrulyEmpty() else { return }
-        
         ref.child("users").child(username).child("data").observeSingleEvent(of: .value) { snapshot in
             
             let value = snapshot.value as? String
@@ -82,14 +79,6 @@ class AccountManager: ObservableObject {
 }
 
 extension String {
-    func isTrulyEmpty() -> Bool {
-        let range = NSRange(location: 0, length: self.utf16.count)
-        let regex = try! NSRegularExpression(pattern: #"\s"#)
-        guard regex.firstMatch(in: self, options: [], range: range) != nil else { return false}
-        
-        return true
-    }
-    
     func fromBase64() -> String? {
         guard let data = Data(base64Encoded: self) else {
             return nil

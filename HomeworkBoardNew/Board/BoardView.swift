@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftDate
 
 struct BoardView: View {
     
@@ -26,8 +27,6 @@ struct BoardView: View {
     
     var member: Member
     
-    let dateFormatter = DateFormatter()
-    
     var body: some View {
         VStack {
             Text(date)
@@ -47,99 +46,82 @@ struct BoardView: View {
                 }
             }
             
-            if let entries = clas.board.entries[date] {
-                List {
+            List {
+                if let entries = clas.board.entries[date] {
                     ForEach(entries) { entry in
-                        VStack {
-                            Text(entry.entry)
-                                .bold()
-                            
-                            if entry.due != nil {
-                                Text(entry.due!)
-                                    .italic()
-                                    .font(.system(size: 10))
-                                    .foregroundColor(.gray)
-                                    .opacity(0.7)
-                            }
-                        }
-                        .swipeActions(edge: .trailing) {
-                            Button("Create") {
-                                createEntry = true
-                                index = entries.firstIndex(of: entry)!
-                            }
-                            
-                            Button("Delete") {
-                                Task {
+                        Text(entry.entry)
+                            .bold()
+                            .swipeActions(edge: .trailing) {
+                                Button("Create") {
+                                    createEntry = true
                                     index = entries.firstIndex(of: entry)!
-                                    clas.board.entries[date]![index].entry = " "
-                                    clas.board.entries[date]![index].due = nil
-                                    
-                                    await CCM.updateCache(clas: clas, did: "\(member.username) REMOVED ENTRY \(entries[index])")
-                                    await CM.saveClass(clas: clas)
                                 }
+                                
+                                Button("Delete") {
+                                    Task {
+                                        index = entries.firstIndex(of: entry)!
+                                        clas.board.entries[date]![index].entry = " "
+                                        clas.board.entries[date]![index].due = nil
+                                        
+                                        CCM.updateCache(clas: clas, did: "\(member.username) REMOVED ENTRY \(entries[index])")
+                                        await CM.saveClass(clas: clas)
+                                    }
+                                }
+                                .tint(.red)
                             }
-                            .tint(.red)
-                        }
                     }
                 }
             }
-        }
-        .navigationTitle(clas.name)
-        .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
-        .onAppear {
-            Task(priority: .high) {
-                dateFormatter.locale = .current
-                dateFormatter.dateFormat = "dd MMMM yyyy"
-                self.date = dateFormatter.string(from: Date())
-                
-                await CM.getClass(name: clas.name)
+            .navigationTitle(clas.name)
+            .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
+            .onAppear {
+                self.date = Date().toFormat("dd MMMM yyyy")
             }
-        }
-        .sheet(isPresented: $createEntry) {
-            Task {
-                await CM.getClass(name: clas.name)
-            }
-        } content: {
-            CreateEntryView(username: member.username ,date: date, index: index, isSheetPresented: $createEntry, clas: $clas, CM: CM)
-        }
-        .sheet(isPresented: $showCache) {
-            CacheView(board: clas.board)
-        }
-        .toolbar {
-            ToolbarItemGroup(placement: .navigationBarTrailing) {
-                Button {
-                    Task { await CM.getClass(name: clas.name) }
-                } label: {
-                    Text("Reload")
-                        .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
-                        .bold()
+            .sheet(isPresented: $createEntry) {
+                Task {
+                    await CM.getClass(name: clas.name)
                 }
-                
-                if member.perm == .admin || member.perm == .teacher {
+            } content: {
+                CreateEntryView(username: member.username ,date: date, index: index, isSheetPresented: $createEntry, clas: $clas, CM: CM)
+            }
+            .sheet(isPresented: $showCache) {
+                CacheView(board: clas.board)
+            }
+            .toolbar {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button {
-                        showCache = true
+                        Task { await CM.getClass(name: clas.name) }
                     } label: {
-                        Text("Cache")
+                        Text("Reload")
                             .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
                             .bold()
                     }
+                    
+                    if member.perm == .admin || member.perm == .teacher {
+                        Button {
+                            showCache = true
+                        } label: {
+                            Text("Cache")
+                                .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
+                                .bold()
+                        }
+                    }
                 }
             }
-        }
-        .onChange(of: daysFromToday) { newValue in
-            Task {
-                CM.whatsDue(on: "26 June 2022")
-                dateFormatter.locale = .current
-                dateFormatter.dateFormat = "dd MMMM yyyy"
-                let tomorrow = Date().addingTimeInterval(TimeInterval(newValue * 86400))
-                let date = dateFormatter.string(from: tomorrow)
-                self.date = date
-                if clas.board.entries[date] == nil {
-                    self.clas = await CM.createBoard(clas: clas, date: date)
-                    await CM.getClass(name: clas.name)
-                    
+            .onChange(of: daysFromToday) { newValue in
+                Task {
+                    let tomorrow = Date().addingTimeInterval(TimeInterval(newValue * 86400))
+                    let date = tomorrow.toFormat("dd MMMM yyyy")
+                    self.date = date
+                    if clas.board.entries[date] == nil {
+                        self.clas = await CM.createBoard(clas: clas, date: date)
+                        await CM.getClass(name: clas.name)
+                        
+                    }
                 }
             }
         }
     }
 }
+
+

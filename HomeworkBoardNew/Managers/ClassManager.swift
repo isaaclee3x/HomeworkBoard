@@ -5,6 +5,7 @@
 //  Created by Isaac Lee Jing Zhi on 17/6/22.
 //
 
+import SwiftDate
 import Foundation
 import FirebaseDatabase
 import FirebaseDatabaseSwift
@@ -18,8 +19,6 @@ class ClassManager: ObservableObject {
     private var ref = Database.database().reference()
     private var encoder = JSONEncoder()
     private var decoder = JSONDecoder()
-    
-    static var allEntries: [Entry] = []
     
     /// Getting the JSON object for all the class
     ///
@@ -68,18 +67,14 @@ class ClassManager: ObservableObject {
     /// - Parameter name: Name of the class
     func createClass(name: String) {
         var date = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd MMMM yyyy"
-        dateFormatter.locale = .current
-        let formattedDate = dateFormatter.string(from: date)
-        var clas = Class(name: name, date: formattedDate)
+        var clas = Class(name: name, date: date.toFormat("dd MMMM yyyy"))
         for i in 0 ..< 2 {
-            let formattedDate = dateFormatter.string(from: date)
+            let formattedDate = date.toFormat("dd MMMM yyyy")
             clas.board.entries[formattedDate] = []
             for _ in 0 ..< 10 {
                 clas.board.entries[formattedDate]?.append(Entry(entry: nil, due: nil))
             }
-            date = Date() + Double((i + 1) * 86400)
+            date = Date().addingTimeInterval(TimeInterval(86400 * i))
         }
         let encodedClas = try? self.encoder.encode(clas)
         let stringEncoded = String(data: encodedClas!, encoding: .utf8)
@@ -114,9 +109,20 @@ class ClassManager: ObservableObject {
         return clas
     }
     
-    func whatsDue(on day: String) -> [Entry] {
-        let entries = ClassManager.allEntries
-        let entriesDueOnDay = entries.filter() { $0.due == day }
-        return entriesDueOnDay
+    func homeworkForTheWeek(clas: Class) -> [Entry] {
+        var entries: [Entry] = []
+        
+        for i in 0 ..< 7 {
+            let date = Date().addingTimeInterval(TimeInterval(86400 * (i + 1)))
+            let string = date.toFormat("dd MMMM yyyy")
+            if let entryForTheDay = clas.board.entries[string] {
+                
+                for i in entryForTheDay {
+                    entries.append(i)
+                }
+            }
+        }
+        
+        return entries
     }
 }

@@ -15,7 +15,7 @@ struct Member: Identifiable, Equatable, Codable {
         self.username = ""
         self.password = ""
         self.clas = ""
-        self.perm = .member
+        self.perm = .admin
     }
     
     var id = UUID()
