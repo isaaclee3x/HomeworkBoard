@@ -28,28 +28,41 @@ struct ClassesView: View {
     var body: some View {
         VStack {
             if MM.account?.perm == .member || MM.account?.perm == .subLeader {
-                ScrollView {
-                    ForEach(entriesWeek) { entry in
+                Rectangle()
+                    .frame(width: 350, height: 300)
+                    .foregroundColor(.black)
+                    .cornerRadius(10)
+                    .overlay {
                         VStack {
-                            Text(entry.entry)
-                                .bold()
                             
-                            if entry.due != nil {
-                                Text(entry.due!)
-                                    .italic()
-                                    .font(.system(size: 10))
-                                    .foregroundColor(.gray)
-                                    .opacity(0.7)
+                            Spacer()
+                                .frame(height: 15)
+                            
+                            Text("Summary")
+                                .foregroundColor(.white)
+                                .bold()
+                                .font(.system(size: 20))
+                                .multilineTextAlignment(.leading)
+                                .padding()
+                            
+                            List {
+                                ForEach(entriesWeek) { entry in
+                                    VStack {
+                                        Text(entry.entry)
+                                            .bold()
+                                        if entry.due != nil {
+                                            Text(entry.due!)
+                                                .italic()
+                                                .font(.system(size: 10))
+                                                .foregroundColor(.gray)
+                                                .opacity(0.7)
+                                        }
+                                    }
+                                }
                             }
                         }
+                        .frame(height: 350)
                     }
-                }
-                .overlay {
-                    Rectangle()
-                        .frame(width: 350, height: 300)
-                        .foregroundColor(.black)
-                        .cornerRadius(10)
-                }
             }
             
             LazyVGrid(columns: columns) {
@@ -78,7 +91,6 @@ struct ClassesView: View {
                     } else {
                         await CM.getClass(name: MM.account!.clas)
                         classes = CM.classes ?? []
-                        print(classes)
                         entriesWeek = CM.homeworkForTheWeek(clas: classes[0])
                     }
                 }
@@ -109,6 +121,7 @@ struct ClassesView: View {
                             } else {
                                 await CM.getClass(name: MM.account!.clas)
                                 classes = CM.classes ?? []
+                                entriesWeek = CM.homeworkForTheWeek(clas: classes[0])
                             }
                         }
                     } label: {

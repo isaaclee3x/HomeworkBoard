@@ -72,52 +72,52 @@ struct BoardView: View {
                     }
                 }
             }
-            .navigationTitle(clas.name)
-            .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
-            .onAppear {
-                self.date = Date().toFormat("dd MMMM yyyy")
+        }
+        .navigationTitle(clas.name)
+        .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
+        .onAppear {
+            self.date = Date().toFormat("dd MMMM yyyy")
+        }
+        .sheet(isPresented: $createEntry) {
+            Task {
+                await CM.getClass(name: clas.name)
             }
-            .sheet(isPresented: $createEntry) {
-                Task {
-                    await CM.getClass(name: clas.name)
+        } content: {
+            CreateEntryView(username: member.username ,date: date, index: index, isSheetPresented: $createEntry, clas: $clas, CM: CM)
+        }
+        .sheet(isPresented: $showCache) {
+            CacheView(board: clas.board)
+        }
+        .toolbar {
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
+                Button {
+                    Task { await CM.getClass(name: clas.name) }
+                } label: {
+                    Text("Reload")
+                        .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
+                        .bold()
                 }
-            } content: {
-                CreateEntryView(username: member.username ,date: date, index: index, isSheetPresented: $createEntry, clas: $clas, CM: CM)
-            }
-            .sheet(isPresented: $showCache) {
-                CacheView(board: clas.board)
-            }
-            .toolbar {
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                
+                if member.perm == .admin || member.perm == .teacher {
                     Button {
-                        Task { await CM.getClass(name: clas.name) }
+                        showCache = true
                     } label: {
-                        Text("Reload")
+                        Text("Cache")
                             .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
                             .bold()
                     }
-                    
-                    if member.perm == .admin || member.perm == .teacher {
-                        Button {
-                            showCache = true
-                        } label: {
-                            Text("Cache")
-                                .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
-                                .bold()
-                        }
-                    }
                 }
             }
-            .onChange(of: daysFromToday) { newValue in
-                Task {
-                    let tomorrow = Date().addingTimeInterval(TimeInterval(newValue * 86400))
-                    let date = tomorrow.toFormat("dd MMMM yyyy")
-                    self.date = date
-                    if clas.board.entries[date] == nil {
-                        self.clas = await CM.createBoard(clas: clas, date: date)
-                        await CM.getClass(name: clas.name)
-                        
-                    }
+        }
+        .onChange(of: daysFromToday) { newValue in
+            Task {
+                let tomorrow = Date().addingTimeInterval(TimeInterval(newValue * 86400))
+                let date = tomorrow.toFormat("dd MMMM yyyy")
+                self.date = date
+                if clas.board.entries[date] == nil {
+                    self.clas = await CM.createBoard(clas: clas, date: date)
+                    await CM.getClass(name: clas.name)
+                    
                 }
             }
         }

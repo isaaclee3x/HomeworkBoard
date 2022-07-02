@@ -49,7 +49,6 @@ class AccountManager: ObservableObject {
     ///   - what: What to do if the authentication is successful
     func auth(username: String, password: String, do what: () -> Void) async {
         await self.getAccount(username: username)
-        print(self.account)
         if account?.username == username && account?.password == password {
             what()
         }
