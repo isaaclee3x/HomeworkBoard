@@ -13,7 +13,7 @@ struct AuthenticateView: View {
     @State var password = ""
     
     @Binding var success: Bool
-    @ObservedObject var MM: AccountManager
+    @ObservedObject var MM: MemberManager
     
     @State var createNewAccount = false
     
@@ -60,6 +60,6 @@ struct AuthenticateView: View {
 
 struct AuthenticateView_Previews: PreviewProvider {
     static var previews: some View {
-        AuthenticateView(success: .constant(false) ,MM: AccountManager())
+        AuthenticateView(success: .constant(false) ,MM: MemberManager())
     }
 }

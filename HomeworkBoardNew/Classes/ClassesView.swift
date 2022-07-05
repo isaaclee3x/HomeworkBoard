@@ -17,7 +17,9 @@ struct ClassesView: View {
     @State var classes = [Class(name: "", date: "")]
     @State var entriesWeek: [Entry] = []
     
-    @ObservedObject var MM: AccountManager
+    @Binding var success: Bool
+    
+    @ObservedObject var MM: MemberManager
     @StateObject var CM = ClassManager()
     
     let columns = [
@@ -27,7 +29,7 @@ struct ClassesView: View {
     
     var body: some View {
         VStack {
-            if MM.account?.perm == .member || MM.account?.perm == .subLeader {
+            if MM.member?.perm == .member || MM.member?.perm == .subLeader {
                 Rectangle()
                     .frame(width: 350, height: 300)
                     .foregroundColor(.black)
@@ -41,6 +43,7 @@ struct ClassesView: View {
                                 .bold()
                                 .foregroundColor(.white)
                                 .frame(width: 300, alignment: .leading)
+                                .offset(y: 10)
                                 .font(.system(size: 30))
                                 .padding()
                             
@@ -75,7 +78,7 @@ struct ClassesView: View {
                 } else {
                     ForEach($classes) { $clas in
                         NavigationLink {
-                            BoardView(clas: $clas, CM: CM, member: MM.account!)
+                            BoardView(clas: $clas, CM: CM, member: MM.member!)
                         } label: {
                             Text(clas.name)
                                 .blockDisplay()
@@ -85,11 +88,11 @@ struct ClassesView: View {
             }
             .onAppear {
                 Task(priority: .high) {
-                    if MM.account?.perm == .admin || MM.account?.perm == .teacher {
+                    if MM.member?.perm == .admin || MM.member?.perm == .teacher {
                         await CM.getClasses()
                         classes = CM.classes ?? []
                     } else {
-                        await CM.getClass(name: MM.account!.clas)
+                        await CM.getClass(name: MM.member!.clas)
                         classes = CM.classes ?? []
                         entriesWeek = CM.homeworkForTheWeek(clas: classes[0])
                     }
@@ -115,11 +118,11 @@ struct ClassesView: View {
                     
                     Button {
                         Task {
-                            if MM.account?.perm == .admin || MM.account?.perm == .teacher {
+                            if MM.member?.perm == .admin || MM.member?.perm == .teacher {
                                 await CM.getClasses()
                                 classes = CM.classes ?? []
                             } else {
-                                await CM.getClass(name: MM.account!.clas)
+                                await CM.getClass(name: MM.member!.clas)
                                 classes = CM.classes ?? []
                                 entriesWeek = CM.homeworkForTheWeek(clas: classes[0])
                             }
@@ -129,9 +132,20 @@ struct ClassesView: View {
                             .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
                             .bold()
                     }
+                    
+                    Button {
+                        MM.member = nil
+                        CM.classes = nil
+                        success = false
+                    } label: {
+                        Text("Logout")
+                            .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
+                            .bold()
+                    }
+
                 }
             }
-            .navigationTitle(MM.account?.perm == .member || MM.account?.perm == .subLeader ? "Class" : "Classes")
+            .navigationTitle(MM.member?.perm == .member || MM.member?.perm == .subLeader ? "Class" : "Classes")
             .sheet(isPresented: $createClass) {
                 Task {
                     await CM.getClasses()

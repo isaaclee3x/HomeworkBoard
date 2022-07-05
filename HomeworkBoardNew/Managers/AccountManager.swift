@@ -13,10 +13,10 @@ import FirebaseDatabaseSwift
 ///
 ///  This manager allows the user to create an account, and to authenticate their account.
 ///  It would also allow them to recall back their password if they forget
-class AccountManager: ObservableObject {
+class MemberManager: ObservableObject {
     
     /// Value is changed based on the account's username
-    @Published var account: Member?
+    @Published var member: Member?
     
     private var ref = Database.database().reference()
 
@@ -49,7 +49,7 @@ class AccountManager: ObservableObject {
     ///   - what: What to do if the authentication is successful
     func auth(username: String, password: String, do what: () -> Void) async {
         await self.getAccount(username: username)
-        if account?.username == username && account?.password == password {
+        if member?.username == username && member?.password == password {
             what()
         }
     }
@@ -69,7 +69,7 @@ class AccountManager: ObservableObject {
             var member = try? decoder.decode(Member.self, from: data)
             let decodedPassword = (member?.password.fromBase64())!
             member?.password = decodedPassword
-            self.account = member
+            self.member = member
         }
         
         try? await Task.sleep(nanoseconds: 100_000_000)
@@ -103,10 +103,10 @@ extension String {
             if classes.contains(self) { return true }
             return false
         } else {
-            let MM = AccountManager()
+            let MM = MemberManager()
             
             await MM.getAccount(username: self)
-            if MM.account == nil { return false }
+            if MM.member == nil { return false }
         }
         return true
     }

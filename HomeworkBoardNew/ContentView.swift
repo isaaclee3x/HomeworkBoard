@@ -11,7 +11,7 @@ struct ContentView: View {
     
     @Environment(\.colorScheme) var colorScheme
     
-    @StateObject var MM = AccountManager()
+    @StateObject var MM = MemberManager()
     @StateObject var CM = ClassManager()
     
     @State var success = false
@@ -22,7 +22,7 @@ struct ContentView: View {
                 AuthenticateView(success: $success, MM: MM)
                     .background(color: "lightestBlue")
             } else {
-                ClassesView(MM: MM)
+                ClassesView(success: $success, MM: MM)
                     .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
             }
         }

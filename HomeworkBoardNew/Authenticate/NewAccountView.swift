@@ -11,7 +11,7 @@ struct NewAccountView: View {
     
     @State var member = Member()
     @Binding var isSheetPresented: Bool
-    @ObservedObject var MM: AccountManager
+    @ObservedObject var MM: MemberManager
     
     var body: some View {
         VStack {
@@ -48,6 +48,6 @@ struct NewAccountView: View {
 
 struct NewAccountView_Previews: PreviewProvider {
     static var previews: some View {
-        NewAccountView(isSheetPresented: .constant(true), MM: AccountManager())
+        NewAccountView(isSheetPresented: .constant(true), MM: MemberManager())
     }
 }
