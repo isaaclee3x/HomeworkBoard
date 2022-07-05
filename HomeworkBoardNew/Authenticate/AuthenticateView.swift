@@ -55,6 +55,9 @@ struct AuthenticateView: View {
         .sheet(isPresented: $createNewAccount) {
             NewAccountView(isSheetPresented: $createNewAccount, MM: MM)
         }
+        .onAppear {
+            MM.member = nil
+        }
     }
 }
 

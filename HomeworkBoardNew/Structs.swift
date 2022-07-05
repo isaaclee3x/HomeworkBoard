@@ -9,7 +9,7 @@ import Foundation
 
 struct Member: Identifiable, Equatable, Codable {
     
-    /// Creates an empty Member (the default)
+    /// Creates an empty Member
     
     init() {
         self.username = ""
@@ -36,6 +36,7 @@ struct Member: Identifiable, Equatable, Codable {
 
 struct Class: Identifiable, Equatable, Codable {
     
+    ///Creates and empty class
     init(name: String, date: String) {
         self.name = name
         self.board = Board(date: date)
@@ -43,12 +44,16 @@ struct Class: Identifiable, Equatable, Codable {
     
     var id = UUID()
     
+    ///Name of the class
     var name: String
+    
+    ///The board
     var board: Board
 }
 
 struct Board: Identifiable, Equatable, Codable {
     
+    ///Creates an empty class
     init(date: String) {
         self.entries = [date:[]]
         self.cache = []
@@ -66,6 +71,7 @@ struct Entry: Identifiable, Equatable, Codable {
         if entry == nil {
             self.entry = " "
         } else {
+            self.subject = nil
             self.entry = entry!
             self.due = due
         }
@@ -73,6 +79,14 @@ struct Entry: Identifiable, Equatable, Codable {
     
     var id = UUID()
     
+    var subject: Subject?
     var entry: String
     var due: String?
+}
+
+struct Subject: Identifiable, Equatable, Codable {
+    var id = UUID()
+    
+    var name: String
+    var colour: String
 }

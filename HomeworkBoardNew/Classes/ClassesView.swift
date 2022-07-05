@@ -134,15 +134,13 @@ struct ClassesView: View {
                     }
                     
                     Button {
-                        MM.member = nil
-                        CM.classes = nil
                         success = false
                     } label: {
                         Text("Logout")
                             .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
                             .bold()
                     }
-
+                    
                 }
             }
             .navigationTitle(MM.member?.perm == .member || MM.member?.perm == .subLeader ? "Class" : "Classes")
