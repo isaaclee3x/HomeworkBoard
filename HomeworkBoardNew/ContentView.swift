@@ -22,8 +22,27 @@ struct ContentView: View {
                 AuthenticateView(success: $success, MM: MM)
                     .background(color: "lightestBlue")
             } else {
-                ClassesView(success: $success, MM: MM)
-                    .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
+                
+                TabView {
+                    ClassesView(success: $success, MM: MM)
+                        .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
+                        .tabItem {
+                            VStack {
+                                Text("Classes")
+                                Image(systemName: "books.vertical")
+                            }
+                        }
+                    
+                    
+                    SettingsView(MM: MM)
+                        .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
+                        .tabItem {
+                            VStack {
+                                Text("Settings")
+                                Image(systemName: "gear")
+                            }
+                        }
+                }
             }
         }
     }

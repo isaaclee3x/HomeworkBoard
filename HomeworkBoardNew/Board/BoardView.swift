@@ -23,6 +23,7 @@ struct BoardView: View {
     
     @Binding var clas: Class
     @ObservedObject var CM: ClassManager
+    @ObservedObject var BM: BoardManager
     let CCM = CacheManager()
     
     var member: Member
@@ -85,7 +86,7 @@ struct BoardView: View {
         .onAppear {
             Task {
                 self.date = Date().toFormat("dd MMMM yyyy")
-                await CM.cleanBoard(clas: clas)
+                await BM.cleanBoard(clas: clas)
             }
         }
         .sheet(isPresented: $createEntry) {
@@ -125,7 +126,7 @@ struct BoardView: View {
                 let date = tomorrow.toFormat("dd MMMM yyyy")
                 self.date = date
                 if clas.board.entries[date] == nil {
-                    self.clas = await CM.createBoard(clas: clas, date: date)
+                    self.clas = await BM.createBoard(clas: clas, date: date)
                     await CM.getClass(name: clas.name)
                     
                 }

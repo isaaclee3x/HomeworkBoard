@@ -32,6 +32,8 @@
 		FF9A8F9D285E2377009F363F /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A8F9C285E2377009F363F /* BoardView.swift */; };
 		FFEDA8AB286F3F7D00E59BF3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FFEDA8AA286F3F7D00E59BF3 /* GoogleService-Info.plist */; };
 		FFEDA8B0286F4DB000E59BF3 /* SwiftDate in Frameworks */ = {isa = PBXBuildFile; productRef = FFEDA8AF286F4DB000E59BF3 /* SwiftDate */; };
+		FFEF34122874242A00E578A7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEF34112874242A00E578A7 /* SettingsView.swift */; };
+		FFEF3414287447A300E578A7 /* BoardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEF3413287447A300E578A7 /* BoardManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +79,8 @@
 		FF9A8F98285E21F6009F363F /* DeleteClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteClassView.swift; sourceTree = "<group>"; };
 		FF9A8F9C285E2377009F363F /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		FFEDA8AA286F3F7D00E59BF3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "../../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		FFEF34112874242A00E578A7 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		FFEF3413287447A300E578A7 /* BoardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +153,7 @@
 			children = (
 				FF4F5A7C285B6487000E727A /* AccountManager.swift */,
 				FF163122285C0EEA00DB8A6E /* ClassManager.swift */,
+				FFEF3413287447A300E578A7 /* BoardManager.swift */,
 				FF03D7E0285F5EB800D8DACD /* CacheManager.swift */,
 			);
 			path = Managers;
@@ -181,10 +186,11 @@
 				FF4F5A4E285B6226000E727A /* HomeworkBoardNewApp.swift */,
 				FF4287752866C53F00FB33DB /* Modifiers.swift */,
 				FF4F5A50285B6226000E727A /* ContentView.swift */,
-				FF4287782866C6A300FB33DB /* Classes */,
-				FF42877B2866C6FE00FB33DB /* Managers */,
+				FFEF34112874242A00E578A7 /* SettingsView.swift */,
 				FF4287772866C69700FB33DB /* Authenticate */,
+				FF4287782866C6A300FB33DB /* Classes */,
 				FF4287792866C6A800FB33DB /* Board */,
+				FF42877B2866C6FE00FB33DB /* Managers */,
 				FF4F5A84285B6606000E727A /* Structs.swift */,
 				FF163124285C1E9600DB8A6E /* Enums.swift */,
 				FF4F5A52285B6229000E727A /* Assets.xcassets */,
@@ -359,11 +365,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFEF3414287447A300E578A7 /* BoardManager.swift in Sources */,
 				FF9A8F99285E21F6009F363F /* DeleteClassView.swift in Sources */,
 				FF163123285C0EEA00DB8A6E /* ClassManager.swift in Sources */,
 				FF03D7E1285F5EB800D8DACD /* CacheManager.swift in Sources */,
 				FF4F5A51285B6226000E727A /* ContentView.swift in Sources */,
 				FF374CC2285B81D10035891F /* NewAccountView.swift in Sources */,
+				FFEF34122874242A00E578A7 /* SettingsView.swift in Sources */,
 				FF4287722866ACA300FB33DB /* CreateEntryView.swift in Sources */,
 				FF4F5A4F285B6226000E727A /* HomeworkBoardNewApp.swift in Sources */,
 				FF9A8F97285DF68C009F363F /* CreateClassView.swift in Sources */,

@@ -21,6 +21,7 @@ struct ClassesView: View {
     
     @ObservedObject var MM: MemberManager
     @StateObject var CM = ClassManager()
+    @StateObject var BM = BoardManager()
     
     let columns = [
         GridItem(.flexible()),
@@ -78,7 +79,7 @@ struct ClassesView: View {
                 } else {
                     ForEach($classes) { $clas in
                         NavigationLink {
-                            BoardView(clas: $clas, CM: CM, member: MM.member!)
+                            BoardView(clas: $clas, CM: CM, member: MM.member!, BM: BM)
                         } label: {
                             Text(clas.name)
                                 .blockDisplay()
@@ -94,12 +95,12 @@ struct ClassesView: View {
                     } else {
                         await CM.getClass(name: MM.member!.clas)
                         classes = CM.classes ?? []
-                        entriesWeek = CM.homeworkForTheWeek(clas: classes[0])
+                        entriesWeek = BM.homeworkForTheWeek(clas: classes[0])
                     }
                 }
             }
             .toolbar {
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                ToolbarItemGroup {
                     Button {
                         createClass = true
                     } label: {
@@ -124,7 +125,7 @@ struct ClassesView: View {
                             } else {
                                 await CM.getClass(name: MM.member!.clas)
                                 classes = CM.classes ?? []
-                                entriesWeek = CM.homeworkForTheWeek(clas: classes[0])
+                                entriesWeek = BM.homeworkForTheWeek(clas: classes[0])
                             }
                         }
                     } label: {
