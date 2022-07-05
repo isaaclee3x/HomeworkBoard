@@ -10,8 +10,8 @@ import SwiftUI
 struct CreateSubjectView: View {
     
     @State var subject = Subject(name: "", colour: RGB(r: 0, g: 0, b: 0))
-    
-    @ObservedObject var BM: BoardManager
+    @Binding var isSheetPresented: Bool
+    @ObservedObject var SM: SubjectManager
     
     var body: some View {
         NavigationView {
@@ -43,7 +43,11 @@ struct CreateSubjectView: View {
                 }
                 
                 Button {
-                    BM.subjects.append(subject)
+                    Task {
+                        SM.addSubject(subj: subject)
+                        await SM.getSubjects()
+                        isSheetPresented = false
+                    }
                 } label: {
                     Text("Save")
                 }
@@ -52,11 +56,5 @@ struct CreateSubjectView: View {
             .navigationTitle("Subject")
             .background(color: "lightestBlue")
         }
-    }
-}
-
-struct CreateSubjectView_Previews: PreviewProvider {
-    static var previews: some View {
-        CreateSubjectView(BM: BoardManager())
     }
 }

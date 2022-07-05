@@ -11,62 +11,75 @@ struct SettingsView: View {
     
     @StateObject var MM = MemberManager()
     @StateObject var CM = ClassManager()
-    @StateObject var BM = BoardManager()
+    @StateObject var SM = SubjectManager()
     
     @State var names: [String] = []
     @State var createNewSubject = false
     
     var body: some View {
         VStack {
-            
             if let $classes = CM.classes {
-                Picker("Choose a Class", selection: $names) {
-                    ForEach(names, id: \.self) { name in
-                        Text(name)
+                HStack {
+                    Text("Choose a Class:")
+                    
+                    Picker("Choose a Class", selection: $names) {
+                        ForEach(names, id: \.self) { name in
+                            Text(name)
+                        }
                     }
-                }
-                .onAppear {
-                    names = $classes.map { $0.name }
+                    .onAppear {
+                        names = $classes.map { $0.name }
+                    }
                 }
             }
             
             Form {
                 Section("Subjects") {
                     if MM.member?.perm == .admin {
-                        if BM.subjects.isEmpty {
-                            
-                        } else {
-                            ForEach(BM.subjects) { subject in
-                                
-                                Circle()
-                                    .frame(width: 10)
-                                    .foregroundColor(Color.init(red: subject.colour.r, green: subject.colour.g, blue: subject.colour.b))
-                                
-                                Text(subject.name)
-                                    .bold()
+                        if let subjects = SM.subjects {
+                            ForEach(subjects) { subject in
+                                HStack {
+                                    Circle()
+                                        .frame(width: 10)
+                                        .foregroundColor(Color.init(red: subject.colour.r, green: subject.colour.g, blue: subject.colour.b))
+                                    
+                                    Text(subject.name)
+                                        .bold()
+                                }
                             }
+                            .onDelete { offsets in
+                                let index = offsets[offsets.startIndex]
+                                SM.deleteSubject(subj: subjects[index])
+                                
+                            }
+                        } else {
+                            Text("Go create a new subject")
+                                .foregroundColor(.gray)
+                                .opacity(0.5)
                         }
-                        Button {
-                            createNewSubject = true
-                        } label: {
-                            Text("Create New Subject")
-                        }
+                    }
+                    
+                    Button {
+                        createNewSubject = true
+                    } label: {
+                        Text("Create New Subject")
                     }
                 }
             }
         }
         .navigationTitle("Settings")
-        .background(color: "lightestBlue")
         .sheet(isPresented: $createNewSubject) {
-            CreateSubjectView(BM: BM)
+            CreateSubjectView(isSheetPresented: $createNewSubject, SM: SM)
         }
         .onAppear {
             Task(priority: .high) {
                 await CM.getClasses()
+                await SM.getSubjects()
             }
         }
     }
 }
+
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
