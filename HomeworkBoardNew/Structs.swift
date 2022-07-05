@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct Member: Identifiable, Equatable, Codable {
     
@@ -85,8 +86,18 @@ struct Entry: Identifiable, Equatable, Codable {
 }
 
 struct Subject: Identifiable, Equatable, Codable {
+    
     var id = UUID()
     
     var name: String
-    var colour: String
+    var colour: RGB
+}
+
+struct RGB: Identifiable, Equatable, Codable {
+    
+    var id = UUID()
+    
+    var r: Double
+    var g: Double
+    var b: Double
 }

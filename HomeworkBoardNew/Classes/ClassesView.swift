@@ -79,7 +79,7 @@ struct ClassesView: View {
                 } else {
                     ForEach($classes) { $clas in
                         NavigationLink {
-                            BoardView(clas: $clas, CM: CM, member: MM.member!, BM: BM)
+                            BoardView(clas: $clas, CM: CM, BM: BM, member: MM.member!)
                         } label: {
                             Text(clas.name)
                                 .blockDisplay()
