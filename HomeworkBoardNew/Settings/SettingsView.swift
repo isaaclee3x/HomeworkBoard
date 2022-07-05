@@ -9,38 +9,61 @@ import SwiftUI
 
 struct SettingsView: View {
     
-    @StateObject var MM: MemberManager
+    @StateObject var MM = MemberManager()
+    @StateObject var CM = ClassManager()
+    @StateObject var BM = BoardManager()
     
+    @State var names: [String] = []
     @State var createNewSubject = false
     
-    
     var body: some View {
-        Form {
-            Section("Subjects") {
-                if MM.member?.perm == .admin {
-                    if BoardManager.subjects.isEmpty {
-                        
-                    } else {
-                        ForEach(BoardManager.subjects) { subject in
-                            
-                            Circle()
-                                .frame(width: 10)
-                                .foregroundColor(Color.init(red: subject.colour.r, green: subject.colour.g, blue: subject.colour.b))
-                            
-                            Text(subject.name)
-                                .bold()
-                        }
+        VStack {
+            
+            if let $classes = CM.classes {
+                Picker("Choose a Class", selection: $names) {
+                    ForEach(names, id: \.self) { name in
+                        Text(name)
                     }
-                    Button {
-                        
-                    } label: {
-                        Text("Create New Subject")
+                }
+                .onAppear {
+                    names = $classes.map { $0.name }
+                }
+            }
+            
+            Form {
+                Section("Subjects") {
+                    if MM.member?.perm == .admin {
+                        if BM.subjects.isEmpty {
+                            
+                        } else {
+                            ForEach(BM.subjects) { subject in
+                                
+                                Circle()
+                                    .frame(width: 10)
+                                    .foregroundColor(Color.init(red: subject.colour.r, green: subject.colour.g, blue: subject.colour.b))
+                                
+                                Text(subject.name)
+                                    .bold()
+                            }
+                        }
+                        Button {
+                            createNewSubject = true
+                        } label: {
+                            Text("Create New Subject")
+                        }
                     }
                 }
             }
         }
+        .navigationTitle("Settings")
+        .background(color: "lightestBlue")
         .sheet(isPresented: $createNewSubject) {
-            
+            CreateSubjectView(BM: BM)
+        }
+        .onAppear {
+            Task(priority: .high) {
+                await CM.getClasses()
+            }
         }
     }
 }

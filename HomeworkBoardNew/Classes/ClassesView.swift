@@ -29,137 +29,140 @@ struct ClassesView: View {
     ]
     
     var body: some View {
-        VStack {
-            if MM.member?.perm == .member || MM.member?.perm == .subLeader {
-                Rectangle()
-                    .frame(width: 350, height: 300)
-                    .foregroundColor(.black)
-                    .overlay {
-                        VStack {
-                            
-                            Spacer()
-                                .frame(height: 15)
-                            
-                            Text("Summary")
-                                .bold()
-                                .foregroundColor(.white)
-                                .frame(width: 300, alignment: .leading)
-                                .offset(y: 10)
-                                .font(.system(size: 30))
-                                .padding()
-                            
-                            List {
-                                ForEach(entriesWeek) { entry in
-                                    VStack {
-                                        Text(entry.entry)
-                                            .bold()
-                                        if entry.due != nil {
-                                            Text(entry.due!)
-                                                .italic()
-                                                .font(.system(size: 10))
-                                                .foregroundColor(.gray)
-                                                .opacity(0.7)
-                                        }
-                                    }.frame(alignment: .leading)
+        NavigationView {
+            VStack {
+                if MM.member?.perm == .member || MM.member?.perm == .subLeader {
+                    Rectangle()
+                        .frame(width: 350, height: 300)
+                        .foregroundColor(.black)
+                        .overlay {
+                            VStack {
+                                
+                                Spacer()
+                                    .frame(height: 15)
+                                
+                                Text("Summary")
+                                    .bold()
+                                    .foregroundColor(.white)
+                                    .frame(width: 300, alignment: .leading)
+                                    .offset(y: 10)
+                                    .font(.system(size: 30))
+                                    .padding()
+                                
+                                List {
+                                    ForEach(entriesWeek) { entry in
+                                        VStack {
+                                            Text(entry.entry)
+                                                .bold()
+                                            if entry.due != nil {
+                                                Text(entry.due!)
+                                                    .italic()
+                                                    .font(.system(size: 10))
+                                                    .foregroundColor(.gray)
+                                                    .opacity(0.7)
+                                            }
+                                        }.frame(alignment: .leading)
+                                    }
                                 }
                             }
+                            .frame(height: 350)
                         }
-                        .frame(height: 350)
-                    }
-                    .cornerRadius(10)
-                    .padding()
-            }
-            
-            LazyVGrid(columns: columns) {
-                if classes.isEmpty {
-                    Text("No Classes Yet")
-                        .frame(maxWidth: 400)
-                        .opacity(0.4)
-                    
-                } else {
-                    ForEach($classes) { $clas in
-                        NavigationLink {
-                            BoardView(clas: $clas, CM: CM, BM: BM, member: MM.member!)
-                        } label: {
-                            Text(clas.name)
-                                .blockDisplay()
-                        }
-                    }
+                        .cornerRadius(10)
+                        .padding()
                 }
-            }
-            .onAppear {
-                Task(priority: .high) {
-                    if MM.member?.perm == .admin || MM.member?.perm == .teacher {
-                        await CM.getClasses()
-                        classes = CM.classes ?? []
+                
+                LazyVGrid(columns: columns) {
+                    if classes.isEmpty {
+                        Text("No Classes Yet")
+                            .frame(maxWidth: 400)
+                            .opacity(0.4)
+                        
                     } else {
-                        await CM.getClass(name: MM.member!.clas)
-                        classes = CM.classes ?? []
-                        entriesWeek = BM.homeworkForTheWeek(clas: classes[0])
-                    }
-                }
-            }
-            .toolbar {
-                ToolbarItemGroup {
-                    Button {
-                        createClass = true
-                    } label: {
-                        Text("Create")
-                            .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
-                            .bold()
-                    }
-                    
-                    Button {
-                        deleteClass = true
-                    } label: {
-                        Text("Delete")
-                            .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
-                            .bold()
-                    }
-                    
-                    Button {
-                        Task {
-                            if MM.member?.perm == .admin || MM.member?.perm == .teacher {
-                                await CM.getClasses()
-                                classes = CM.classes ?? []
-                            } else {
-                                await CM.getClass(name: MM.member!.clas)
-                                classes = CM.classes ?? []
-                                entriesWeek = BM.homeworkForTheWeek(clas: classes[0])
+                        ForEach($classes) { $clas in
+                            NavigationLink {
+                                BoardView(clas: $clas, CM: CM, BM: BM, member: MM.member!)
+                            } label: {
+                                Text(clas.name)
+                                    .blockDisplay()
                             }
                         }
-                    } label: {
-                        Text("Reload")
-                            .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
-                            .bold()
                     }
-                    
-                    Button {
-                        success = false
-                    } label: {
-                        Text("Logout")
-                            .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
-                            .bold()
+                }
+                .onAppear {
+                    Task(priority: .high) {
+                        if MM.member?.perm == .admin || MM.member?.perm == .teacher {
+                            await CM.getClasses()
+                            classes = CM.classes ?? []
+                        } else {
+                            await CM.getClass(name: MM.member!.clas)
+                            classes = CM.classes ?? []
+                            entriesWeek = BM.homeworkForTheWeek(clas: classes[0])
+                        }
                     }
-                    
                 }
-            }
-            .navigationTitle(MM.member?.perm == .member || MM.member?.perm == .subLeader ? "Class" : "Classes")
-            .sheet(isPresented: $createClass) {
-                Task {
-                    await CM.getClasses()
-                    classes = CM.classes!
+                .toolbar {
+                    ToolbarItemGroup {
+                        Button {
+                            createClass = true
+                        } label: {
+                            Text("Create")
+                                .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
+                                .bold()
+                        }
+                        
+                        Button {
+                            deleteClass = true
+                        } label: {
+                            Text("Delete")
+                                .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
+                                .bold()
+                        }
+                        
+                        Button {
+                            Task {
+                                if MM.member?.perm == .admin || MM.member?.perm == .teacher {
+                                    await CM.getClasses()
+                                    classes = CM.classes ?? []
+                                } else {
+                                    await CM.getClass(name: MM.member!.clas)
+                                    classes = CM.classes ?? []
+                                    entriesWeek = BM.homeworkForTheWeek(clas: classes[0])
+                                }
+                            }
+                        } label: {
+                            Text("Reload")
+                                .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
+                                .bold()
+                        }
+                        
+                        Button {
+                            success = false
+                        } label: {
+                            Text("Logout")
+                                .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
+                                .bold()
+                        }
+                        
+                    }
                 }
-            } content: {
-                CreateClassView(CM: CM, isSheetPresented: $createClass)
-            }
-            .sheet(isPresented: $deleteClass) {
-                Task {
-                    await CM.getClasses()
-                    classes = CM.classes ?? []
+                .navigationTitle(MM.member?.perm == .member || MM.member?.perm == .subLeader ? "Class" : "Classes")
+                .sheet(isPresented: $createClass) {
+                    Task {
+                        await CM.getClasses()
+                        classes = CM.classes!
+                    }
+                } content: {
+                    CreateClassView(CM: CM, isSheetPresented: $createClass)
                 }
-            } content: {
-                DeleteClassView(isSheetPresented: $deleteClass, CM: CM)
+                .sheet(isPresented: $deleteClass) {
+                    Task {
+                        await CM.getClasses()
+                        classes = CM.classes ?? []
+                    }
+                } content: {
+                    DeleteClassView(isSheetPresented: $deleteClass, CM: CM)
+                }
+                .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
             }
         }
     }

@@ -35,6 +35,7 @@
 		FFEF34122874242A00E578A7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEF34112874242A00E578A7 /* SettingsView.swift */; };
 		FFEF3414287447A300E578A7 /* BoardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEF3413287447A300E578A7 /* BoardManager.swift */; };
 		FFEF341728744ECF00E578A7 /* CreateSubjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEF341628744ECF00E578A7 /* CreateSubjectView.swift */; };
+		FFEF34192874704F00E578A7 /* SubjectManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEF34182874704F00E578A7 /* SubjectManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +84,7 @@
 		FFEF34112874242A00E578A7 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		FFEF3413287447A300E578A7 /* BoardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardManager.swift; sourceTree = "<group>"; };
 		FFEF341628744ECF00E578A7 /* CreateSubjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSubjectView.swift; sourceTree = "<group>"; };
+		FFEF34182874704F00E578A7 /* SubjectManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +156,7 @@
 			isa = PBXGroup;
 			children = (
 				FF4F5A7C285B6487000E727A /* AccountManager.swift */,
+				FFEF34182874704F00E578A7 /* SubjectManager.swift */,
 				FF163122285C0EEA00DB8A6E /* ClassManager.swift */,
 				FFEF3413287447A300E578A7 /* BoardManager.swift */,
 				FF03D7E0285F5EB800D8DACD /* CacheManager.swift */,
@@ -390,6 +393,7 @@
 				FF4F5A85285B6606000E727A /* Structs.swift in Sources */,
 				FF4F5A7B285B647F000E727A /* AuthenticateView.swift in Sources */,
 				FF4287742866BCC200FB33DB /* CacheView.swift in Sources */,
+				FFEF34192874704F00E578A7 /* SubjectManager.swift in Sources */,
 				FF4F5A7D285B6487000E727A /* AccountManager.swift in Sources */,
 				FF4287762866C53F00FB33DB /* Modifiers.swift in Sources */,
 				FF9A8F9D285E2377009F363F /* BoardView.swift in Sources */,

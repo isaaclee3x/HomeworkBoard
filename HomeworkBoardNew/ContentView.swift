@@ -17,32 +17,29 @@ struct ContentView: View {
     @State var success = false
     
     var body: some View {
-        NavigationView {
-            if !success {
+        if !success {
+            NavigationView {
                 AuthenticateView(success: $success, MM: MM)
                     .background(color: "lightestBlue")
-            } else {
+            }
+        } else {
+            TabView {
+                ClassesView(success: $success, MM: MM)
+                    .tabItem {
+                        VStack {
+                            Text("Classes")
+                            Image(systemName: "books.vertical")
+                        }
+                    }
                 
-                TabView {
-                    ClassesView(success: $success, MM: MM)
-                        .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
-                        .tabItem {
-                            VStack {
-                                Text("Classes")
-                                Image(systemName: "books.vertical")
-                            }
+                
+                SettingsView(MM: MM)
+                    .tabItem {
+                        VStack {
+                            Text("Settings")
+                            Image(systemName: "gear")
                         }
-                    
-                    
-                    SettingsView(MM: MM)
-                        .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
-                        .tabItem {
-                            VStack {
-                                Text("Settings")
-                                Image(systemName: "gear")
-                            }
-                        }
-                }
+                    }
             }
         }
     }

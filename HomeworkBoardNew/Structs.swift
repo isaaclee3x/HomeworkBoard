@@ -58,12 +58,14 @@ struct Board: Identifiable, Equatable, Codable {
     init(date: String) {
         self.entries = [date:[]]
         self.cache = []
+        self.subjects = []
     }
     
     var id = UUID()
     
     var entries: [String: [Entry]]
     var cache: [String]
+    var subjects: [Subject]
 }
 
 struct Entry: Identifiable, Equatable, Codable {

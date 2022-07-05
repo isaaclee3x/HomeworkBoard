@@ -13,7 +13,7 @@ import FirebaseDatabaseSwift
 class BoardManager: ObservableObject {
     
     private var CM = ClassManager()
-    static var subjects: [Subject] = []
+    @Published var subjects: [Subject] = []
     
     /// Creates a new board if the clas.board[date] value is nil
     /// - Parameters:
