@@ -113,7 +113,7 @@ class ClassManager: ObservableObject {
         var entries: [Entry] = []
         
         for i in 0 ..< 7 {
-            let date = Date().addingTimeInterval(TimeInterval(86400 * (i + 1)))
+            let date = Date().addingTimeInterval(TimeInterval(86400 * i))
             let string = date.toFormat("dd MMMM yyyy")
             if let entryForTheDay = clas.board.entries[string] {
                 
@@ -124,5 +124,32 @@ class ClassManager: ObservableObject {
         }
         
         return entries
+    }
+    
+    func cleanBoard(clas: Class) async {
+        var clas = clas
+        let nsdict = clas.board.entries as NSDictionary
+        let keys = nsdict.allKeys as! [String]
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMM yyyy"
+        
+        var dates: [Date] = []
+        
+        for key in keys {
+            dates.append(dateFormatter.date(from: key)!)
+        }
+        
+        for date in dates {
+            if date < Date() {
+                let index = dates.firstIndex(of: date)!
+                let clasIndex = clas.board.entries.firstIndex() { $0.key == keys[index] }!
+                let key = clas.board.entries[clasIndex].key
+                
+                clas.board.entries[key] = []
+            }
+        }
+        
+        await self.saveClass(clas: clas)
     }
 }

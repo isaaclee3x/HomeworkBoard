@@ -30,6 +30,9 @@ struct BoardView: View {
     var body: some View {
         VStack {
             Text(date)
+                .font(.system(size: 25, design: .rounded))
+                .bold()
+            
             HStack {
                 Button {
                     if daysFromToday > 0 {
@@ -37,12 +40,16 @@ struct BoardView: View {
                     }
                 } label: {
                     Text("Yesterday")
+                        .font(.system(size: 15))
+                        .bold()
                 }
                 
                 Button {
                     daysFromToday += 1
                 } label: {
                     Text("Tomorrow")
+                        .font(.system(size: 15))
+                        .bold()
                 }
             }
             
@@ -76,7 +83,10 @@ struct BoardView: View {
         .navigationTitle(clas.name)
         .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
         .onAppear {
-            self.date = Date().toFormat("dd MMMM yyyy")
+            Task {
+                self.date = Date().toFormat("dd MMMM yyyy")
+                await CM.cleanBoard(clas: clas)
+            }
         }
         .sheet(isPresented: $createEntry) {
             Task {

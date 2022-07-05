@@ -31,7 +31,6 @@ struct ClassesView: View {
                 Rectangle()
                     .frame(width: 350, height: 300)
                     .foregroundColor(.black)
-                    .cornerRadius(10)
                     .overlay {
                         VStack {
                             
@@ -39,10 +38,10 @@ struct ClassesView: View {
                                 .frame(height: 15)
                             
                             Text("Summary")
-                                .foregroundColor(.white)
                                 .bold()
-                                .font(.system(size: 20))
-                                .multilineTextAlignment(.leading)
+                                .foregroundColor(.white)
+                                .frame(width: 300, alignment: .leading)
+                                .font(.system(size: 30))
                                 .padding()
                             
                             List {
@@ -57,19 +56,20 @@ struct ClassesView: View {
                                                 .foregroundColor(.gray)
                                                 .opacity(0.7)
                                         }
-                                    }
+                                    }.frame(alignment: .leading)
                                 }
                             }
                         }
                         .frame(height: 350)
                     }
+                    .cornerRadius(10)
+                    .padding()
             }
             
             LazyVGrid(columns: columns) {
                 if classes.isEmpty {
                     Text("No Classes Yet")
                         .frame(maxWidth: 400)
-                        .multilineTextAlignment(.center)
                         .opacity(0.4)
                     
                 } else {
