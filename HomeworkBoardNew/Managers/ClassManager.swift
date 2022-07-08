@@ -94,5 +94,4 @@ class ClassManager: ObservableObject {
     func deleteClass(name: String) {
         ref.child("classes").child(name).removeValue()
     }
-    
 }

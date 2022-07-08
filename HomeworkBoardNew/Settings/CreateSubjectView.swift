@@ -24,18 +24,18 @@ struct CreateSubjectView: View {
                 
                 Section {
                     Rectangle()
-                        .frame(width: 350, height: 30)
+                        .frame(width: 300, height: 30)
                         .foregroundColor(Color.init(red: subject.colour.r, green: subject.colour.g, blue: subject.colour.b))
                     
-                    Slider(value: $subject.colour.r, in: 0 ... 1) {
+                    Slider(value: $subject.colour.r, in: 0 ... 1, minimumValueLabel: Text(String(0)), maximumValueLabel: Text(String(1))) {
                         Text("\(subject.colour.r)")
                     }
                     
-                    Slider(value: $subject.colour.g, in: 0 ... 1) {
+                    Slider(value: $subject.colour.g, in: 0 ... 1, minimumValueLabel: Text(String(0)), maximumValueLabel: Text(String(1))) {
                         Text("\(subject.colour.g)")
                     }
                     
-                    Slider(value: $subject.colour.b, in: 0 ... 1) {
+                    Slider(value: $subject.colour.b, in: 0 ... 1, minimumValueLabel: Text(String(0)), maximumValueLabel: Text(String(1))) {
                         Text("\(subject.colour.b)")
                     }
                 } header: {

@@ -37,25 +37,23 @@ struct CreateEntryView: View {
                         Button {
                             self.subject = subject
                         } label: {
-                            HStack {
-                                Circle()
-                                    .frame(width: 10)
-                                    .foregroundColor(Color.init(red: subject.colour.r, green: subject.colour.g, blue: subject.colour.b))
-                                
-                                Text(subject.name)
-                                    .bold()
-                            }
+                            Text(subject.name)
+                                .bold()
+                                .foregroundColor(.black)
                         }
                     }
                 }
             } label: {
                 Text("Choose a subject")
                     .font(.system(size: 15, design: .rounded))
-                    .foregroundColor(.white)
+                    .foregroundColor(.black)
                 
             }
             
             Text(subject.name)
+                .foregroundColor(.black)
+                .bold()
+    
             TextField("Entry", text: $name)
                 .credStyle(dimensions: (300,60))
                 .foregroundColor(.black)
@@ -64,7 +62,7 @@ struct CreateEntryView: View {
                 Task {
                     clas.board.entries[self.date]![index] = Entry(entry: name, due: date, subject: subject)
                     
-                    CCM.updateCache(clas: clas, did: "\(username) CREATED ENTRY \(name)")
+                    await CCM.updateCache(clas: clas, did: "\(username) CREATED ENTRY \(name)")
                     await CM.saveClass(clas: clas)
                     
                     isSheetPresented = false

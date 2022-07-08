@@ -10,10 +10,9 @@ import SwiftUI
 struct CreateClassView: View {
     
     @State var name = ""
-    
     @ObservedObject var CM: ClassManager
-    var CCM = CacheManager()
     
+    var CCM = CacheManager()
     @Binding var isSheetPresented: Bool
     
     var body: some View {
@@ -34,7 +33,7 @@ struct CreateClassView: View {
                             clas.name == name
                         })
                         let index: Int = classes.distance(from: classes.startIndex, to: i!)
-                        CCM.updateCache(clas: classes[index], did: "ADMIN CREATED CLASS \(name)")
+                        await CCM.updateCache(clas: classes[index], did: "ADMIN CREATED CLASS \(name)")
                     }
                     isSheetPresented = false
                 }
@@ -43,13 +42,8 @@ struct CreateClassView: View {
                     .bold()
             }
             .bottomButton()
-            .background(color: "lightestBlue")
         }
+        .background(color: "lightestBlue")
     }
 }
 
-struct CreateClassView_Previews: PreviewProvider {
-    static var previews: some View {
-        CreateClassView(CM: ClassManager(), isSheetPresented: .constant(true))
-    }
-}

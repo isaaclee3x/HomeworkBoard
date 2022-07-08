@@ -42,9 +42,11 @@ class BoardManager: ObservableObject {
                 for i in entryForTheDay {
                     entries.append(i)
                 }
+                entries = entries.filter { entry in
+                    entry.entry != " "
+                }
             }
         }
-        
         return entries
     }
     
@@ -65,7 +67,7 @@ class BoardManager: ObservableObject {
         }
         
         for date in dates {
-            if date < Date() {
+            if date < Date().addingTimeInterval(-86400) {
                 let index = dates.firstIndex(of: date)!
                 let clasIndex = clas.board.entries.firstIndex() { $0.key == keys[index] }!
                 let key = clas.board.entries[clasIndex].key

@@ -87,7 +87,7 @@ struct BoardView: View {
                                     clas.board.entries[date]![index].due = nil
                                     clas.board.entries[date]![index].subject = nil
                                     
-                                    CCM.updateCache(clas: clas, did: "\(member.username) REMOVED ENTRY \(entries[index])")
+                                    await CCM.updateCache(clas: clas, did: "\(member.username) REMOVED ENTRY \(entries[index])")
                                     await CM.saveClass(clas: clas)
                                 }
                             }
@@ -116,23 +116,28 @@ struct BoardView: View {
             CacheView(board: clas.board)
         }
         .toolbar {
-            ToolbarItemGroup(placement: .navigationBarTrailing) {
-                Button {
-                    Task { await CM.getClass(name: clas.name) }
-                } label: {
-                    Text("Reload")
-                        .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
-                        .bold()
-                }
-                
-                if member.perm == .admin || member.perm == .teacher {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Menu {
                     Button {
-                        showCache = true
+                        Task { await CM.getClass(name: clas.name) }
                     } label: {
-                        Text("Cache")
+                        Text("Reload")
                             .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
                             .bold()
                     }
+                    
+                    if member.perm == .admin || member.perm == .teacher {
+                        Button {
+                            showCache = true
+                        } label: {
+                            Text("Cache")
+                                .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
+                                .bold()
+                        }
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                        .foregroundColor(Color("lightestBlue"))
                 }
             }
         }

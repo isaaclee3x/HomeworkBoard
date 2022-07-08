@@ -22,6 +22,8 @@ class SubjectManager: ObservableObject {
         ref.child("subjects").observeSingleEvent(of: .value) { snapshot in
             var subjects: [Subject] = []
             let value = snapshot.value as? NSDictionary
+            
+            guard value != nil else { self.subjects = []; return}
 
             let values = value?.allValues as? [String]
             for i in values! {
@@ -41,7 +43,8 @@ class SubjectManager: ObservableObject {
         )
     }
     
-    func deleteSubject(subj: Subject) {
-        ref.child("subjects").child(subj.name).removeValue()
+    func deleteSubject(subj: Subject) async {
+        try? await ref.child("subjects").child(subj.name).removeValue()
+        await getSubjects()
     }
 }

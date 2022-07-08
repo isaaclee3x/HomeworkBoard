@@ -13,6 +13,7 @@ struct ClassesView: View {
     
     @State var createClass = false
     @State var deleteClass = false
+    @State var showSettings = false
     
     @State var classes = [Class(name: "", date: "")]
     @State var entriesWeek: [Entry] = []
@@ -22,6 +23,7 @@ struct ClassesView: View {
     @ObservedObject var MM: MemberManager
     @StateObject var CM = ClassManager()
     @StateObject var BM = BoardManager()
+    @StateObject var SM = SubjectManager()
     
     let columns = [
         GridItem(.flexible()),
@@ -102,22 +104,23 @@ struct ClassesView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
-                        Button {
-                            createClass = true
-                        } label: {
-                            Text("Create")
-                                .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
-                                .bold()
+                        if MM.member!.perm == .admin || MM.member!.perm == .teacher {
+                            Button {
+                                createClass = true
+                            } label: {
+                                Text("Create")
+                                    .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
+                                    .bold()
+                            }
+                            
+                            Button {
+                                deleteClass = true
+                            } label: {
+                                Text("Delete")
+                                    .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
+                                    .bold()
+                            }
                         }
-                        
-                        Button {
-                            deleteClass = true
-                        } label: {
-                            Text("Delete")
-                                .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
-                                .bold()
-                        }
-                        
                         Button {
                             Task {
                                 if MM.member?.perm == .admin || MM.member?.perm == .teacher {
@@ -142,9 +145,16 @@ struct ClassesView: View {
                                 .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
                                 .bold()
                         }
+                        
+                        Button {
+                            showSettings = true
+                        } label: {
+                            Text("Settings")
+                        }
+
                     } label: {
                         Image(systemName: "ellipsis.circle")
-                            .foregroundColor(Color("lightestBlue"))
+                            .foregroundColor(Color(colorScheme == .light ? "murkyBlue" : "lightestBlue"))
                     }
                     
                 }
@@ -165,6 +175,9 @@ struct ClassesView: View {
                 }
             } content: {
                 DeleteClassView(isSheetPresented: $deleteClass, CM: CM)
+            }
+            .sheet(isPresented: $showSettings) {
+                SettingsView(MM: MM, CM: CM, SM: SM)
             }
             .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
         }
