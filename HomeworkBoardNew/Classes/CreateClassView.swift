@@ -18,7 +18,7 @@ struct CreateClassView: View {
     
     var body: some View {
         VStack {
-            Text("Create a new class")
+            Text("**Create** a new class")
                 .header()
             
             TextField("Name", text: $name)
@@ -34,7 +34,7 @@ struct CreateClassView: View {
                             clas.name == name
                         })
                         let index: Int = classes.distance(from: classes.startIndex, to: i!)
-                        await CCM.updateCache(clas: classes[index], did: "ADMIN CREATED CLASS \(name)")
+                        CCM.updateCache(clas: classes[index], did: "ADMIN CREATED CLASS \(name)")
                     }
                     isSheetPresented = false
                 }
@@ -43,6 +43,7 @@ struct CreateClassView: View {
                     .bold()
             }
             .bottomButton()
+            .background(color: "lightestBlue")
         }
     }
 }

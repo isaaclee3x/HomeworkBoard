@@ -29,93 +29,79 @@ struct ClassesView: View {
     ]
     
     var body: some View {
-        NavigationView {
-            VStack {
-                if MM.member?.perm == .member || MM.member?.perm == .subLeader {
-                    Rectangle()
-                        .frame(width: 350, height: 300)
-                        .foregroundColor(.black)
-                        .overlay {
-                            VStack {
-                                Spacer()
-                                    .frame(height: 15)
-                                
-                                Text("Summary")
-                                    .bold()
-                                    .foregroundColor(.white)
-                                    .frame(width: 300, alignment: .leading)
-                                    .offset(y: 10)
-                                    .font(.system(size: 30))
-                                    .padding()
-                                
-                                List {
-                                    ForEach(entriesWeek) { entry in
-                                        HStack {
-                                            if let subject = entry.subject {
-                                                VStack {
-                                                    Circle()
-                                                        .frame(width: 10)
-                                                        .foregroundColor(Color.init(red: subject.colour.r, green: subject.colour.g, blue: subject.colour.b))
-                                                    
-                                                    Text(subject.name)
-                                                        .font(.system(size: 10))
-                                                        .foregroundColor(.gray)
-                                                }
-                                            }
+        VStack {
+            if MM.member?.perm == .member || MM.member?.perm == .subLeader {
+                Rectangle()
+                    .foregroundColor(.black)
+                    .overlay {
+                        List {
+                            ForEach(entriesWeek) { entry in
+                                HStack {
+                                    if let subject = entry.subject {
+                                        VStack {
+                                            Circle()
+                                                .frame(width: 10)
+                                                .foregroundColor(Color.init(red: subject.colour.r, green: subject.colour.g, blue: subject.colour.b))
                                             
-                                            VStack {
-                                                Text(entry.entry)
-                                                    .bold()
-                                                if entry.due != nil {
-                                                    Text(entry.due!)
-                                                        .italic()
-                                                        .font(.system(size: 10))
-                                                        .foregroundColor(.gray)
-                                                        .opacity(0.7)
-                                                }
-                                            }
-                                            .frame(alignment: .leading)
+                                            Text(subject.name)
+                                                .font(.system(size: 10))
+                                                .foregroundColor(.gray)
                                         }
                                     }
+                                    
+                                    VStack {
+                                        Text(entry.entry)
+                                            .bold()
+                                        if entry.due != nil {
+                                            Text(entry.due!)
+                                                .italic()
+                                                .font(.system(size: 10))
+                                                .foregroundColor(.gray)
+                                                .opacity(0.7)
+                                        }
+                                    }
+                                    .frame(alignment: .leading)
                                 }
                             }
-                            .frame(height: 350)
                         }
-                        .cornerRadius(10)
-                        .padding()
+                    }
+                    .frame(width: 350, height: 300)
+                    .cornerRadius(10)
+                    .padding()
+            }
+            
+            LazyVGrid(columns: columns) {
+                if classes.isEmpty {
+                    Text("No Classes Yet")
+                        .frame(maxWidth: 400)
+                        .opacity(0.4)
+                    
+                } else {
+                    ForEach($classes) { $clas in
+                        NavigationLink {
+                            BoardView(clas: $clas, CM: CM, BM: BM, member: MM.member!)
+                        } label: {
+                            Text(clas.name)
+                                .blockDisplay()
+                        }
+                    }
                 }
-                
-                LazyVGrid(columns: columns) {
-                    if classes.isEmpty {
-                        Text("No Classes Yet")
-                            .frame(maxWidth: 400)
-                            .opacity(0.4)
-                        
+            }
+            .onAppear {
+                Task(priority: .high) {
+                    if MM.member?.perm == .admin || MM.member?.perm == .teacher {
+                        await CM.getClasses()
+                        classes = CM.classes ?? []
                     } else {
-                        ForEach($classes) { $clas in
-                            NavigationLink {
-                                BoardView(clas: $clas, CM: CM, BM: BM, member: MM.member!)
-                            } label: {
-                                Text(clas.name)
-                                    .blockDisplay()
-                            }
-                        }
+                        await CM.getClass(name: MM.member!.clas)
+                        classes = CM.classes ?? []
+                        entriesWeek = BM.homeworkForTheWeek(clas: classes[0])
                     }
                 }
-                .onAppear {
-                    Task(priority: .high) {
-                        if MM.member?.perm == .admin || MM.member?.perm == .teacher {
-                            await CM.getClasses()
-                            classes = CM.classes ?? []
-                        } else {
-                            await CM.getClass(name: MM.member!.clas)
-                            classes = CM.classes ?? []
-                            entriesWeek = BM.homeworkForTheWeek(clas: classes[0])
-                        }
-                    }
-                }
-                .toolbar {
-                    ToolbarItemGroup {
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Menu {
                         Button {
                             createClass = true
                         } label: {
@@ -156,28 +142,31 @@ struct ClassesView: View {
                                 .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
                                 .bold()
                         }
-                        
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
+                            .foregroundColor(Color("lightestBlue"))
                     }
+                    
                 }
-                .navigationTitle(MM.member?.perm == .member || MM.member?.perm == .subLeader ? "Class" : "Classes")
-                .sheet(isPresented: $createClass) {
-                    Task {
-                        await CM.getClasses()
-                        classes = CM.classes!
-                    }
-                } content: {
-                    CreateClassView(CM: CM, isSheetPresented: $createClass)
-                }
-                .sheet(isPresented: $deleteClass) {
-                    Task {
-                        await CM.getClasses()
-                        classes = CM.classes ?? []
-                    }
-                } content: {
-                    DeleteClassView(isSheetPresented: $deleteClass, CM: CM)
-                }
-                .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
             }
+            .navigationTitle(MM.member?.perm == .member || MM.member?.perm == .subLeader ? "Class" : "Classes")
+            .sheet(isPresented: $createClass) {
+                Task {
+                    await CM.getClasses()
+                    classes = CM.classes!
+                }
+            } content: {
+                CreateClassView(CM: CM, isSheetPresented: $createClass)
+            }
+            .sheet(isPresented: $deleteClass) {
+                Task {
+                    await CM.getClasses()
+                    classes = CM.classes ?? []
+                }
+            } content: {
+                DeleteClassView(isSheetPresented: $deleteClass, CM: CM)
+            }
+            .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
         }
     }
 }

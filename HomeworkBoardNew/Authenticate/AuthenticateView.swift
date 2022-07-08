@@ -19,7 +19,7 @@ struct AuthenticateView: View {
     
     var body: some View {
         VStack {
-            Text("Login to your account")
+            Text("**Login** to your account")
                 .header()
             
             TextField("Username", text: $username)
@@ -52,6 +52,7 @@ struct AuthenticateView: View {
                     }
             }
         }
+        .background(color: "lightestBlue")
         .sheet(isPresented: $createNewAccount) {
             NewAccountView(isSheetPresented: $createNewAccount, MM: MM)
         }

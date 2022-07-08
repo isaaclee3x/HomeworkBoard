@@ -28,7 +28,7 @@ struct CreateEntryView: View {
     var body: some View {
         VStack {
             
-            Text("Create an entry")
+            Text("**Create** an entry")
                 .header()
             
             Menu {
@@ -80,5 +80,6 @@ struct CreateEntryView: View {
                 await SM.getSubjects()
             }
         }
+        .background(color: "lightestBlue")
     }
 }

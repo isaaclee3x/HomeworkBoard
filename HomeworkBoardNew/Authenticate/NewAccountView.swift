@@ -15,8 +15,7 @@ struct NewAccountView: View {
     
     var body: some View {
         VStack {
-            
-            Text("Create a new account")
+            Text("**Create** a new account")
                 .header()
             
             TextField("Username", text: $member.username)

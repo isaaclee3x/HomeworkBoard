@@ -21,6 +21,7 @@ struct SettingsView: View {
             if let $classes = CM.classes {
                 HStack {
                     Text("Choose a Class:")
+                        .bold()
                     
                     Picker("Choose a Class", selection: $names) {
                         ForEach(names, id: \.self) { name in

@@ -18,7 +18,7 @@ struct DeleteClassView: View {
     
     var body: some View {
         VStack {
-            Text("Delete a class")
+            Text("**Delete** a class")
                 .header()
             
             TextField("Class", text: $name)

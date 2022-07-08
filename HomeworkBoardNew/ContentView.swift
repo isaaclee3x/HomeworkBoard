@@ -20,25 +20,11 @@ struct ContentView: View {
         if !success {
             NavigationView {
                 AuthenticateView(success: $success, MM: MM)
+                
             }
         } else {
-            TabView {
-                ClassesView(success: $success, MM: MM)
-                    .tabItem {
-                        VStack {
-                            Text("Classes")
-                            Image(systemName: "books.vertical")
-                        }
-                    }
-                
-                
-                SettingsView(MM: MM)
-                    .tabItem {
-                        VStack {
-                            Text("Settings")
-                            Image(systemName: "gear")
-                        }
-                    }
+            NavigationView {
+                ClassesView(success: $success, MM: MM)                
             }
         }
     }
