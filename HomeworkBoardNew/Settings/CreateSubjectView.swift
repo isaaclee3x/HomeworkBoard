@@ -54,7 +54,6 @@ struct CreateSubjectView: View {
                 
             }
             .navigationTitle("Subject")
-            .background(color: "lightestBlue")
         }
     }
 }

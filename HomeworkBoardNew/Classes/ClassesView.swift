@@ -37,7 +37,6 @@ struct ClassesView: View {
                         .foregroundColor(.black)
                         .overlay {
                             VStack {
-                                
                                 Spacer()
                                     .frame(height: 15)
                                 
@@ -51,17 +50,32 @@ struct ClassesView: View {
                                 
                                 List {
                                     ForEach(entriesWeek) { entry in
-                                        VStack {
-                                            Text(entry.entry)
-                                                .bold()
-                                            if entry.due != nil {
-                                                Text(entry.due!)
-                                                    .italic()
-                                                    .font(.system(size: 10))
-                                                    .foregroundColor(.gray)
-                                                    .opacity(0.7)
+                                        HStack {
+                                            if let subject = entry.subject {
+                                                VStack {
+                                                    Circle()
+                                                        .frame(width: 10)
+                                                        .foregroundColor(Color.init(red: subject.colour.r, green: subject.colour.g, blue: subject.colour.b))
+                                                    
+                                                    Text(subject.name)
+                                                        .font(.system(size: 10))
+                                                        .foregroundColor(.gray)
+                                                }
                                             }
-                                        }.frame(alignment: .leading)
+                                            
+                                            VStack {
+                                                Text(entry.entry)
+                                                    .bold()
+                                                if entry.due != nil {
+                                                    Text(entry.due!)
+                                                        .italic()
+                                                        .font(.system(size: 10))
+                                                        .foregroundColor(.gray)
+                                                        .opacity(0.7)
+                                                }
+                                            }
+                                            .frame(alignment: .leading)
+                                        }
                                     }
                                 }
                             }

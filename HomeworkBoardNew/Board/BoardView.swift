@@ -24,6 +24,8 @@ struct BoardView: View {
     @Binding var clas: Class
     @ObservedObject var CM: ClassManager
     @ObservedObject var BM: BoardManager
+    
+    @State var SM = SubjectManager()
     let CCM = CacheManager()
     
     var member: Member
@@ -57,35 +59,49 @@ struct BoardView: View {
             List {
                 if let entries = clas.board.entries[date] {
                     ForEach(entries) { entry in
-                        Text(entry.entry)
-                            .bold()
-                            .swipeActions(edge: .trailing) {
-                                Button("Create") {
-                                    createEntry = true
-                                    index = entries.firstIndex(of: entry)!
+                        HStack {
+                            if let subject = entry.subject {
+                                VStack {
+                                    Circle()
+                                        .frame(width: 10)
+                                        .foregroundColor(Color.init(red: subject.colour.r, green: subject.colour.g, blue: subject.colour.b))
+                                    
+                                    Text(subject.name)
+                                        .font(.system(size: 10))
+                                        .foregroundColor(.gray)
                                 }
-                                
-                                Button("Delete") {
-                                    Task {
-                                        index = entries.firstIndex(of: entry)!
-                                        clas.board.entries[date]![index].entry = " "
-                                        clas.board.entries[date]![index].due = nil
-                                        
-                                        CCM.updateCache(clas: clas, did: "\(member.username) REMOVED ENTRY \(entries[index])")
-                                        await CM.saveClass(clas: clas)
-                                    }
-                                }
-                                .tint(.red)
                             }
+                            Text(entry.entry)
+                                .bold()
+                        }
+                        .swipeActions(edge: .trailing) {
+                            Button("Create") {
+                                createEntry = true
+                                index = entries.firstIndex(of: entry)!
+                            }
+                            
+                            Button("Delete") {
+                                Task {
+                                    index = entries.firstIndex(of: entry)!
+                                    clas.board.entries[date]![index].entry = " "
+                                    clas.board.entries[date]![index].due = nil
+                                    clas.board.entries[date]![index].subject = nil
+                                    
+                                    CCM.updateCache(clas: clas, did: "\(member.username) REMOVED ENTRY \(entries[index])")
+                                    await CM.saveClass(clas: clas)
+                                }
+                            }
+                            .tint(.red)
+                        }
                     }
                 }
             }
         }
         .navigationTitle(clas.name)
-        .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
         .onAppear {
             Task {
                 self.date = Date().toFormat("dd MMMM yyyy")
+                await CM.getClass(name: clas.name)
                 await BM.cleanBoard(clas: clas)
             }
         }
@@ -94,7 +110,7 @@ struct BoardView: View {
                 await CM.getClass(name: clas.name)
             }
         } content: {
-            CreateEntryView(username: member.username ,date: date, index: index, isSheetPresented: $createEntry, clas: $clas, CM: CM)
+            CreateEntryView(username: member.username ,date: date, index: index, isSheetPresented: $createEntry, clas: $clas, CM: CM, SM: SM)
         }
         .sheet(isPresented: $showCache) {
             CacheView(board: clas.board)
@@ -134,5 +150,3 @@ struct BoardView: View {
         }
     }
 }
-
-

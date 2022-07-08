@@ -20,9 +20,9 @@ class BoardManager: ObservableObject {
     ///   - date: The key to save in
     func createBoard(clas: Class, date: String) async -> Class {
         var clas = clas
-        clas.board.entries[date] = [Entry(entry: nil, due: nil)]
+        clas.board.entries[date] = [Entry(entry: nil, due: nil, subject: nil)]
         for _ in 0 ..< 9 {
-            clas.board.entries[date]?.append(Entry(entry: nil, due: nil))
+            clas.board.entries[date]?.append(Entry(entry: nil, due: nil, subject: nil))
         }
         await CM.saveClass(clas: clas)
         return clas

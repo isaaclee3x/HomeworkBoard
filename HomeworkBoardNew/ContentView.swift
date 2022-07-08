@@ -20,7 +20,6 @@ struct ContentView: View {
         if !success {
             NavigationView {
                 AuthenticateView(success: $success, MM: MM)
-                    .background(color: "lightestBlue")
             }
         } else {
             TabView {

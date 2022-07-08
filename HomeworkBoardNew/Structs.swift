@@ -70,11 +70,11 @@ struct Board: Identifiable, Equatable, Codable {
 
 struct Entry: Identifiable, Equatable, Codable {
     
-    init(entry: String?, due: String?) {
+    init(entry: String?, due: String?, subject: Subject?) {
         if entry == nil {
             self.entry = " "
         } else {
-            self.subject = nil
+            self.subject = subject
             self.entry = entry!
             self.due = due
         }
@@ -87,7 +87,7 @@ struct Entry: Identifiable, Equatable, Codable {
     var due: String?
 }
 
-struct Subject: Identifiable, Equatable, Codable {
+struct Subject: Identifiable, Equatable, Codable, Hashable {
     
     var id = UUID()
     
@@ -95,7 +95,7 @@ struct Subject: Identifiable, Equatable, Codable {
     var colour: RGB
 }
 
-struct RGB: Identifiable, Equatable, Codable {
+struct RGB: Identifiable, Equatable, Codable, Hashable {
     
     var id = UUID()
     

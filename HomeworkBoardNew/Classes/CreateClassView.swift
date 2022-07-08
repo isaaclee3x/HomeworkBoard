@@ -44,7 +44,6 @@ struct CreateClassView: View {
             }
             .bottomButton()
         }
-        .background(color: "lightestBlue")
     }
 }
 

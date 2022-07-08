@@ -72,7 +72,7 @@ class ClassManager: ObservableObject {
             let formattedDate = date.toFormat("dd MMMM yyyy")
             clas.board.entries[formattedDate] = []
             for _ in 0 ..< 10 {
-                clas.board.entries[formattedDate]?.append(Entry(entry: nil, due: nil))
+                clas.board.entries[formattedDate]?.append(Entry(entry: nil, due: nil, subject: nil))
             }
             date = Date().addingTimeInterval(TimeInterval(86400 * i))
         }
