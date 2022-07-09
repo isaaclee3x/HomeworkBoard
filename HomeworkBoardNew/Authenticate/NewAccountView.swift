@@ -44,9 +44,3 @@ struct NewAccountView: View {
         .background(color: "lightestBlue")
     }
 }
-
-struct NewAccountView_Previews: PreviewProvider {
-    static var previews: some View {
-        NewAccountView(isSheetPresented: .constant(true), MM: MemberManager())
-    }
-}

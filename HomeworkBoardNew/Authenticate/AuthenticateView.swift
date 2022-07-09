@@ -61,9 +61,3 @@ struct AuthenticateView: View {
         }
     }
 }
-
-struct AuthenticateView_Previews: PreviewProvider {
-    static var previews: some View {
-        AuthenticateView(success: .constant(false) ,MM: MemberManager())
-    }
-}

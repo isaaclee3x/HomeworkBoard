@@ -37,9 +37,3 @@ struct DeleteClassView: View {
         .background(color: "lightestBlue")
     }
 }
-
-struct DeleteClassView_Previews: PreviewProvider {
-    static var previews: some View {
-        DeleteClassView(isSheetPresented: .constant(true) ,CM: ClassManager())
-    }
-}
