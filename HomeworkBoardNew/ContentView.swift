@@ -24,7 +24,7 @@ struct ContentView: View {
             }
         } else {
             NavigationView {
-                ClassesView(success: $success, MM: MM)                
+                ClassesView(success: $success, MM: MM)
             }
         }
     }

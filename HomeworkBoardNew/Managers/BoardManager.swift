@@ -10,7 +10,7 @@ import SwiftUI
 import Firebase
 import FirebaseDatabaseSwift
 
-class BoardManager: ObservableObject {
+class BoardManager {
     
     private var CM = ClassManager()
     

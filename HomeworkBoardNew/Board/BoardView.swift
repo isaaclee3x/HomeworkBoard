@@ -23,7 +23,7 @@ struct BoardView: View {
     
     @Binding var clas: Class
     @ObservedObject var CM: ClassManager
-    @ObservedObject var BM: BoardManager
+    let BM: BoardManager
     
     @State var SM = SubjectManager()
     let CCM = CacheManager()

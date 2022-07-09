@@ -23,7 +23,7 @@
 		FF4F5A6A285B622A000E727A /* HomeworkBoardNewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A69285B622A000E727A /* HomeworkBoardNewUITests.swift */; };
 		FF4F5A6C285B622A000E727A /* HomeworkBoardNewUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A6B285B622A000E727A /* HomeworkBoardNewUITestsLaunchTests.swift */; };
 		FF4F5A7B285B647F000E727A /* AuthenticateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A7A285B647F000E727A /* AuthenticateView.swift */; };
-		FF4F5A7D285B6487000E727A /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A7C285B6487000E727A /* AccountManager.swift */; };
+		FF4F5A7D285B6487000E727A /* MemberManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A7C285B6487000E727A /* MemberManager.swift */; };
 		FF4F5A80285B650F000E727A /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FF4F5A7F285B650F000E727A /* FirebaseDatabaseSwift */; };
 		FF4F5A83285B65A1000E727A /* SwiftyBase64 in Frameworks */ = {isa = PBXBuildFile; productRef = FF4F5A82285B65A1000E727A /* SwiftyBase64 */; };
 		FF4F5A85285B6606000E727A /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A84285B6606000E727A /* Structs.swift */; };
@@ -75,7 +75,7 @@
 		FF4F5A69285B622A000E727A /* HomeworkBoardNewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeworkBoardNewUITests.swift; sourceTree = "<group>"; };
 		FF4F5A6B285B622A000E727A /* HomeworkBoardNewUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeworkBoardNewUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		FF4F5A7A285B647F000E727A /* AuthenticateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticateView.swift; sourceTree = "<group>"; };
-		FF4F5A7C285B6487000E727A /* AccountManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountManager.swift; sourceTree = "<group>"; };
+		FF4F5A7C285B6487000E727A /* MemberManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberManager.swift; sourceTree = "<group>"; };
 		FF4F5A84285B6606000E727A /* Structs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Structs.swift; sourceTree = "<group>"; };
 		FF9A8F96285DF68C009F363F /* CreateClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateClassView.swift; sourceTree = "<group>"; };
 		FF9A8F98285E21F6009F363F /* DeleteClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteClassView.swift; sourceTree = "<group>"; };
@@ -155,10 +155,10 @@
 		FF42877B2866C6FE00FB33DB /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				FF4F5A7C285B6487000E727A /* AccountManager.swift */,
-				FFEF34182874704F00E578A7 /* SubjectManager.swift */,
+				FF4F5A7C285B6487000E727A /* MemberManager.swift */,
 				FF163122285C0EEA00DB8A6E /* ClassManager.swift */,
 				FFEF3413287447A300E578A7 /* BoardManager.swift */,
+				FFEF34182874704F00E578A7 /* SubjectManager.swift */,
 				FF03D7E0285F5EB800D8DACD /* CacheManager.swift */,
 			);
 			path = Managers;
@@ -394,7 +394,7 @@
 				FF4F5A7B285B647F000E727A /* AuthenticateView.swift in Sources */,
 				FF4287742866BCC200FB33DB /* CacheView.swift in Sources */,
 				FFEF34192874704F00E578A7 /* SubjectManager.swift in Sources */,
-				FF4F5A7D285B6487000E727A /* AccountManager.swift in Sources */,
+				FF4F5A7D285B6487000E727A /* MemberManager.swift in Sources */,
 				FF4287762866C53F00FB33DB /* Modifiers.swift in Sources */,
 				FF9A8F9D285E2377009F363F /* BoardView.swift in Sources */,
 				FF163125285C1E9600DB8A6E /* Enums.swift in Sources */,

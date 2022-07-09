@@ -22,8 +22,8 @@ struct ClassesView: View {
     
     @ObservedObject var MM: MemberManager
     @StateObject var CM = ClassManager()
-    @StateObject var BM = BoardManager()
     @StateObject var SM = SubjectManager()
+    let BM = BoardManager()
     
     let columns = [
         GridItem(.flexible()),
@@ -183,3 +183,4 @@ struct ClassesView: View {
         }
     }
 }
+    
