@@ -13,7 +13,8 @@ struct SettingsView: View {
     @ObservedObject var CM: ClassManager
     @ObservedObject var SM: SubjectManager
     
-    @State var name = ""
+    @State var clas = ""
+    @State var students: [Member] = []
     @State var createNewSubject = false
     
     var body: some View {
@@ -22,18 +23,56 @@ struct SettingsView: View {
                 if MM.member?.perm == .admin {
                     if let classes = CM.classes {
                         HStack {
-                            Text("Choose a Class:")
+                            Text("Choose a Class")
                                 .bold()
                             
-                            Picker("Choose a Class", selection: $name) {
+                            Menu {
                                 ForEach(classes) { clas in
-                                    Text(clas.name)
+                                    Button(clas.name) {
+                                        Task {
+                                            self.clas = clas.name
+                                            if self.clas != "" {
+                                                let students = await MM.getMembers(of: self.clas)
+                                                for i in students {
+                                                    self.students.append(await MM.adminBasedGetAccount(username: i))
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            } label: {
+                                if clas.isEmpty {
+                                    Text("Here")
+                                        .foregroundColor(.blue)
+                                } else {
+                                    Text(clas)
+                                        .foregroundColor(.blue)
                                 }
                             }
                         }
                     }
                     
                     Form {
+                        Section("Students") {
+                            if students != [] {
+                                ForEach(students) { student in
+                                    HStack {
+                                        Text(student.username)
+                                            .bold()
+                                        
+                                        VStack {
+                                            Text(student.clas)
+                                            
+                                            Text(student.perm.rawValue)
+                                        }
+                                        .opacity(0.5)
+                                        .font(.system(size: 10))
+                                        .foregroundColor(.gray)
+                                    }
+                                }
+                            }
+                        }
+                        
                         Section("Subjects") {
                             if let subjects = SM.subjects {
                                 ForEach(subjects) { subject in

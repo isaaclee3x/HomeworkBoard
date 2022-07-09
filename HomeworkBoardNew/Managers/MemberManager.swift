@@ -19,7 +19,7 @@ class MemberManager: ObservableObject {
     @Published var member: Member?
     
     private var ref = Database.database().reference()
-
+    
     
     /// Saves a member (with an encrypted password) to the /users/(username) path
     ///
@@ -40,6 +40,14 @@ class MemberManager: ObservableObject {
                 "data": stringEncoded
             ]
         )
+        
+        if member.perm == .member || member.perm == .subLeader {
+            try! await ref.child(member.clas).child(member.username).setValue(
+                [
+                    "name": member.username
+                ]
+            )
+        }
     }
     
     /// Checks whether the username and password the user entered matches the username and password saved in the cloud
@@ -55,7 +63,7 @@ class MemberManager: ObservableObject {
     }
     
     /// Gets the account's data from the database
-    /// 
+    ///
     /// Decodes the data into the Member struct
     /// - Parameter username: The account to pull
     func getAccount(username: String) async {
@@ -73,6 +81,36 @@ class MemberManager: ObservableObject {
         }
         
         try? await Task.sleep(nanoseconds: 100_000_000)
+    }
+    
+    func adminBasedGetAccount(username: String) async -> Member {
+        var returnMember = Member()
+        ref.child("users").child(username).child("data").observeSingleEvent(of: .value) { snapshot in
+            let value = snapshot.value as? String
+            guard value != nil else { return }
+            
+            let data = value!.data(using: .utf8)!
+            let decoder = JSONDecoder()
+            var member = try? decoder.decode(Member.self, from: data)
+            let decodedPassword = (member?.password.fromBase64())!
+            member?.password = decodedPassword
+            returnMember = member!
+        }
+        try? await Task.sleep(nanoseconds: 100_000_000)
+        return returnMember
+    }
+    
+    func getMembers(of: String) async -> [String] {
+        var names: [String] = []
+        ref.child(of).observeSingleEvent(of: .value) { snapshot in
+            let value = snapshot.value as? NSDictionary
+            guard let value else { return }
+            
+            names = value.allKeys as? [String] ?? []
+        }
+        
+        try? await Task.sleep(nanoseconds: 100_000_000)
+        return names
     }
     
 }
