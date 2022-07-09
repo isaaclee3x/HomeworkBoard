@@ -23,79 +23,19 @@ struct BoardView: View {
     
     @Binding var clas: Class
     @ObservedObject var CM: ClassManager
-    let BM: BoardManager
+    @ObservedObject var SM: SubjectManager
     
-    @State var SM = SubjectManager()
+    let BM: BoardManager
     let CCM = CacheManager()
     
     var member: Member
     
     var body: some View {
         VStack {
-            Text(date)
-                .font(.system(size: 25, design: .rounded))
-                .bold()
             
-            HStack {
-                Button {
-                    if daysFromToday > 0 {
-                        daysFromToday -= 1
-                    }
-                } label: {
-                    Text("Yesterday")
-                        .font(.system(size: 15))
-                        .bold()
-                }
-                
-                Button {
-                    daysFromToday += 1
-                } label: {
-                    Text("Tomorrow")
-                        .font(.system(size: 15))
-                        .bold()
-                }
-            }
+            ChangeDateView(date: $date, daysFromToday: $daysFromToday )
             
-            List {
-                if let entries = clas.board.entries[date] {
-                    ForEach(entries) { entry in
-                        HStack {
-                            if let subject = entry.subject {
-                                VStack {
-                                    Circle()
-                                        .frame(width: 10)
-                                        .foregroundColor(Color.init(red: subject.colour.r, green: subject.colour.g, blue: subject.colour.b))
-                                    
-                                    Text(subject.name)
-                                        .font(.system(size: 10))
-                                        .foregroundColor(.gray)
-                                }
-                            }
-                            Text(entry.entry)
-                                .bold()
-                        }
-                        .swipeActions(edge: .trailing) {
-                            Button("Create") {
-                                createEntry = true
-                                index = entries.firstIndex(of: entry)!
-                            }
-                            
-                            Button("Delete") {
-                                Task {
-                                    index = entries.firstIndex(of: entry)!
-                                    clas.board.entries[date]![index].entry = " "
-                                    clas.board.entries[date]![index].due = nil
-                                    clas.board.entries[date]![index].subject = nil
-                                    
-                                    await CCM.updateCache(clas: clas, did: "\(member.username) REMOVED ENTRY \(entries[index])")
-                                    await CM.saveClass(clas: clas)
-                                }
-                            }
-                            .tint(.red)
-                        }
-                    }
-                }
-            }
+            EntriesView(date: date, member: member, clas: $clas, createEntry: $createEntry, index: $index, CM: CM, CCM: CCM)
         }
         .navigationTitle(clas.name)
         .onAppear {
@@ -150,6 +90,96 @@ struct BoardView: View {
                     self.clas = await BM.createBoard(clas: clas, date: date)
                     await CM.getClass(name: clas.name)
                     
+                }
+            }
+        }
+    }
+}
+
+struct ChangeDateView: View {
+    
+    @Binding var date: String
+    @Binding var daysFromToday: Int
+    
+    var body: some View {
+        VStack {
+            Text(date)
+                .font(.system(size: 25, design: .rounded))
+                .bold()
+            
+            HStack {
+                Button {
+                    if daysFromToday > 0 {
+                        daysFromToday -= 1
+                    }
+                } label: {
+                    Text("Yesterday")
+                        .font(.system(size: 15))
+                        .bold()
+                }
+                
+                Button {
+                    daysFromToday += 1
+                } label: {
+                    Text("Tomorrow")
+                        .font(.system(size: 15))
+                        .bold()
+                }
+            }
+        }
+    }
+}
+
+struct EntriesView: View {
+    
+    var date: String
+    var member: Member
+    
+    @Binding var clas: Class
+    @Binding var createEntry: Bool
+    @Binding var index: Int
+    
+    @ObservedObject var CM: ClassManager
+    let CCM: CacheManager
+    
+    var body: some View {
+        List {
+            if let entries = clas.board.entries[date] {
+                ForEach(entries) { entry in
+                    HStack {
+                        if let subject = entry.subject {
+                            VStack {
+                                Circle()
+                                    .frame(width: 10)
+                                    .foregroundColor(Color.init(red: subject.colour.r, green: subject.colour.g, blue: subject.colour.b))
+                                
+                                Text(subject.name)
+                                    .font(.system(size: 10))
+                                    .foregroundColor(.gray)
+                            }
+                        }
+                        Text(entry.entry)
+                            .bold()
+                    }
+                    .swipeActions(edge: .trailing) {
+                        Button("Create") {
+                            createEntry = true
+                            index = entries.firstIndex(of: entry)!
+                        }
+                        
+                        Button("Delete") {
+                            Task {
+                                index = entries.firstIndex(of: entry)!
+                                clas.board.entries[date]![index].entry = " "
+                                clas.board.entries[date]![index].due = nil
+                                clas.board.entries[date]![index].subject = nil
+                                
+                                await CCM.updateCache(clas: clas, did: "\(member.username) REMOVED ENTRY \(entries[index])")
+                                await CM.saveClass(clas: clas)
+                            }
+                        }
+                        .tint(.red)
+                    }
                 }
             }
         }
