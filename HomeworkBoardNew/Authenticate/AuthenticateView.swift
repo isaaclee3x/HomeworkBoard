@@ -24,10 +24,10 @@ struct AuthenticateView: View {
             
             TextField("Username", text: $username)
                 .disableAutocorrection(true)
-                .credStyle(dimensions: (300, 60))
+                .credStyle(width: 300, height: 60)
             
             SecureField("Password", text: $password)
-                .credStyle(dimensions: (300, 60))
+                .credStyle(width: 300, height: 60)
             
             Button {
                 Task {

@@ -23,7 +23,7 @@ struct DeleteClassView: View {
             
             TextField("Class", text: $name)
                 .disableAutocorrection(true)
-                .credStyle(dimensions: (300,60))
+                .credStyle(width: 300, height: 60)
             
             Button {
                 CM.deleteClass(name: name)

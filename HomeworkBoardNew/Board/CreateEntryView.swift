@@ -55,7 +55,7 @@ struct CreateEntryView: View {
                 .bold()
     
             TextField("Entry", text: $name)
-                .credStyle(dimensions: (300,60))
+                .credStyle(width: 300, height: 60)
                 .foregroundColor(.black)
             
             Button {

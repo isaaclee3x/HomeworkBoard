@@ -12,8 +12,8 @@ struct BoardView: View {
     
     @Environment(\.colorScheme) var colorScheme
     
-    @State var daysFromToday = 0
     @State var date = ""
+    @State var daysFromToday = 0
     
     @State var createEntry = false
     @State var index = 0
@@ -22,6 +22,9 @@ struct BoardView: View {
     @State var dueDates: [String] = []
     
     @Binding var clas: Class
+    
+    var pullDate: String
+    
     @ObservedObject var CM: ClassManager
     @ObservedObject var SM: SubjectManager
     

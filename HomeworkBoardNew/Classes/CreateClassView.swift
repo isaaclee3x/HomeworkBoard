@@ -22,7 +22,7 @@ struct CreateClassView: View {
             
             TextField("Name", text: $name)
                 .disableAutocorrection(true)
-                .credStyle(dimensions: (300,60))
+                .credStyle(width: 300, height: 60)
             
             Button {
                 Task {

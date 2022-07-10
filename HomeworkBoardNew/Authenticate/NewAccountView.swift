@@ -20,15 +20,15 @@ struct NewAccountView: View {
             
             TextField("Username", text: $member.username)
                 .disableAutocorrection(true)
-                .credStyle(dimensions: (300, 60))
+                .credStyle(width: 300, height: 60)
             
             
             SecureField("Password", text: $member.password)
-                .credStyle(dimensions: (300, 60))
+                .credStyle(width: 300, height: 60)
             
             TextField("Class In", text: $member.clas)
                 .disableAutocorrection(true)
-                .credStyle(dimensions: (300, 60))
+                .credStyle(width: 300, height: 60).credStyle(width: 300, height: 60)
             
             Button {
                 Task {

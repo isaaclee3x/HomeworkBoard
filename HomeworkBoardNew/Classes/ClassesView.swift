@@ -33,7 +33,7 @@ struct ClassesView: View {
     var body: some View {
         VStack {
             if MM.member?.perm == .member || MM.member?.perm == .subLeader {
-                SummaryView(entriesWeek: entriesWeek)
+                SummaryView(clas: $classes[0], CM: CM, SM: SM, BM: BM, member: MM.member!, entriesWeek: entriesWeek)
             }
             ShowClassesView(classes: $classes, CM: CM, MM: MM, SM: SM, BM: BM)
         }
@@ -125,7 +125,7 @@ struct ClassesView: View {
             DeleteClassView(isSheetPresented: $deleteClass, CM: CM)
         }
         .sheet(isPresented: $showSettings) {
-            SettingsView(MM: MM, CM: CM, SM: SM)
+            SettingsView(MM: MM, CM: CM, SM: SM, member: MM.member!)
         }
         .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
     }
@@ -133,6 +133,15 @@ struct ClassesView: View {
 
 struct SummaryView: View {
     
+    @Binding var clas: Class
+    
+    @ObservedObject var CM: ClassManager
+    @ObservedObject var SM: SubjectManager
+    
+    @State var date = ""
+    
+    let BM: BoardManager
+    var member: Member
     var entriesWeek: [Entry]
     
     var body: some View {
@@ -141,36 +150,43 @@ struct SummaryView: View {
             .overlay {
                 List {
                     ForEach(entriesWeek) { entry in
-                        HStack {
-                            if let subject = entry.subject {
+                        NavigationLink {
+                            BoardView(clas: $clas, pullDate: date, CM: CM, SM: SM, BM: BM, member: member)
+                        } label: {
+                            HStack {
+                                if let subject = entry.subject {
+                                    VStack {
+                                        Circle()
+                                            .frame(width: 10)
+                                            .foregroundColor(Color.init(red: subject.colour.r, green: subject.colour.g, blue: subject.colour.b))
+
+                                        Text(subject.name)
+                                            .font(.system(size: 10))
+                                            .foregroundColor(.gray)
+                                    }
+                                }
+
                                 VStack {
-                                    Circle()
-                                        .frame(width: 10)
-                                        .foregroundColor(Color.init(red: subject.colour.r, green: subject.colour.g, blue: subject.colour.b))
-                                    
-                                    Text(subject.name)
-                                        .font(.system(size: 10))
-                                        .foregroundColor(.gray)
+                                    Text(entry.entry)
+                                        .bold()
+                                    if entry.due != nil {
+                                        Text(entry.due!)
+                                            .italic()
+                                            .font(.system(size: 10))
+                                            .foregroundColor(.gray)
+                                            .opacity(0.7)
+                                    }
                                 }
+                                .frame(alignment: .leading)
                             }
-                            
-                            VStack {
-                                Text(entry.entry)
-                                    .bold()
-                                if entry.due != nil {
-                                    Text(entry.due!)
-                                        .italic()
-                                        .font(.system(size: 10))
-                                        .foregroundColor(.gray)
-                                        .opacity(0.7)
-                                }
+                            .onTapGesture {
+                                date = entry.due!
                             }
-                            .frame(alignment: .leading)
                         }
                     }
                 }
             }
-            .frame(width: 350, height: 300)
+            .frame(width: 400, height: 300)
             .cornerRadius(10)
             .padding()
     }
@@ -178,11 +194,14 @@ struct SummaryView: View {
 
 struct ShowClassesView: View {
     
+    @State var date = ""
+    
     @Binding var classes: [Class]
     
     @ObservedObject var CM: ClassManager
     @ObservedObject var MM: MemberManager
     @ObservedObject var SM: SubjectManager
+    
     let BM: BoardManager
     
     var body: some View {
@@ -194,11 +213,15 @@ struct ShowClassesView: View {
         } else {
             ForEach($classes) { $clas in
                 NavigationLink {
-                    BoardView(clas: $clas, CM: CM, SM: SM, BM: BM, member: MM.member!)
+                    BoardView(clas: $clas, pullDate: date, CM: CM, SM: SM, BM: BM, member: MM.member!)
                 } label: {
                     Text(clas.name)
+                        .bold()
                         .blockDisplay()
                 }
+            }
+            .onAppear {
+                date = DateFormatter().string(from: Date())
             }
         }
     }

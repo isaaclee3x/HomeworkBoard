@@ -13,7 +13,12 @@ struct SettingsView: View {
     @ObservedObject var CM: ClassManager
     @ObservedObject var SM: SubjectManager
     
+    let BM = BoardManager()
+    var member: Member
+    
     @State var clas = ""
+    @State var sendableClas = Class(name: "", date: "")
+    @State var entries: [Entry] = []
     @State var students: [Member] = []
     @State var createNewSubject = false
     
@@ -21,11 +26,24 @@ struct SettingsView: View {
         NavigationView {
             VStack {
                 if MM.member?.perm == .admin || MM.member?.perm == .teacher {
-                    if let classes = CM.classes {
-                        SelectClassView(clas: $clas, students: $students, classes: classes, MM: MM, CM: CM)
+                    if clas != "" {
+                        let index = (CM.classes?.firstIndex() { clas in
+                            return clas.name == self.clas
+                        })!
+                        if let $clas = Binding<Class>(
+                            get: { CM.classes![index] },
+                            set: { newValue in CM.classes![index] = newValue}) {
+                            
+                            SummaryView(clas: $clas, CM: CM, SM: SM, BM: BM, member: member, entriesWeek: entries)
+                        }
                     }
                     
                     Form {
+                        if let classes = CM.classes {
+                            
+                            SelectClassView(clas: $clas, students: $students, entries: $entries, classes: classes, MM: MM, CM: CM)
+                        }
+                        
                         Section("Students") {
                             StudentsView(students: $students)
                         }
@@ -33,15 +51,15 @@ struct SettingsView: View {
                         Section("Subjects") {
                             SubjectsView(SM: SM, createNewSubject: $createNewSubject)
                         }
-                    }
-                    .navigationTitle("Settings")
-                    .sheet(isPresented: $createNewSubject) {
-                        CreateSubjectView(isSheetPresented: $createNewSubject, SM: SM)
-                    }
-                    .onAppear {
-                        Task(priority: .high) {
-                            await CM.getClasses()
-                            await SM.getSubjects()
+                        .navigationTitle("Settings")
+                        .sheet(isPresented: $createNewSubject) {
+                            CreateSubjectView(isSheetPresented: $createNewSubject, SM: SM)
+                        }
+                        .onChange(of: clas) { newValue in
+                            Task(priority: .high) {
+                                await CM.getClasses()
+                                await SM.getSubjects()
+                            }
                         }
                     }
                 }
@@ -54,11 +72,13 @@ struct SelectClassView: View {
     
     @Binding var clas: String
     @Binding var students: [Member]
+    @Binding var entries: [Entry]
     
     var classes: [Class]
     
     @ObservedObject var MM: MemberManager
     @ObservedObject var CM: ClassManager
+    let BM = BoardManager()
     
     var body: some View {
         HStack {
@@ -77,6 +97,7 @@ struct SelectClassView: View {
                                     self.students.append(await MM.adminBasedGetAccount(username: i))
                                 }
                             }
+                            self.entries = BM.homeworkForTheWeek(clas: clas)
                         }
                     }
                 }
