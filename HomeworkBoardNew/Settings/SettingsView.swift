@@ -34,7 +34,7 @@ struct SettingsView: View {
                             get: { CM.classes![index] },
                             set: { newValue in CM.classes![index] = newValue}) {
                             
-                            SummaryView(clas: $clas, CM: CM, SM: SM, BM: BM, member: member, entriesWeek: entries)
+                            SummaryView(clas: $clas, CM: CM, SM: SM, BM: BM, member: member)
                         }
                     }
                     
@@ -97,7 +97,6 @@ struct SelectClassView: View {
                                     self.students.append(await MM.adminBasedGetAccount(username: i))
                                 }
                             }
-                            self.entries = BM.homeworkForTheWeek(clas: clas)
                         }
                     }
                 }

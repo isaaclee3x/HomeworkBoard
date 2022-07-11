@@ -34,7 +34,7 @@ struct ClassesView: View {
     var body: some View {
         VStack {
             if MM.member?.perm == .member || MM.member?.perm == .subLeader {
-                SummaryView(clas: $classes[0], CM: CM, SM: SM, BM: BM, member: MM.member!, entriesWeek: entriesWeek)
+                SummaryView(clas: $classes[0], CM: CM, SM: SM, BM: BM, member: MM.member!)
             }
             ShowClassesView(classes: $classes, CM: CM, MM: MM, SM: SM, BM: BM)
         }
@@ -46,7 +46,6 @@ struct ClassesView: View {
                 } else {
                     await CM.getClass(name: MM.member!.clas)
                     classes = CM.classes ?? []
-                    entriesWeek = BM.homeworkForTheWeek(clas: classes[0])
                 }
             }
         }
@@ -78,7 +77,6 @@ struct ClassesView: View {
                             } else {
                                 await CM.getClass(name: MM.member!.clas)
                                 classes = CM.classes ?? []
-                                entriesWeek = BM.homeworkForTheWeek(clas: classes[0])
                             }
                         }
                     } label: {
@@ -108,7 +106,7 @@ struct ClassesView: View {
                 
             }
         }
-        .navigationTitle(MM.member?.perm == .member || MM.member?.perm == .subLeader ? "Class" : "Classes")
+        .navigationTitle(MM.member?.perm == .member || MM.member?.perm == .subLeader ? "Classes" : "Class")
         .sheet(isPresented: $createClass) {
             Task {
                 await CM.getClasses()
@@ -146,56 +144,90 @@ struct SummaryView: View {
     @ObservedObject var SM: SubjectManager
     
     @State var date = ""
+    @State var entriesWeek: [Entry] = []
+    @State var days = 7.0
     
     let BM: BoardManager
     var member: Member
-    var entriesWeek: [Entry]
     
     var body: some View {
         Rectangle()
             .foregroundColor(.black)
             .overlay {
-                List {
-                    ForEach(entriesWeek) { entry in
-                        NavigationLink {
-                            BoardView(clas: $clas, pullDate: date, CM: CM, SM: SM, BM: BM, member: member)
-                        } label: {
-                            HStack {
-                                if let subject = entry.subject {
-                                    VStack {
-                                        Circle()
-                                            .frame(width: 10)
-                                            .foregroundColor(Color.init(red: subject.colour.r, green: subject.colour.g, blue: subject.colour.b))
-
-                                        Text(subject.name)
-                                            .font(.system(size: 10))
-                                            .foregroundColor(.gray)
-                                    }
-                                }
-
-                                VStack {
-                                    Text(entry.entry)
-                                        .bold()
-                                    if entry.due != nil {
-                                        Text(entry.due!)
-                                            .italic()
-                                            .font(.system(size: 10))
-                                            .foregroundColor(.gray)
-                                            .opacity(0.7)
-                                    }
-                                }
-                                .frame(alignment: .leading)
-                            }
-                            .onTapGesture {
-                                date = entry.due!
+                VStack {
+                    HStack {
+                        Text("Homework due in \(String(format: "%.0f", days)) days:")
+                            .bold()
+                            .frame(width: 50)
+                            .font(.system(size: 9))
+                        Slider(value: $days, in: 1...10, step: 1) {
+                            Text("Due in \(days) days")
+                        } minimumValueLabel: {
+                            Text("1")
+                                .bold()
+                        } maximumValueLabel: {
+                            Text("10")
+                                .bold()
+                        } onEditingChanged: { value in
+                            Task {
+                                entriesWeek = BM.homeworkDue(clas: clas, in: Int(days))
                             }
                         }
+                        .frame(width: 200)
+                    }
+                    .offset(y: 10)
+                    
+                    if entriesWeek != [] {
+                        List {
+                            ForEach(entriesWeek) { entry in
+                                NavigationLink {
+                                    BoardView(clas: $clas, pullDate: date, CM: CM, SM: SM, BM: BM, member: member)
+                                } label: {
+                                    HStack {
+                                        if let subject = entry.subject {
+                                            VStack {
+                                                Circle()
+                                                    .frame(width: 10)
+                                                    .foregroundColor(Color.init(red: subject.colour.r, green: subject.colour.g, blue: subject.colour.b))
+                                                
+                                                Text(subject.name)
+                                                    .font(.system(size: 10))
+                                                    .foregroundColor(.gray)
+                                            }
+                                        }
+                                        
+                                        VStack {
+                                            Text(entry.entry)
+                                                .bold()
+                                            if entry.due != nil {
+                                                Text(entry.due!)
+                                                    .italic()
+                                                    .font(.system(size: 10))
+                                                    .foregroundColor(.gray)
+                                                    .opacity(0.7)
+                                            }
+                                        }
+                                        .frame(alignment: .leading)
+                                    }
+                                    .onTapGesture {
+                                        date = entry.due!
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        Text("There are no entries due")
+                            .foregroundColor(Color("lightestBlue"))
+                            .bold()
                     }
                 }
             }
-            .frame(width: 400, height: 300)
+            .frame(width: 350, height: 300)
             .cornerRadius(10)
             .padding()
+            .onAppear {
+                entriesWeek = BM.homeworkDue(clas: clas, in: Int(days))
+            }
     }
 }
 
@@ -218,7 +250,7 @@ struct ShowClassesView: View {
                 .opacity(0.4)
             
         } else {
-            if let member = MM.member {
+            if MM.member != nil {
                 ForEach($classes) { $clas in
                     NavigationLink {
                         BoardView(clas: $clas, pullDate: date, CM: CM, SM: SM, BM: BM, member: MM.member!)

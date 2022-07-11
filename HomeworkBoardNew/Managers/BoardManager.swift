@@ -31,10 +31,10 @@ class BoardManager {
     /// Checks what entries happen in the week after today
     /// - Parameter clas: The class to check the entries from
     /// - Returns: The entries that are due next week
-    func homeworkForTheWeek(clas: Class) -> [Entry] {
+    func homeworkDue(clas: Class, in days: Int) -> [Entry] {
         var entries: [Entry] = []
         
-        for i in 0 ..< 7 {
+        for i in 0 ..< days {
             let date = Date().addingTimeInterval(TimeInterval(86400 * i))
             let string = date.toFormat("dd MMMM yyyy")
             if let entryForTheDay = clas.board.entries[string] {
