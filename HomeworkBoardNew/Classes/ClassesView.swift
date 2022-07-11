@@ -25,12 +25,7 @@ struct ClassesView: View {
     @StateObject var CM = ClassManager()
     @StateObject var SM = SubjectManager()
     let BM = BoardManager()
-    
-    let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
-    
+
     var body: some View {
         VStack {
             if MM.member?.perm == .member || MM.member?.perm == .subLeader {
@@ -145,7 +140,7 @@ struct SummaryView: View {
     
     @State var date = ""
     @State var entriesWeek: [Entry] = []
-    @State var days = 7.0
+    @State var days = 1.0
     
     let BM: BoardManager
     var member: Member
@@ -181,7 +176,7 @@ struct SummaryView: View {
                         List {
                             ForEach(entriesWeek) { entry in
                                 NavigationLink {
-                                    BoardView(clas: $clas, pullDate: date, CM: CM, SM: SM, BM: BM, member: member)
+                                    BoardView(clas: $clas, pullDate: entry.due!, CM: CM, SM: SM, BM: BM, member: member)
                                 } label: {
                                     HStack {
                                         if let subject = entry.subject {
@@ -208,9 +203,6 @@ struct SummaryView: View {
                                             }
                                         }
                                         .frame(alignment: .leading)
-                                    }
-                                    .onTapGesture {
-                                        date = entry.due!
                                     }
                                 }
                             }
@@ -241,6 +233,11 @@ struct ShowClassesView: View {
     @ObservedObject var MM: MemberManager
     @ObservedObject var SM: SubjectManager
     
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    
     let BM: BoardManager
     
     var body: some View {
@@ -251,13 +248,15 @@ struct ShowClassesView: View {
             
         } else {
             if MM.member != nil {
-                ForEach($classes) { $clas in
-                    NavigationLink {
-                        BoardView(clas: $clas, pullDate: date, CM: CM, SM: SM, BM: BM, member: MM.member!)
-                    } label: {
-                        Text(clas.name)
-                            .bold()
-                            .blockDisplay()
+                LazyVGrid(columns: columns) {
+                    ForEach($classes) { $clas in
+                        NavigationLink {
+                            BoardView(clas: $clas, pullDate: date, CM: CM, SM: SM, BM: BM, member: MM.member!)
+                        } label: {
+                            Text(clas.name)
+                                .bold()
+                                .blockDisplay()
+                        }
                     }
                 }
                 .onAppear {

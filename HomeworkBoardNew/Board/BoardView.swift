@@ -43,7 +43,6 @@ struct BoardView: View {
         .navigationTitle(clas.name)
         .onAppear {
             Task {
-                self.date = Date().toFormat("dd MMMM yyyy")
                 await CM.getClass(name: clas.name)
                 await BM.cleanBoard(clas: clas)
             }

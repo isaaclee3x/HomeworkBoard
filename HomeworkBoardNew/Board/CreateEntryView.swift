@@ -15,7 +15,8 @@ struct CreateEntryView: View {
     var index: Int
     
     @State var name = ""
-    @State var subject = Subject(name: "", colour: RGB(r: 0, g: 1, b: 0))
+    @State var subject = Subject(name: "", colour: RGB(r: 0, g: 0, b: 0))
+    @State var didNotChooseSubject = false
     
     @Binding var isSheetPresented: Bool
     @Binding var clas: Class
@@ -61,12 +62,16 @@ struct CreateEntryView: View {
             
             Button {
                 Task {
-                    clas.board.entries[self.date]![index] = Entry(entry: name, due: date, subject: subject)
-                    
-                    await CCM.updateCache(clas: clas, did: "\(username) CREATED ENTRY \(name)")
-                    await CM.saveClass(clas: clas)
-                    
-                    isSheetPresented = false
+                    if subject.name == "" {
+                        didNotChooseSubject = true
+                    } else {
+                        clas.board.entries[self.date]![index] = Entry(entry: name, due: date, subject: subject)
+                        
+                        await CCM.updateCache(clas: clas, did: "\(username) CREATED ENTRY \(name)")
+                        await CM.saveClass(clas: clas)
+                        
+                        isSheetPresented = false                        
+                    }
                 }
             } label: {
                 Text("Submit")
@@ -80,5 +85,10 @@ struct CreateEntryView: View {
             }
         }
         .background(color: "lightestBlue")
+        .alert("Please choose a subject", isPresented: $didNotChooseSubject) {
+            Button("Cancel", role: .cancel) {
+                
+            }
+        }
     }
 }
