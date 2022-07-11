@@ -1,66 +1,64 @@
 //
-//  NewAccountView.swift
+//  SelectClassView.swift
 //  HomeworkBoardNew
 //
-//  Created by Isaac Lee Jing Zhi on 16/6/22.
+//  Created by Isaac Lee Jing Zhi on 11/7/22.
 //
 
 import SwiftUI
 
-struct NewAccountView: View {
+struct NoClassChooseView: View {
     
-    @State var member = Member()
+    @Binding var username: String
+    @Binding var success: Bool
     @Binding var isSheetPresented: Bool
+    
+    @State var clas = ""
+    
     @ObservedObject var MM: MemberManager
     @ObservedObject var CM: ClassManager
     
     var body: some View {
         VStack {
-            Text("**Create** a new account")
+            Text("**Choose** your class")
                 .header()
-            
-            TextField("Username", text: $member.username)
-                .disableAutocorrection(true)
-                .credStyle(width: 300, height: 60)
-            
-            
-            SecureField("Password", text: $member.password)
-                .credStyle(width: 300, height: 60)
             
             if let classes = CM.classes {
                 Menu {
                     ForEach(classes) { clas in
                         Button {
-                            member.clas = clas.name
+                            self.clas = clas.name
                         } label: {
                             Text(clas.name)
                         }
+                        
                     }
                 } label: {
-                    Text("Pick your Class")
+                    Text("Pick a class")
                         .foregroundColor(Color("murkyBlue"))
                         .bold()
                 }
-                .padding()
             }
             
-            Text(member.clas)
-                .bold() 
+            Text(clas)
+                .bold()
             
             Button {
                 Task {
-                    await MM.saveAccount(member: member, bypass: false)
+                    MM.member?.clas = clas
+                    await MM.saveAccount(member: MM.member!, bypass: true)
                     isSheetPresented = false
+                    success = false
                 }
             } label: {
-                Text("Save")
+                Text("Confirm")
                     .bold()
             }
             .bottomButton()
         }
         .background(color: "lightestBlue")
         .onAppear {
-            Task { await CM.getClasses() }
+            Task { await CM.getClasses(); await MM.getAccount(username: username) }
         }
     }
 }

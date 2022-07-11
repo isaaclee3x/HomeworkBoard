@@ -7,6 +7,7 @@
 
 import SwiftDate
 import Foundation
+import Firebase
 import FirebaseDatabase
 import FirebaseDatabaseSwift
 
@@ -16,6 +17,7 @@ class ClassManager: ObservableObject {
     
     @Published var classes: [Class]?
     
+    let MM = MemberManager()
     private var ref = Database.database().reference()
     private var encoder = JSONEncoder()
     private var decoder = JSONDecoder()
@@ -91,7 +93,28 @@ class ClassManager: ObservableObject {
     
     /// Deletes the class by setting its value to nil
     ///  - Parameter name: Name of the class to delete
-    func deleteClass(name: String) {
-        ref.child("classes").child(name).removeValue()
+    func deleteClass(name: String) async {
+        try? await ref.child("classes").child(name).removeValue()
+        
+        var fetchName: [String] = []
+        ref.child(name).observeSingleEvent(of: .value) { snapshot in
+            let value = snapshot.value as! NSDictionary
+            let names = value.allKeys as? [String]
+            fetchName = names!
+        }
+        
+        try? await Task.sleep(nanoseconds: 100_000_000)
+        
+        guard fetchName != [] else { return }
+        
+        for name in fetchName {
+            var student = await self.MM.adminBasedGetAccount(username: name)
+            student.clas = ""
+            student.password = student.password.toBase64()
+            let encodedStudent = try? JSONEncoder().encode(student)
+            try? await ref.child("users").child(student.username).child("data").setValue(String(data: encodedStudent!, encoding: .utf8))
+        }
+        
+        try? await ref.child(name).removeValue()
     }
 }

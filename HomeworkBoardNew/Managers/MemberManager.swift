@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Firebase
 import FirebaseDatabase
 import FirebaseDatabaseSwift
 
@@ -25,10 +26,11 @@ class MemberManager: ObservableObject {
     ///
     /// It also encodes it using JSONEncoder so that it can be more easily parsed into the right struct
     /// - Parameter member: The member to save
-    func saveAccount(member: Member) async {
-        
-        guard await !member.username.exists(in: "member") else { return }
-        guard await member.clas.exists(in: "class") else { return }
+    func saveAccount(member: Member, bypass: Bool) async {
+        if !bypass {
+            guard await !member.username.exists(in: "member") else { return }
+            guard await member.clas.exists(in: "class") else { return }
+        }
         
         var member = member
         member.password = member.password.toBase64()
@@ -55,10 +57,12 @@ class MemberManager: ObservableObject {
     ///   - username: Serves as the path to get from the database to check with
     ///   - password: Locally inputed password
     ///   - what: What to do if the authentication is successful
-    func auth(username: String, password: String, do what: () -> Void) async {
+    func auth(username: String, password: String, do what: (() -> Void)..., not fail: (() -> Void)...) async {
         await self.getAccount(username: username)
         if member?.username == username && member?.password == password {
-            what()
+            for i in what { i() }
+        } else {
+            for i in fail { i() }
         }
     }
     
@@ -67,7 +71,7 @@ class MemberManager: ObservableObject {
     /// Decodes the data into the Member struct
     /// - Parameter username: The account to pull
     func getAccount(username: String) async {
-        ref.child("users").child(username).child("data").observeSingleEvent(of: .value) { snapshot in
+        ref.child("users").child(username).child("data").observe(.value) { snapshot in
             
             let value = snapshot.value as? String
             guard value != nil else { return }

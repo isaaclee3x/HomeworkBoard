@@ -15,16 +15,17 @@ struct ContentView: View {
     @StateObject var CM = ClassManager()
     
     @State var success = false
+    @State var chooseClassView = false
     
     var body: some View {
         if !success {
             NavigationView {
-                AuthenticateView(success: $success, MM: MM)
+                AuthenticateView(success: $success, MM: MM, CM: CM)
                 
             }
         } else {
             NavigationView {
-                ClassesView(success: $success, MM: MM)
+                ClassesView(success: $success, chooseClassView: $chooseClassView, MM: MM)
             }
         }
     }

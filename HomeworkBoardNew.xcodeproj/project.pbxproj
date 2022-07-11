@@ -28,9 +28,9 @@
 		FF9A8F97285DF68C009F363F /* CreateClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A8F96285DF68C009F363F /* CreateClassView.swift */; };
 		FF9A8F99285E21F6009F363F /* DeleteClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A8F98285E21F6009F363F /* DeleteClassView.swift */; };
 		FF9A8F9D285E2377009F363F /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A8F9C285E2377009F363F /* BoardView.swift */; };
+		FFC1281A287C3CCB002EF761 /* NoClassChooseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC12819287C3CCB002EF761 /* NoClassChooseView.swift */; };
 		FFE171A6287AA9CA00304237 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = FFE171A5287AA9CA00304237 /* FirebaseDatabase */; };
 		FFE171A8287AA9CA00304237 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FFE171A7287AA9CA00304237 /* FirebaseDatabaseSwift */; };
-		FFE171AB287AAA1200304237 /* SwiftyBase64 in Frameworks */ = {isa = PBXBuildFile; productRef = FFE171AA287AAA1200304237 /* SwiftyBase64 */; };
 		FFE171AE287AAA4400304237 /* SwiftDate in Frameworks */ = {isa = PBXBuildFile; productRef = FFE171AD287AAA4400304237 /* SwiftDate */; };
 		FFEDA8AB286F3F7D00E59BF3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FFEDA8AA286F3F7D00E59BF3 /* GoogleService-Info.plist */; };
 		FFEF34122874242A00E578A7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEF34112874242A00E578A7 /* SettingsView.swift */; };
@@ -94,6 +94,7 @@
 		FF9A8F96285DF68C009F363F /* CreateClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateClassView.swift; sourceTree = "<group>"; };
 		FF9A8F98285E21F6009F363F /* DeleteClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteClassView.swift; sourceTree = "<group>"; };
 		FF9A8F9C285E2377009F363F /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
+		FFC12819287C3CCB002EF761 /* NoClassChooseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoClassChooseView.swift; sourceTree = "<group>"; };
 		FFEDA8AA286F3F7D00E59BF3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "../../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FFEF34112874242A00E578A7 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		FFEF3413287447A300E578A7 /* BoardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardManager.swift; sourceTree = "<group>"; };
@@ -108,7 +109,6 @@
 			files = (
 				FFE171AE287AAA4400304237 /* SwiftDate in Frameworks */,
 				FFE171A8287AA9CA00304237 /* FirebaseDatabaseSwift in Frameworks */,
-				FFE171AB287AAA1200304237 /* SwiftyBase64 in Frameworks */,
 				FFE171A6287AA9CA00304237 /* FirebaseDatabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -134,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				FF4F5A7A285B647F000E727A /* AuthenticateView.swift */,
+				FFC12819287C3CCB002EF761 /* NoClassChooseView.swift */,
 				FF374CC1285B81D10035891F /* NewAccountView.swift */,
 			);
 			path = Authenticate;
@@ -273,7 +274,6 @@
 			packageProductDependencies = (
 				FFE171A5287AA9CA00304237 /* FirebaseDatabase */,
 				FFE171A7287AA9CA00304237 /* FirebaseDatabaseSwift */,
-				FFE171AA287AAA1200304237 /* SwiftyBase64 */,
 				FFE171AD287AAA4400304237 /* SwiftDate */,
 			);
 			productName = HomeworkBoardNew;
@@ -350,7 +350,6 @@
 			mainGroup = FF4F5A42285B6226000E727A;
 			packageReferences = (
 				FFE171A4287AA9CA00304237 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				FFE171A9287AAA1200304237 /* XCRemoteSwiftPackageReference "SwiftyBase64" */,
 				FFE171AC287AAA4400304237 /* XCRemoteSwiftPackageReference "SwiftDate" */,
 			);
 			productRefGroup = FF4F5A4C285B6226000E727A /* Products */;
@@ -403,6 +402,7 @@
 				FF74B754287AA0F5008684A5 /* Modifiers.swift in Sources */,
 				FF4F5A51285B6226000E727A /* ContentView.swift in Sources */,
 				FF374CC2285B81D10035891F /* NewAccountView.swift in Sources */,
+				FFC1281A287C3CCB002EF761 /* NoClassChooseView.swift in Sources */,
 				FFEF34122874242A00E578A7 /* SettingsView.swift in Sources */,
 				FF4287722866ACA300FB33DB /* CreateEntryView.swift in Sources */,
 				FFEF341728744ECF00E578A7 /* CreateSubjectView.swift in Sources */,
@@ -775,14 +775,6 @@
 				minimumVersion = 9.0.0;
 			};
 		};
-		FFE171A9287AAA1200304237 /* XCRemoteSwiftPackageReference "SwiftyBase64" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/drichardson/SwiftyBase64";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		FFE171AC287AAA4400304237 /* XCRemoteSwiftPackageReference "SwiftDate" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/malcommac/SwiftDate";
@@ -803,11 +795,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FFE171A4287AA9CA00304237 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseDatabaseSwift;
-		};
-		FFE171AA287AAA1200304237 /* SwiftyBase64 */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FFE171A9287AAA1200304237 /* XCRemoteSwiftPackageReference "SwiftyBase64" */;
-			productName = SwiftyBase64;
 		};
 		FFE171AD287AAA4400304237 /* SwiftDate */ = {
 			isa = XCSwiftPackageProductDependency;

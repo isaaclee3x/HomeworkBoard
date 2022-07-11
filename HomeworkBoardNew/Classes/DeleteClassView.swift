@@ -26,8 +26,10 @@ struct DeleteClassView: View {
                 .credStyle(width: 300, height: 60)
             
             Button {
-                CM.deleteClass(name: name)
-                isSheetPresented = false
+                Task {
+                    await CM.deleteClass(name: name)
+                    isSheetPresented = false
+                }
             } label: {
                 Text("Delete")
                     .bold()

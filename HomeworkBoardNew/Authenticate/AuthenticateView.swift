@@ -14,8 +14,11 @@ struct AuthenticateView: View {
     
     @Binding var success: Bool
     @ObservedObject var MM: MemberManager
+    @ObservedObject var CM: ClassManager
     
     @State var createNewAccount = false
+    @State var chooseClass = false
+    @State var loginFail = false
     
     var body: some View {
         VStack {
@@ -32,7 +35,14 @@ struct AuthenticateView: View {
             Button {
                 Task {
                     await MM.auth(username: username, password: password) {
-                        success = true
+                        print(MM.member)
+                        if MM.member?.clas == "" {
+                            chooseClass = true
+                        } else {
+                            success = true
+                        }
+                    } not: {
+                        loginFail = true
                     }
                 }
             } label: {
@@ -54,10 +64,22 @@ struct AuthenticateView: View {
         }
         .background(color: "lightestBlue")
         .sheet(isPresented: $createNewAccount) {
-            NewAccountView(isSheetPresented: $createNewAccount, MM: MM)
+            NewAccountView(isSheetPresented: $createNewAccount, MM: MM, CM: CM)
+        }
+        .sheet(isPresented: $chooseClass) {
+            NoClassChooseView(username: $username, success: $success, isSheetPresented: $chooseClass, MM: MM, CM: CM)
         }
         .onAppear {
             MM.member = nil
+        }
+        .alert("Login Failed", isPresented: $loginFail) {
+            Button("Create", role: .cancel) {
+                createNewAccount = true
+            }
+            
+            Button("Cancel", role: .destructive) {
+                loginFail = false
+            }
         }
     }
 }

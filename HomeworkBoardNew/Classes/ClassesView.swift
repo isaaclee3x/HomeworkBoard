@@ -19,6 +19,7 @@ struct ClassesView: View {
     @State var entriesWeek: [Entry] = []
     
     @Binding var success: Bool
+    @Binding var chooseClassView: Bool
     
     @ObservedObject var MM: MemberManager
     @StateObject var CM = ClassManager()
@@ -128,6 +129,12 @@ struct ClassesView: View {
             SettingsView(MM: MM, CM: CM, SM: SM, member: MM.member!)
         }
         .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
+        .onChange(of: MM.member?.clas) { newValue in
+            if newValue == "" {
+                success = false
+                chooseClassView = false
+            }
+        }
     }
 }
 
@@ -211,17 +218,19 @@ struct ShowClassesView: View {
                 .opacity(0.4)
             
         } else {
-            ForEach($classes) { $clas in
-                NavigationLink {
-                    BoardView(clas: $clas, pullDate: date, CM: CM, SM: SM, BM: BM, member: MM.member!)
-                } label: {
-                    Text(clas.name)
-                        .bold()
-                        .blockDisplay()
+            if let member = MM.member {
+                ForEach($classes) { $clas in
+                    NavigationLink {
+                        BoardView(clas: $clas, pullDate: date, CM: CM, SM: SM, BM: BM, member: MM.member!)
+                    } label: {
+                        Text(clas.name)
+                            .bold()
+                            .blockDisplay()
+                    }
                 }
-            }
-            .onAppear {
-                date = DateFormatter().string(from: Date())
+                .onAppear {
+                    date = DateFormatter().string(from: Date())
+                }
             }
         }
     }

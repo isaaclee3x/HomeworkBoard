@@ -46,7 +46,8 @@ struct CreateEntryView: View {
             } label: {
                 Text("Choose a subject")
                     .font(.system(size: 15, design: .rounded))
-                    .foregroundColor(.black)
+                    .foregroundColor(Color("murkyBlue"))
+                    .bold()
                 
             }
             
