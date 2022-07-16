@@ -17,24 +17,23 @@ class SubjectManager: ObservableObject {
     private var ref = Database.database().reference()
     private var encoder = JSONEncoder()
     private var decoder = JSONDecoder()
+    @ObservedObject var CLM = ClientManager()
     
+    /// Gets subjects from ./subject dir
     func getSubjects() async {
-        ref.child("subjects").observeSingleEvent(of: .value) { snapshot in
-            var subjects: [Subject] = []
-            let value = snapshot.value as? NSDictionary
+        if let data = await CLM.pullData(pull: Subject.self) {
+            let string = String(data: data, encoding: .utf8)
             
-            guard value != nil else { self.subjects = []; return}
-
-            let values = value?.allValues as? [String]
-            for i in values! {
-                let data = i.data(using: .utf8)!
-                let subject = try! self.decoder.decode(Subject.self, from: data)
-                subjects.append(subject)
-            }
+            let strings = string!.components(separatedBy: " n ")
+            let datas = strings.map() { $0.data(using: .utf8) }
+            var subjects: [Subject] = []
+            for i in datas { subjects.append(try! decoder.decode(Subject.self, from: i!))}
             self.subjects = subjects
         }
     }
     
+    /// Appends a new subject to the ./subject path
+    /// - Parameter subj: Subject to add
     func addSubject(subj: Subject) {
         let encoded = try? encoder.encode(subj)
         let stringEncoded = String(data: encoded!, encoding: .utf8)
@@ -43,6 +42,8 @@ class SubjectManager: ObservableObject {
         )
     }
     
+    /// Deletes the subject
+    /// - Parameter subj: Subject to remove
     func deleteSubject(subj: Subject) async {
         try? await ref.child("subjects").child(subj.name).removeValue()
         await getSubjects()

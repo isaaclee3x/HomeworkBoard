@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 import Firebase
 import FirebaseDatabase
 import FirebaseDatabaseSwift
@@ -18,9 +19,8 @@ class MemberManager: ObservableObject {
     
     /// Value is changed based on the account's username
     @Published var member: Member?
-    
+    @ObservedObject var CLM = ClientManager()
     private var ref = Database.database().reference()
-    
     
     /// Saves a member (with an encrypted password) to the /users/(username) path
     ///
@@ -34,22 +34,7 @@ class MemberManager: ObservableObject {
         
         var member = member
         member.password = member.password.toBase64()
-        let encoded = try? JSONEncoder().encode(member)
-        let stringEncoded = String(data: encoded!, encoding: .utf8)
-        
-        try! await ref.child("users").child(member.username).setValue(
-            [
-                "data": stringEncoded
-            ]
-        )
-        
-        if member.perm == .member || member.perm == .subLeader {
-            try! await ref.child(member.clas).child(member.username).setValue(
-                [
-                    "name": member.username
-                ]
-            )
-        }
+        await CLM.saveData(member: member)
     }
     
     /// Checks whether the username and password the user entered matches the username and password saved in the cloud
@@ -71,42 +56,39 @@ class MemberManager: ObservableObject {
     /// Decodes the data into the Member struct
     /// - Parameter username: The account to pull
     func getAccount(username: String) async {
-        ref.child("users").child(username).child("data").observe(.value) { snapshot in
-            
-            let value = snapshot.value as? String
-            guard value != nil else { return }
-            
-            let data = value!.data(using: .utf8)!
-            let decoder = JSONDecoder()
-            var member = try? decoder.decode(Member.self, from: data)
-            let decodedPassword = (member?.password.fromBase64())!
-            member?.password = decodedPassword
-            self.member = member
+        let decoder = JSONDecoder()
+        var member = Member()
+        if let data = await CLM.pullData(pull: Member.self, username: username) {
+            member = try! decoder.decode(Member.self, from: data)
+            member.password = member.password.fromBase64()!
         }
+        self.member = member
         
-        try? await Task.sleep(nanoseconds: 100_000_000)
     }
     
-    func adminBasedGetAccount(username: String) async -> Member {
-        var returnMember = Member()
-        ref.child("users").child(username).child("data").observeSingleEvent(of: .value) { snapshot in
-            let value = snapshot.value as? String
-            guard value != nil else { return }
-            
-            let data = value!.data(using: .utf8)!
+    /// Same functionality as getMember(), except that it returns the Member gotten except of updating @Published member
+    /// This is used in limited occasions, where admin controls require user data but admin's own data cannot be updated
+    /// - Parameter username: The account to pull
+    /// - Returns: Returns the member's value
+    func findAccount(username: String) async -> Member? {
+        var returnMember: Member? = nil
+        if let data = await self.CLM.pullData(pull: Member.self, username: username) {
             let decoder = JSONDecoder()
-            var member = try? decoder.decode(Member.self, from: data)
-            let decodedPassword = (member?.password.fromBase64())!
-            member?.password = decodedPassword
-            returnMember = member!
+            returnMember = try! decoder.decode(Member.self, from: data)
         }
         try? await Task.sleep(nanoseconds: 100_000_000)
         return returnMember
     }
     
-    func getMembers(of: String) async -> [String] {
+    /// Returns the names of members in a class
+    ///
+    /// Checks the /clas dir to pull the names of the members
+    /// These can be used to pull their information using getMember()
+    /// - Parameter clas: The class to check
+    /// - Returns: The names of members in the class
+    func getMembers(of clas: String) async -> [String] {
         var names: [String] = []
-        ref.child(of).observeSingleEvent(of: .value) { snapshot in
+        ref.child(clas).observeSingleEvent(of: .value) { snapshot in
             let value = snapshot.value as? NSDictionary
             guard let value else { return }
             
@@ -134,21 +116,20 @@ extension String {
     
     func exists(in the: String) async -> Bool {
         if the == "class" {
-            let CM = ClassManager()
+            let CM = await ClassManager()
             
             await CM.getClasses()
             var classes: [String] = []
-            for clas in CM.classes! {
+            for clas in await CM.classes! {
                 classes.append(clas.name)
             }
             
             if classes.contains(self) { return true }
             return false
         } else {
-            let MM = MemberManager()
+            let MM = await MemberManager()
             
-            await MM.getAccount(username: self)
-            if MM.member == nil { return false }
+            if await MM.findAccount(username: self) == nil { return false }
         }
         return true
     }

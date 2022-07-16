@@ -24,6 +24,7 @@
 		FF4F5A7B285B647F000E727A /* AuthenticateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A7A285B647F000E727A /* AuthenticateView.swift */; };
 		FF4F5A7D285B6487000E727A /* MemberManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A7C285B6487000E727A /* MemberManager.swift */; };
 		FF4F5A85285B6606000E727A /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A84285B6606000E727A /* Structs.swift */; };
+		FF66DC2C287FC57E00AB77E0 /* ClientManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF66DC2B287FC57D00AB77E0 /* ClientManager.swift */; };
 		FF74B754287AA0F5008684A5 /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF74B753287AA0F5008684A5 /* Modifiers.swift */; };
 		FF9A8F97285DF68C009F363F /* CreateClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A8F96285DF68C009F363F /* CreateClassView.swift */; };
 		FF9A8F99285E21F6009F363F /* DeleteClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A8F98285E21F6009F363F /* DeleteClassView.swift */; };
@@ -90,6 +91,7 @@
 		FF4F5A7A285B647F000E727A /* AuthenticateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticateView.swift; sourceTree = "<group>"; };
 		FF4F5A7C285B6487000E727A /* MemberManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberManager.swift; sourceTree = "<group>"; };
 		FF4F5A84285B6606000E727A /* Structs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Structs.swift; sourceTree = "<group>"; };
+		FF66DC2B287FC57D00AB77E0 /* ClientManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientManager.swift; sourceTree = "<group>"; };
 		FF74B753287AA0F5008684A5 /* Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
 		FF9A8F96285DF68C009F363F /* CreateClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateClassView.swift; sourceTree = "<group>"; };
 		FF9A8F98285E21F6009F363F /* DeleteClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteClassView.swift; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				FF4F5A7C285B6487000E727A /* MemberManager.swift */,
+				FF66DC2B287FC57D00AB77E0 /* ClientManager.swift */,
 				FF163122285C0EEA00DB8A6E /* ClassManager.swift */,
 				FFEF3413287447A300E578A7 /* BoardManager.swift */,
 				FFEF34182874704F00E578A7 /* SubjectManager.swift */,
@@ -397,6 +400,7 @@
 			files = (
 				FFEF3414287447A300E578A7 /* BoardManager.swift in Sources */,
 				FF9A8F99285E21F6009F363F /* DeleteClassView.swift in Sources */,
+				FF66DC2C287FC57E00AB77E0 /* ClientManager.swift in Sources */,
 				FF163123285C0EEA00DB8A6E /* ClassManager.swift in Sources */,
 				FF03D7E1285F5EB800D8DACD /* CacheManager.swift in Sources */,
 				FF74B754287AA0F5008684A5 /* Modifiers.swift in Sources */,

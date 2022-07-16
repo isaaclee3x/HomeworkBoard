@@ -176,7 +176,7 @@ struct SummaryView: View {
                         List {
                             ForEach(entriesWeek) { entry in
                                 NavigationLink {
-                                    BoardView(clas: $clas, pullDate: entry.due!, CM: CM, SM: SM, BM: BM, member: member)
+                                    BoardView(date: $date, clas: $clas, CM: CM, SM: SM, BM: BM, member: member)
                                 } label: {
                                     HStack {
                                         if let subject = entry.subject {
@@ -251,7 +251,7 @@ struct ShowClassesView: View {
                 LazyVGrid(columns: columns) {
                     ForEach($classes) { $clas in
                         NavigationLink {
-                            BoardView(clas: $clas, pullDate: date, CM: CM, SM: SM, BM: BM, member: MM.member!)
+                            BoardView(date: $date, clas: $clas, CM: CM, SM: SM, BM: BM, member: MM.member!)
                         } label: {
                             Text(clas.name)
                                 .bold()
@@ -260,7 +260,10 @@ struct ShowClassesView: View {
                     }
                 }
                 .onAppear {
-                    date = DateFormatter().string(from: Date())
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.locale = .current
+                    dateFormatter.dateFormat = "dd MMMM yyyy"
+                    date = dateFormatter.string(from: Date().addingTimeInterval(86400))
                 }
             }
         }

@@ -12,7 +12,7 @@ struct BoardView: View {
     
     @Environment(\.colorScheme) var colorScheme
     
-    @State var date = ""
+    @Binding var date: String
     @State var daysFromToday = 0
     
     @State var createEntry = false
@@ -22,8 +22,6 @@ struct BoardView: View {
     @State var dueDates: [String] = []
     
     @Binding var clas: Class
-    
-    var pullDate: String
     
     @ObservedObject var CM: ClassManager
     @ObservedObject var SM: SubjectManager
@@ -35,7 +33,6 @@ struct BoardView: View {
     
     var body: some View {
         VStack {
-            
             ChangeDateView(date: $date, daysFromToday: $daysFromToday )
             
             EntriesView(date: date, member: member, clas: $clas, createEntry: $createEntry, index: $index, CM: CM, CCM: CCM)
@@ -85,6 +82,8 @@ struct BoardView: View {
         }
         .onChange(of: daysFromToday) { newValue in
             Task {
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "dd MMMM yyyy"
                 let tomorrow = Date().addingTimeInterval(TimeInterval(newValue * 86400))
                 let date = tomorrow.toFormat("dd MMMM yyyy")
                 self.date = date
@@ -111,7 +110,7 @@ struct ChangeDateView: View {
             
             HStack {
                 Button {
-                    if daysFromToday > 0 {
+                    if daysFromToday > 2 {
                         daysFromToday -= 1
                     }
                 } label: {

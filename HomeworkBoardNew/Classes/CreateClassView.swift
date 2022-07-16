@@ -26,7 +26,7 @@ struct CreateClassView: View {
             
             Button {
                 Task {
-                    CM.createClass(name: name)
+                    await CM.createClass(name: name)
                     await CM.getClasses()
                     if let classes = CM.classes {
                         let i = classes.firstIndex(where: { clas in

@@ -94,7 +94,7 @@ struct SelectClassView: View {
                                 let students = await MM.getMembers(of: self.clas)
                                 self.students = []
                                 for i in students {
-                                    self.students.append(await MM.adminBasedGetAccount(username: i))
+                                    self.students.append(await MM.findAccount(username: i)!)
                                 }
                             }
                         }
