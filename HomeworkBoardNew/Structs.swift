@@ -8,7 +8,11 @@
 import Foundation
 import SwiftUI
 
-struct Member: Identifiable, Equatable, Codable {
+protocol Item {
+    var itemName: String { get }
+}
+
+struct Member: Identifiable, Equatable, Codable, Item {
     
     /// Creates an empty Member
     
@@ -21,6 +25,7 @@ struct Member: Identifiable, Equatable, Codable {
     
     var id = UUID()
     
+    var itemName: String = "users"
     /// The account's username
     var username: String
     
@@ -35,7 +40,7 @@ struct Member: Identifiable, Equatable, Codable {
     
 }
 
-struct Class: Identifiable, Equatable, Codable {
+struct Class: Identifiable, Equatable, Codable, Item {
     
     ///Creates and empty class
     init(name: String, date: String) {
@@ -43,6 +48,7 @@ struct Class: Identifiable, Equatable, Codable {
         self.board = Board(date: date)
     }
     
+    var itemName: String = "classes"
     var id = UUID()
     
     ///Name of the class
@@ -52,7 +58,7 @@ struct Class: Identifiable, Equatable, Codable {
     var board: Board
 }
 
-struct Board: Identifiable, Equatable, Codable {
+struct Board: Identifiable, Equatable, Codable, Item {
     
     ///Creates an empty class
     init(date: String) {
@@ -63,12 +69,13 @@ struct Board: Identifiable, Equatable, Codable {
     
     var id = UUID()
     
+    var itemName: String = "board"
     var entries: [String: [Entry]]
     var cache: [String]
     var subjects: [Subject]
 }
 
-struct Entry: Identifiable, Equatable, Codable {
+struct Entry: Identifiable, Equatable, Codable, Item {
     
     init(entry: String?, due: String?, subject: Subject?) {
         if entry == nil {
@@ -82,23 +89,26 @@ struct Entry: Identifiable, Equatable, Codable {
     
     var id = UUID()
     
+    var itemName: String = "entries"
     var subject: Subject?
     var entry: String
     var due: String?
 }
 
-struct Subject: Identifiable, Equatable, Codable, Hashable {
+struct Subject: Identifiable, Equatable, Codable, Hashable, Item {
     
     var id = UUID()
     
+    var itemName: String = "subjects"
     var name: String
     var colour: RGB
 }
 
-struct RGB: Identifiable, Equatable, Codable, Hashable {
+struct RGB: Identifiable, Equatable, Codable, Hashable, Item {
     
     var id = UUID()
     
+    var itemName = "RGB"
     var r: Double
     var g: Double
     var b: Double
