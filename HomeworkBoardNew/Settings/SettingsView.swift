@@ -121,7 +121,7 @@ struct StudentsView: View {
         if students != [] {
             ForEach(students) { student in
                 HStack {
-                    Text(student.username)
+                    Text(student.name)
                         .bold()
                     
                     VStack {

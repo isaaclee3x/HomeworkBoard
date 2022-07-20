@@ -26,15 +26,15 @@ class MemberManager: ObservableObject {
     ///
     /// It also encodes it using JSONEncoder so that it can be more easily parsed into the right struct
     /// - Parameter member: The member to save
-    func saveAccount(member: Member, bypass: Bool) async {
-        if !bypass {
-            guard await !member.username.exists(in: "member") else { return }
+    func saveAccount(member: Member, perm: Permissions) async {
+        if perm == .member || perm == .leader {
+            guard await !member.name.exists(in: "member") else { return }
             guard await member.clas.exists(in: "class") else { return }
         }
         
         var member = member
         member.password = member.password.toBase64()
-        await CLM.saveData(member: member)
+        await CLM.saveData(type: "users", item: member, perm: perm)
     }
     
     /// Checks whether the username and password the user entered matches the username and password saved in the cloud
@@ -44,7 +44,7 @@ class MemberManager: ObservableObject {
     ///   - what: What to do if the authentication is successful
     func auth(username: String, password: String, do what: (() -> Void)..., not fail: (() -> Void)...) async {
         await self.getAccount(username: username)
-        if member?.username == username && member?.password == password {
+        if member?.name == username && member?.password == password {
             for i in what { i() }
         } else {
             for i in fail { i() }
@@ -56,14 +56,11 @@ class MemberManager: ObservableObject {
     /// Decodes the data into the Member struct
     /// - Parameter username: The account to pull
     func getAccount(username: String) async {
-        let decoder = JSONDecoder()
-        var member = Member()
-        if let data = await CLM.pullData(pull: Member.self, username: username) {
-            member = try! decoder.decode(Member.self, from: data)
-            member.password = member.password.fromBase64()!
-        }
-        self.member = member
-        
+        let members = await CLM.pullData(pull: Member(), name: username)
+        let member = members.first
+        var editableMem = member
+        editableMem?.password = (member?.password.fromBase64())!
+        self.member = editableMem
     }
     
     /// Same functionality as getMember(), except that it returns the Member gotten except of updating @Published member
@@ -71,13 +68,8 @@ class MemberManager: ObservableObject {
     /// - Parameter username: The account to pull
     /// - Returns: Returns the member's value
     func findAccount(username: String) async -> Member? {
-        var returnMember: Member? = nil
-        if let data = await self.CLM.pullData(pull: Member.self, username: username) {
-            let decoder = JSONDecoder()
-            returnMember = try! decoder.decode(Member.self, from: data)
-        }
-        try? await Task.sleep(nanoseconds: 100_000_000)
-        return returnMember
+        let data = await CLM.pullData(pull: Member(), name: username)
+        return data.first
     }
     
     /// Returns the names of members in a class
@@ -90,9 +82,9 @@ class MemberManager: ObservableObject {
         var names: [String] = []
         ref.child(clas).observeSingleEvent(of: .value) { snapshot in
             let value = snapshot.value as? NSDictionary
-            guard let value else { return }
+            guard value != nil else { return }
             
-            names = value.allKeys as? [String] ?? []
+            names = value!.allKeys as? [String] ?? []
         }
         
         try? await Task.sleep(nanoseconds: 100_000_000)

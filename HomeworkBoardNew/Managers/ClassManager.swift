@@ -28,15 +28,7 @@ class ClassManager: ObservableObject {
     ///
     /// It also decodes the JSON object into the Class Struct (can be injected into other views)
     func getClasses() async {
-        
-        if let data = await CLM.pullData(pull: Class.self) {
-            let string = String(data: data, encoding: .utf8)
-            let strings = string!.components(separatedBy: " n ")
-            let datas = strings.map() { $0.data(using: .utf8) }
-            var classes: [Class] = []
-            for i in datas { classes.append(try! decoder.decode(Class.self, from: i!))}
-            self.classes = classes
-        } else { self.classes = nil }
+        self.classes = await CLM.pullData(pull: Class(name: "", date: ""))
     }
     
     /// Gets the JSON object from one class
@@ -44,10 +36,7 @@ class ClassManager: ObservableObject {
     /// It also decodes the JSON object into the Class Struct (can be injected into other views)
     ///  - Parameter name: Name of the class
     func getClass(name: String) async {
-        if let data = await CLM.pullData(pull: Class.self, clas: name) {
-            let clas = try! decoder.decode(Class.self, from: data)
-            self.classes = [clas]
-        } else { self.classes = nil }
+        self.classes = await CLM.pullData(pull: Class(name: "", date: ""), name: name)
         
     }
     
@@ -66,13 +55,13 @@ class ClassManager: ObservableObject {
             }
             date = Date().addingTimeInterval(TimeInterval(86400 * i))
         }
-        await CLM.saveData(clas: clas)
+        await CLM.saveData(type: "classes", item: clas)
     }
     
     /// Takes the data of an updated class and saves it under the class' path
     /// - Parameter clas: The class' data to encode
     func saveClass(clas: Class) async {
-        await CLM.saveData(clas: clas)
+        await CLM.saveData(type: "classes", item: clas)
     }
     
     /// Deletes all instances of a member being in a class
@@ -81,7 +70,7 @@ class ClassManager: ObservableObject {
     /// It uses the data of the students to set their class to "",
     ///  - Parameter name: Name of the class to delete
     func deleteClass(name: String) async {
-        try? await ref.child("classes").child(name).removeValue()
+        try! await ref.child("classes").child(name).removeValue()
         
         var fetchName: [String] = []
         ref.child(name).observeSingleEvent(of: .value) { snapshot in
@@ -100,10 +89,10 @@ class ClassManager: ObservableObject {
                 student.clas = ""
                 student.password = student.password.toBase64()
                 let encodedStudent = try? JSONEncoder().encode(student)
-                try? await ref.child("users").child(student.username).child("data").setValue(String(data: encodedStudent!, encoding: .utf8))
+                try! await ref.child("users").child(student.name).child("data").setValue(String(data: encodedStudent!, encoding: .utf8))
             }
         }
         
-        try? await ref.child(name).removeValue()
+        try! await ref.child(name).removeValue()
     }
 }

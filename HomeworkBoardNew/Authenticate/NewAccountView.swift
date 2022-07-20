@@ -14,12 +14,15 @@ struct NewAccountView: View {
     @ObservedObject var MM: MemberManager
     @ObservedObject var CM: ClassManager
     
+    @State var isAdmin = false
+    
     var body: some View {
         VStack {
             Text("**Create** a new account")
                 .header()
             
-            TextField("Username", text: $member.username)
+            
+            TextField("Username", text: $member.name)
                 .disableAutocorrection(true)
                 .credStyle(width: 300, height: 60)
             
@@ -44,12 +47,16 @@ struct NewAccountView: View {
                 .padding()
             }
             
+            if member.name == "YTSSADMIN" {
+                Toggle("Are you an admin?", isOn: $isAdmin)
+            }
+            
             Text(member.clas)
                 .bold() 
             
             Button {
                 Task {
-                    await MM.saveAccount(member: member, bypass: false)
+                    await MM.saveAccount(member: member, perm: isAdmin ? .admin : .member)
                     isSheetPresented = false
                 }
             } label: {
@@ -60,7 +67,10 @@ struct NewAccountView: View {
         }
         .background(color: "lightestBlue")
         .onAppear {
-            Task { await CM.getClasses() }
+//            Task { await CM.getClasses() }
+        }
+        .onChange(of: isAdmin) { newValue in
+            print(newValue)
         }
     }
 }

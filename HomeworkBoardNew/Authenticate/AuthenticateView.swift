@@ -35,9 +35,10 @@ struct AuthenticateView: View {
             Button {
                 Task {
                     await MM.auth(username: username, password: password) {
-                        print(MM.member)
                         if MM.member?.clas == "" {
-                            chooseClass = true
+                            if MM.member?.perm == .member || MM.member?.perm == .leader {
+                                chooseClass = true                                
+                            }
                         } else {
                             success = true
                         }

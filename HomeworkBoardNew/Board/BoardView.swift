@@ -49,7 +49,7 @@ struct BoardView: View {
                 await CM.getClass(name: clas.name)
             }
         } content: {
-            CreateEntryView(username: member.username ,date: date, index: index, isSheetPresented: $createEntry, clas: $clas, CM: CM, SM: SM)
+            CreateEntryView(username: member.name ,date: date, index: index, isSheetPresented: $createEntry, clas: $clas, CM: CM, SM: SM)
         }
         .sheet(isPresented: $showCache) {
             CacheView(board: clas.board)
@@ -110,7 +110,7 @@ struct ChangeDateView: View {
             
             HStack {
                 Button {
-                    if daysFromToday > 2 {
+                    if daysFromToday > 1 {
                         daysFromToday -= 1
                     }
                 } label: {
@@ -175,7 +175,7 @@ struct EntriesView: View {
                                 clas.board.entries[date]![index].due = nil
                                 clas.board.entries[date]![index].subject = nil
                                 
-                                await CCM.updateCache(clas: clas, did: "\(member.username) REMOVED ENTRY \(entries[index])")
+                                await CCM.updateCache(clas: clas, did: "\(member.name) REMOVED ENTRY \(entries[index])")
                                 await CM.saveClass(clas: clas)
                             }
                         }

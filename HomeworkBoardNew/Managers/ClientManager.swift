@@ -13,83 +13,64 @@ import FirebaseDatabaseSwift
 
 class ClientManager: ObservableObject {
     
-    @Published var data: Data?
-    
     private let ref = Database.database().reference()
     private let encoder = JSONEncoder()
     
-    func pullData<T>(pull what: T.Type, username: String = "", clas: String = "", subject: String = "") async -> Data? where T: (Decodable) {
-        var path = ref.child("hello")
-        var data: Data? = nil
-        switch what {
-        case is Member.Type: path = ref.child("users").child(username)
-        case is Class.Type: path = (clas != "" ? ref.child("classes").child(clas) : ref.child("classes"))
-        case is Subject.Type: path = ref.child("subjects")
-        default:
-            let exception = NSException(name: NSExceptionName("Unable to proceed"), reason: "Unable to get data due to invalid type")
-            exception.raise()
+    func pullData<T>(pull what: T, name: String? = nil) async -> [T] where T: Item, T: Decodable {
+        
+        var returnData: [T] = []
+        var path = ref
+        
+        if let type = what.type {
+            if let name = name {
+                path = ref.child(type).child(name)
+            } else {
+                path = ref.child(type)
+            }
         }
         
         path.observeSingleEvent(of: .value) { snapshot in
+            let decoder = JSONDecoder()
             let value = snapshot.value as? NSDictionary
-            var stringValue = ""
-            guard value != nil else { return }
-            switch what {
-            case is Member.Type:
-                stringValue = value!["data"] as! String
-            case is Class.Type:
-                if clas != "" {
-                    stringValue = value!["data"] as! String
-                } else {
-                    let value = snapshot.value as! NSDictionary
-                    let stringClasses = value.allValues as! [String]
-                    stringValue = stringClasses.joined(separator: " n ")
-                }
-            case is Subject.Type:
-                if subject != "" {
-                    stringValue = value![subject] as! String
-                } else {
-                    let values = value?.allValues.map({ i in
-                        i as! String
-                    })
-                    stringValue = values!.joined(separator: " n ")
-                    print(stringValue)
-                }
-            default: break
+            
+            guard value != nil else {
+                let value = snapshot.value as? String
+                guard value != nil else { return }
+                let data = value!.data(using: .utf8)
+                let returnValue = try! decoder.decode(T.self, from: data!)
+                returnData = [returnValue]
+                return
             }
-            let convertedString = stringValue.data(using: .utf8)
-            data = convertedString
+            
+            let values = value!.allValues as! [String]
+            let returnValue = values.map { item -> T in
+                let data = item.data(using: .utf8)
+                return try! decoder.decode(T.self, from: data!)
+            }
+            returnData = returnValue
         }
         try? await Task.sleep(nanoseconds: 100_000_000)
-        return data
+        return returnData
     }
     
-    func saveData(member: Member? = nil, clas: Class? = nil, subj: Subject? = nil) async {
-        var path = ref.child("hello")
-        var addToClas = ref.child("hello")
-        var data: Data! = Data()
+    func saveData<T>(type: String, item: T, perm: Permissions = .member) async where T: Item, T: Codable {
         
-        if clas != nil {
-            path = ref.child("classes").child(clas!.name)
-            data = try? encoder.encode(clas)
-        }
-        else if member != nil {
-            path = ref.child("users").child(member!.username)
-            addToClas = ref.child(member!.clas).child(member!.username)
-            data = try? encoder.encode(member)
-        }
-        else if subj != nil {
-            path = ref.child("subjects").child(subj!.name)
-            data = try? encoder.encode(subj)
-        }
+        var path = ref
         
-        try? await path.setValue(String(data: data, encoding: .utf8))
-        if member != nil {
-            try? await addToClas.setValue(
-                [
-                    "data": member?.username
-                ]
-            )
+        guard type == item.type else { return }
+        path = path.child(type).child(item.name)
+        
+        guard let data = try? JSONEncoder().encode(item) else { return  }
+        try! await path.setValue(String(data: data, encoding: .utf8))
+        
+        if type == "users" {
+            if perm == .member || perm == .leader {
+                let clas = item.getProp()
+                path = ref.child(clas)
+                
+                try! await path.setValue([item.name: item.name])
+            }
         }
     }
 }
+

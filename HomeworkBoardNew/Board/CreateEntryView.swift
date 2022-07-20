@@ -15,7 +15,7 @@ struct CreateEntryView: View {
     var index: Int
     
     @State var name = ""
-    @State var subject = Subject(name: "", colour: RGB(r: 0, g: 0, b: 0))
+    @State var subject = Subject()
     @State var didNotChooseSubject = false
     
     @Binding var isSheetPresented: Bool

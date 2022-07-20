@@ -9,7 +9,7 @@ import Foundation
 
 enum Permissions: String, Codable {
     case member = "member"
-    case subLeader = "subLeader"
+    case leader = "subLeader"
     case teacher = "teacher"
     case admin = "admin"
 }

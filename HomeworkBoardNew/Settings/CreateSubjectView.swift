@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CreateSubjectView: View {
     
-    @State var subject = Subject(name: "", colour: RGB(r: 0, g: 0, b: 0))
+    @State var subject = Subject()
     @Binding var isSheetPresented: Bool
     @ObservedObject var SM: SubjectManager
     
@@ -45,7 +45,7 @@ struct CreateSubjectView: View {
                 
                 Button {
                     Task {
-                        SM.addSubject(subj: subject)
+                        await SM.addSubject(subj: subject)
                         await SM.getSubjects()
                         isSheetPresented = false
                     }

@@ -28,7 +28,7 @@ struct ClassesView: View {
 
     var body: some View {
         VStack {
-            if MM.member?.perm == .member || MM.member?.perm == .subLeader {
+            if MM.member?.perm == .member || MM.member?.perm == .leader {
                 SummaryView(clas: $classes[0], CM: CM, SM: SM, BM: BM, member: MM.member!)
             }
             ShowClassesView(classes: $classes, CM: CM, MM: MM, SM: SM, BM: BM)
@@ -101,7 +101,7 @@ struct ClassesView: View {
                 
             }
         }
-        .navigationTitle(MM.member?.perm == .member || MM.member?.perm == .subLeader ? "Classes" : "Class")
+        .navigationTitle(MM.member?.perm == .member || MM.member?.perm == .leader ? "Classes" : "Class")
         .sheet(isPresented: $createClass) {
             Task {
                 await CM.getClasses()
@@ -160,9 +160,11 @@ struct SummaryView: View {
                         } minimumValueLabel: {
                             Text("1")
                                 .bold()
+                                .foregroundColor(.white)
                         } maximumValueLabel: {
                             Text("10")
                                 .bold()
+                                .foregroundColor(.white)
                         } onEditingChanged: { value in
                             Task {
                                 entriesWeek = BM.homeworkDue(clas: clas, in: Int(days))
