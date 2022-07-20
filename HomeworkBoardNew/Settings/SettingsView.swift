@@ -71,7 +71,9 @@ struct SettingsView: View {
                         .sheet(isPresented: $createNewSubject) {
                             CreateSubjectView(isSheetPresented: $createNewSubject, SM: SM)
                         }
-                        
+                        .sheet(isPresented: $massCreateUsers) {
+                            MassCreateUsersView(MM: MM, CM: CM)
+                        }
                     }
                 }
             }

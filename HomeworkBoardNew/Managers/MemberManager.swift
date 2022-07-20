@@ -38,6 +38,24 @@ class MemberManager: ObservableObject {
         await CLM.saveData(type: "users", item: member, perm: perm)
     }
     
+    func massCreateAccount(filePath: URL) {
+        guard let file = XLSXFile(filepath: filePath.path) else {
+          fatalError("XLSX file at \(filePath) is corrupted or does not exist")
+        }
+        
+        for wbk in try! file.parseWorkbooks() {
+          for (name, path) in try! file.parseWorksheetPathsAndNames(workbook: wbk) {
+            let worksheet = try? file.parseWorksheet(at: path)
+              let rowA = worksheet?.data?.rows[0]
+              let rowB = worksheet?.data?.rows[0]
+              
+              
+              for cell in rowA!.cells {
+                  print(cell)
+              }
+          }
+        }
+    }
     /// Checks whether the username and password the user entered matches the username and password saved in the cloud
     /// - Parameters:
     ///   - username: Serves as the path to get from the database to check with
