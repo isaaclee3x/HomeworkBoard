@@ -67,7 +67,7 @@ struct NewAccountView: View {
         }
         .background(color: "lightestBlue")
         .onAppear {
-//            Task { await CM.getClasses() }
+            Task { await CM.getClasses() }
         }
         .onChange(of: isAdmin) { newValue in
             print(newValue)

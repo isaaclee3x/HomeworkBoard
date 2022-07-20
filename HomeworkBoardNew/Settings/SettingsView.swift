@@ -21,6 +21,7 @@ struct SettingsView: View {
     @State var entries: [Entry] = []
     @State var students: [Member] = []
     @State var createNewSubject = false
+    @State var massCreateUsers = false
     
     var body: some View {
         NavigationView {
@@ -51,9 +52,14 @@ struct SettingsView: View {
                         Section("Subjects") {
                             SubjectsView(SM: SM, createNewSubject: $createNewSubject)
                         }
-                        .navigationTitle("Settings")
-                        .sheet(isPresented: $createNewSubject) {
-                            CreateSubjectView(isSheetPresented: $createNewSubject, SM: SM)
+                        
+                        Section("Batch") {
+                            Button {
+                                massCreateUsers = true
+                            } label: {
+                                Text("Mass-Create Account")
+                            }
+
                         }
                         .onChange(of: clas) { newValue in
                             Task(priority: .high) {
@@ -61,6 +67,11 @@ struct SettingsView: View {
                                 await SM.getSubjects()
                             }
                         }
+                        .navigationTitle("Settings")
+                        .sheet(isPresented: $createNewSubject) {
+                            CreateSubjectView(isSheetPresented: $createNewSubject, SM: SM)
+                        }
+                        
                     }
                 }
             }

@@ -29,6 +29,8 @@
 		FF9A8F97285DF68C009F363F /* CreateClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A8F96285DF68C009F363F /* CreateClassView.swift */; };
 		FF9A8F99285E21F6009F363F /* DeleteClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A8F98285E21F6009F363F /* DeleteClassView.swift */; };
 		FF9A8F9D285E2377009F363F /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A8F9C285E2377009F363F /* BoardView.swift */; };
+		FFAEC5072887FD8D005F7862 /* MassCreateUsersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAEC5062887FD8D005F7862 /* MassCreateUsersView.swift */; };
+		FFAEC50A2887FE21005F7862 /* CoreXLSX in Frameworks */ = {isa = PBXBuildFile; productRef = FFAEC5092887FE21005F7862 /* CoreXLSX */; };
 		FFC1281A287C3CCB002EF761 /* NoClassChooseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC12819287C3CCB002EF761 /* NoClassChooseView.swift */; };
 		FFE171A6287AA9CA00304237 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = FFE171A5287AA9CA00304237 /* FirebaseDatabase */; };
 		FFE171A8287AA9CA00304237 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FFE171A7287AA9CA00304237 /* FirebaseDatabaseSwift */; };
@@ -96,6 +98,7 @@
 		FF9A8F96285DF68C009F363F /* CreateClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateClassView.swift; sourceTree = "<group>"; };
 		FF9A8F98285E21F6009F363F /* DeleteClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteClassView.swift; sourceTree = "<group>"; };
 		FF9A8F9C285E2377009F363F /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
+		FFAEC5062887FD8D005F7862 /* MassCreateUsersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MassCreateUsersView.swift; sourceTree = "<group>"; };
 		FFC12819287C3CCB002EF761 /* NoClassChooseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoClassChooseView.swift; sourceTree = "<group>"; };
 		FFEDA8AA286F3F7D00E59BF3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "../../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FFEF34112874242A00E578A7 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -109,6 +112,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFAEC50A2887FE21005F7862 /* CoreXLSX in Frameworks */,
 				FFE171AE287AAA4400304237 /* SwiftDate in Frameworks */,
 				FFE171A8287AA9CA00304237 /* FirebaseDatabaseSwift in Frameworks */,
 				FFE171A6287AA9CA00304237 /* FirebaseDatabase in Frameworks */,
@@ -253,6 +257,7 @@
 			children = (
 				FFEF34112874242A00E578A7 /* SettingsView.swift */,
 				FFEF341628744ECF00E578A7 /* CreateSubjectView.swift */,
+				FFAEC5062887FD8D005F7862 /* MassCreateUsersView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -278,6 +283,7 @@
 				FFE171A5287AA9CA00304237 /* FirebaseDatabase */,
 				FFE171A7287AA9CA00304237 /* FirebaseDatabaseSwift */,
 				FFE171AD287AAA4400304237 /* SwiftDate */,
+				FFAEC5092887FE21005F7862 /* CoreXLSX */,
 			);
 			productName = HomeworkBoardNew;
 			productReference = FF4F5A4B285B6226000E727A /* HomeworkBoardNew.app */;
@@ -354,6 +360,7 @@
 			packageReferences = (
 				FFE171A4287AA9CA00304237 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				FFE171AC287AAA4400304237 /* XCRemoteSwiftPackageReference "SwiftDate" */,
+				FFAEC5082887FE21005F7862 /* XCRemoteSwiftPackageReference "CoreXLSX" */,
 			);
 			productRefGroup = FF4F5A4C285B6226000E727A /* Products */;
 			projectDirPath = "";
@@ -420,6 +427,7 @@
 				FF9A8F9D285E2377009F363F /* BoardView.swift in Sources */,
 				FF163125285C1E9600DB8A6E /* Enums.swift in Sources */,
 				FF163121285C0EE200DB8A6E /* ClassesView.swift in Sources */,
+				FFAEC5072887FD8D005F7862 /* MassCreateUsersView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -771,6 +779,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		FFAEC5082887FE21005F7862 /* XCRemoteSwiftPackageReference "CoreXLSX" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CoreOffice/CoreXLSX";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.1;
+			};
+		};
 		FFE171A4287AA9CA00304237 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -790,6 +806,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		FFAEC5092887FE21005F7862 /* CoreXLSX */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFAEC5082887FE21005F7862 /* XCRemoteSwiftPackageReference "CoreXLSX" */;
+			productName = CoreXLSX;
+		};
 		FFE171A5287AA9CA00304237 /* FirebaseDatabase */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FFE171A4287AA9CA00304237 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

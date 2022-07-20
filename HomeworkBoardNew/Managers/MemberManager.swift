@@ -10,6 +10,7 @@ import SwiftUI
 import Firebase
 import FirebaseDatabase
 import FirebaseDatabaseSwift
+import CoreXLSX
 
 /// Manages the account details for each user
 ///
