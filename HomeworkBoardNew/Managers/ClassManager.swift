@@ -66,8 +66,8 @@ class ClassManager: ObservableObject {
     
     /// Deletes all instances of a member being in a class
     ///
-    /// This deletes the class in classes/clas, and also /clas where the names of students are in
-    /// It uses the data of the students to set their class to "",
+    /// This deletes the class in classes/clas, and also /clas where the names of members are in
+    /// It uses the data of the members to set their class to "",
     ///  - Parameter name: Name of the class to delete
     func deleteClass(name: String) async {
         try! await ref.child("classes").child(name).removeValue()
@@ -84,12 +84,12 @@ class ClassManager: ObservableObject {
         guard fetchName != [] else { return }
         
         for name in fetchName {
-            if let student = await self.MM.findAccount(username: name) {
-                var student = student
-                student.clas = ""
-                student.password = student.password.toBase64()
-                let encodedStudent = try? JSONEncoder().encode(student)
-                try! await ref.child("users").child(student.name).child("data").setValue(String(data: encodedStudent!, encoding: .utf8))
+            if let member = await self.MM.findAccount(username: name) {
+                var member = member
+                member.clas = ""
+                member.password = member.password.toBase64()
+                let encodedMember = try? JSONEncoder().encode(member)
+                try! await ref.child("users").child(member.name).child("data").setValue(String(data: encodedMember!, encoding: .utf8))
             }
         }
         

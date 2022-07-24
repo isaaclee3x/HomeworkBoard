@@ -19,7 +19,7 @@ struct SettingsView: View {
     @State var clas = ""
     @State var sendableClas = Class(name: "", date: "")
     @State var entries: [Entry] = []
-    @State var students: [Member] = []
+    @State var members: [Member] = []
     @State var createNewSubject = false
     @State var massCreateUsers = false
     
@@ -41,12 +41,11 @@ struct SettingsView: View {
                     
                     Form {
                         if let classes = CM.classes {
-                            
-                            SelectClassView(clas: $clas, students: $students, entries: $entries, classes: classes, MM: MM, CM: CM)
+                            SelectClassView(clas: $clas, members: $members, entries: $entries, classes: classes, MM: MM, CM: CM)
                         }
                         
-                        Section("Students") {
-                            StudentsView(students: $students)
+                        Section("Members") {
+                            MembersView(members: $members)
                         }
                         
                         Section("Subjects") {
@@ -57,7 +56,7 @@ struct SettingsView: View {
                             Button {
                                 massCreateUsers = true
                             } label: {
-                                Text("Mass-Create Account")
+                                Text("Mass Create Account")
                             }
 
                         }
@@ -72,7 +71,7 @@ struct SettingsView: View {
                             CreateSubjectView(isSheetPresented: $createNewSubject, SM: SM)
                         }
                         .sheet(isPresented: $massCreateUsers) {
-                            MassCreateUsersView(MM: MM, CM: CM)
+                            MassCreateUsersView(isSheetPresented: $massCreateUsers, MM: MM, CM: CM)
                         }
                     }
                 }
@@ -84,7 +83,7 @@ struct SettingsView: View {
 struct SelectClassView: View {
     
     @Binding var clas: String
-    @Binding var students: [Member]
+    @Binding var members: [Member]
     @Binding var entries: [Entry]
     
     var classes: [Class]
@@ -104,10 +103,10 @@ struct SelectClassView: View {
                         Task {
                             self.clas = clas.name
                             if self.clas != "" {
-                                let students = await MM.getMembers(of: self.clas)
-                                self.students = []
-                                for i in students {
-                                    self.students.append(await MM.findAccount(username: i)!)
+                                let members = await MM.getMembers(of: self.clas)
+                                self.members = []
+                                for i in members {
+                                    self.members.append(await MM.findAccount(username: i)!)
                                 }
                             }
                         }
@@ -126,21 +125,21 @@ struct SelectClassView: View {
     }
 }
 
-struct StudentsView: View {
+struct MembersView: View {
     
-    @Binding var students: [Member]
+    @Binding var members: [Member]
     
     var body: some View {
-        if students != [] {
-            ForEach(students) { student in
+        if members != [] {
+            ForEach(members) { member in
                 HStack {
-                    Text(student.name)
+                    Text(member.name)
                         .bold()
                     
                     VStack {
-                        Text(student.clas)
+                        Text(member.clas)
                         
-                        Text(student.perm.rawValue)
+                        Text(member.perm.rawValue)
                     }
                     .opacity(0.5)
                     .font(.system(size: 10))
@@ -148,7 +147,7 @@ struct StudentsView: View {
                 }
             }
         } else {
-            Text("No Students Inside")
+            Text("No Members Inside")
         }
     }
 }
