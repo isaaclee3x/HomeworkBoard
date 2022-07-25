@@ -8,13 +8,56 @@
 import SwiftUI
 
 struct ChangeDefaultPassword: View {
+    
+    @State var newPassword = ""
+    @State var confirmPassword = ""
+    
+    @State var notEqualPassword = false
+    @State var member = Member()
+    @Binding var isSheetPresented: Bool
+    
+    var username: String
+    @ObservedObject var MM: MemberManager
+    
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Text("**Reset** your password")
+                .header()
+            
+            Text("Please change your password")
+                .bold()
+                .frame(width: 150)
+            
+            TextField("Password", text: $newPassword)
+                .credStyle(width: 300, height: 60)
+            
+            TextField("Confirm Password:", text: $confirmPassword)
+                .credStyle(width: 300, height: 60)
+            
+            Button {
+                if newPassword == confirmPassword {
+                    member.password = newPassword
+                    Task {
+                        await MM.saveAccount(member: member, perm: .member)
+                        await MM.getAccount(username: member.name)
+                    }
+                    isSheetPresented = false
+                }
+            } label: {
+                Text("Save")
+                    .bold()
+            }
+            .bottomButton()
+            .onAppear {
+                Task {
+                    member = await MM.findAccount(username: username)!
+                    await MM.deleteMember(username: username)
+                }
+            }
+        }
+        .background(color: "lightestBlue")
     }
 }
 
-struct ChangeDefaultPassword_Previews: PreviewProvider {
-    static var previews: some View {
-        ChangeDefaultPassword()
-    }
-}
+

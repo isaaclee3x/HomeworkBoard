@@ -26,6 +26,7 @@
 		FF4F5A85285B6606000E727A /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A84285B6606000E727A /* Structs.swift */; };
 		FF66DC2C287FC57E00AB77E0 /* ClientManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF66DC2B287FC57D00AB77E0 /* ClientManager.swift */; };
 		FF74B754287AA0F5008684A5 /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF74B753287AA0F5008684A5 /* Modifiers.swift */; };
+		FF84E3A3288E56D0007AA142 /* ChangeDefaultPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF84E3A2288E56D0007AA142 /* ChangeDefaultPassword.swift */; };
 		FF9A8F97285DF68C009F363F /* CreateClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A8F96285DF68C009F363F /* CreateClassView.swift */; };
 		FF9A8F99285E21F6009F363F /* DeleteClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A8F98285E21F6009F363F /* DeleteClassView.swift */; };
 		FF9A8F9D285E2377009F363F /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A8F9C285E2377009F363F /* BoardView.swift */; };
@@ -95,6 +96,7 @@
 		FF4F5A84285B6606000E727A /* Structs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Structs.swift; sourceTree = "<group>"; };
 		FF66DC2B287FC57D00AB77E0 /* ClientManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientManager.swift; sourceTree = "<group>"; };
 		FF74B753287AA0F5008684A5 /* Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
+		FF84E3A2288E56D0007AA142 /* ChangeDefaultPassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeDefaultPassword.swift; sourceTree = "<group>"; };
 		FF9A8F96285DF68C009F363F /* CreateClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateClassView.swift; sourceTree = "<group>"; };
 		FF9A8F98285E21F6009F363F /* DeleteClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteClassView.swift; sourceTree = "<group>"; };
 		FF9A8F9C285E2377009F363F /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				FF4F5A7A285B647F000E727A /* AuthenticateView.swift */,
+				FF84E3A2288E56D0007AA142 /* ChangeDefaultPassword.swift */,
 				FFC12819287C3CCB002EF761 /* NoClassChooseView.swift */,
 				FF374CC1285B81D10035891F /* NewAccountView.swift */,
 			);
@@ -417,6 +420,7 @@
 				FFEF34122874242A00E578A7 /* SettingsView.swift in Sources */,
 				FF4287722866ACA300FB33DB /* CreateEntryView.swift in Sources */,
 				FFEF341728744ECF00E578A7 /* CreateSubjectView.swift in Sources */,
+				FF84E3A3288E56D0007AA142 /* ChangeDefaultPassword.swift in Sources */,
 				FF4F5A4F285B6226000E727A /* HomeworkBoardNewApp.swift in Sources */,
 				FF9A8F97285DF68C009F363F /* CreateClassView.swift in Sources */,
 				FF4F5A85285B6606000E727A /* Structs.swift in Sources */,

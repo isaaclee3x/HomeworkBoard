@@ -101,6 +101,13 @@ class MemberManager: ObservableObject {
         return names
     }
     
+    func deleteMember(username: String) async {
+        let member = await self.findAccount(username: username)!
+        try? await ref.child(member.clas).child(member.name).setValue(nil)
+        try? await ref.child("users").child(member.name).setValue(nil)
+        
+    }
+    
 }
 
 extension String {

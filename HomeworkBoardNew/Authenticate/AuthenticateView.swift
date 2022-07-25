@@ -19,6 +19,7 @@ struct AuthenticateView: View {
     @State var createNewAccount = false
     @State var chooseClass = false
     @State var loginFail = false
+    @State var resetDefaultPassword = false
     
     var body: some View {
         VStack {
@@ -41,6 +42,8 @@ struct AuthenticateView: View {
                             } else {
                                 success = true
                             }
+                        } else if MM.member?.password == MM.defaultPassword {
+                            resetDefaultPassword = true
                         } else {
                             success = true
                         }
@@ -71,6 +74,11 @@ struct AuthenticateView: View {
         }
         .sheet(isPresented: $chooseClass) {
             NoClassChooseView(username: $username, success: $success, isSheetPresented: $chooseClass, MM: MM, CM: CM)
+        }
+        .sheet(isPresented: $resetDefaultPassword) {
+            success = true
+        } content: {
+            ChangeDefaultPassword(isSheetPresented: $resetDefaultPassword, username: username, MM: MM)
         }
         .onAppear {
             MM.member = nil
