@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct SettingsView: View {
     
@@ -108,7 +109,14 @@ struct SelectClassView: View {
                                 let members = await MM.getMembers(of: self.clas)
                                 self.members = []
                                 for i in members {
-                                    self.members.append(await MM.findAccount(username: i)!)
+                                    guard let member = await MM.findAccount(username: i) else {
+                                        let ref = DatabaseReference()
+                                        
+                                        try! await ref.child(clas.name).child(i).setValue(nil)
+                                        return
+                                        
+                                    }
+                                    self.members.append(member)
                                 }
                             }
                         }

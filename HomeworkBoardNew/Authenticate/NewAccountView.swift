@@ -49,6 +49,7 @@ struct NewAccountView: View {
             
             if member.name == "YTSSADMIN" {
                 Toggle("Are you an admin?", isOn: $isAdmin)
+                    .frame(width: 200)
             }
             
             Text(member.clas)

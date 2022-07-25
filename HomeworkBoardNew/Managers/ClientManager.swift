@@ -60,15 +60,15 @@ class ClientManager: ObservableObject {
         guard type == item.type else { return }
         path = path.child(type).child(item.name)
         
-        guard let data = try? JSONEncoder().encode(item) else { return  }
+        guard let data = try? JSONEncoder().encode(item) else { return }
         try! await path.setValue(String(data: data, encoding: .utf8))
         
         if type == "users" {
             if perm == .member || perm == .leader {
                 let clas = item.getProp()
-                path = ref.child(clas)
+                path = ref.child(clas).child(item.name)
                 
-                try! await path.setValue([item.name: item.name])
+                try! await path.setValue(item.name)
             }
         }
     }

@@ -23,17 +23,6 @@ struct MassCreateUsersView: View {
         Form {
             ForEach(classes, id: \.self) { clas in
                 Section(clas) {
-                    Button {
-                        if members[clas] == nil { members[clas] = [] }
-                        var member = Member()
-                        member.perm = .member
-                        member.clas = clas
-                        members[clas]?.append(member)
-                    } label: {
-                        Text("Add Students")
-                            .bold()
-                    }
-                    
                     if let members = members[clas] {
                         ForEach(0 ..< members.count, id: \.self) { member in
                             let binding = Binding {
@@ -43,19 +32,46 @@ struct MassCreateUsersView: View {
                             }
                             
                             TextField("Name", text: binding)
+                                .disableAutocorrection(true)
+                                .onSubmit {
+                                    var member = Member()
+                                    member.perm = .member
+                                    member.clas = clas
+                                    member.password = MM.defaultPassword
+                                    self.members[clas]?.append(member)
+                                }
                         }
                     }
                 }
             }
             
             Button {
+                let values = self.members as NSDictionary
+                
+                let value = values.allValues as? [[Member]] ?? []
+                guard value != [] else { return }
+                let members = value[0]
+                Task {
+                    for member in members {
+                        await MM.saveAccount(member: member, perm: .member)
+                    }
+                }
+                
+                isSheetPresented = false
                 
             } label: {
                 Text("Submit")
             }
         }
         .onAppear {
-            print(classes)
+            for clas in classes {
+                if members[clas] == nil { members[clas] = [] }
+                var member = Member()
+                member.perm = .member
+                member.clas = clas
+                member.password = MM.defaultPassword
+                members[clas]?.append(member)
+            }
         }
     }
 }

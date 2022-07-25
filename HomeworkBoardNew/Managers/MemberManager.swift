@@ -22,6 +22,15 @@ class MemberManager: ObservableObject {
     @Published var member: Member?
     @ObservedObject var CLM = ClientManager()
     private var ref = Database.database().reference()
+    var defaultPassword: String {
+        let date = Date()
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.dateFormat = "yyyy"
+        dateFormatter.locale = .current
+        
+        return "YTSS\(dateFormatter.string(from: date))"
+    }
     
     /// Saves a member (with an encrypted password) to the /users/(username) path
     ///
@@ -125,5 +134,9 @@ extension String {
             if await MM.findAccount(username: self) == nil { return false }
         }
         return true
+    }
+    
+    func isDefault() -> Bool {
+        self == MemberManager().defaultPassword ? true : false
     }
 }

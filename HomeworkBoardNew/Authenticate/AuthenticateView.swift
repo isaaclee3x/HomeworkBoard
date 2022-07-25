@@ -38,6 +38,8 @@ struct AuthenticateView: View {
                         if MM.member?.clas == "" {
                             if MM.member?.perm == .member || MM.member?.perm == .leader {
                                 chooseClass = true                                
+                            } else {
+                                success = true
                             }
                         } else {
                             success = true
