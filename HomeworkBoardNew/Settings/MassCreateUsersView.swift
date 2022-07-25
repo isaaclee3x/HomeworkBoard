@@ -10,62 +10,58 @@ import Foundation
 
 struct MassCreateUsersView: View {
     
-    @State var chooseFile = false
-    @State var createFile = false
+    @State var chosenClass = ""
+    @State var members: [String: [Member]] = [:]
+    @State var mutableMember = Member()
     
-    @State var members = [Member()]
     @Binding var isSheetPresented: Bool
-    
     @ObservedObject var MM: MemberManager
-    @ObservedObject var CM: ClassManager
+    
+    var classes: [String]
     
     var body: some View {
         Form {
-            Text("Enter the member's name under the class")
-            
-            Section("Classes") {
-                if let classes = CM.classes {
-                    ForEach(classes) { clas in
-                        HStack {
-                            Text(clas.name)
-                            
-                            Button {
-                                var member = Member()
-                                member.clas = clas.name
-                                members.append(member)
-                                print(members)
-                            } label: {
-                                Image(systemName: "plus.circle")
+            ForEach(classes, id: \.self) { clas in
+                Section(clas) {
+                    Button {
+                        if members[clas] == nil { members[clas] = [] }
+                        var member = Member()
+                        member.perm = .member
+                        member.clas = clas
+                        members[clas]?.append(member)
+                    } label: {
+                        Text("Add Students")
+                            .bold()
+                    }
+                    
+                    if let members = members[clas] {
+                        ForEach(0 ..< members.count, id: \.self) { member in
+                            let binding = Binding {
+                                return members[member].name
+                            } set: { newValue in
+                                self.members[clas]![member].name = newValue
                             }
-                            .padding()
+                            
+                            TextField("Name", text: binding)
                         }
                     }
                 }
             }
             
             Button {
-                let members = self.members.filter() { $0.name != "" }
-                for i in members {
-                    Task {
-                        await MM.saveAccount(member: i, perm: .member)
-                    }
-                }
+                
             } label: {
                 Text("Submit")
             }
-            
         }
         .onAppear {
-            Task {
-                await CM.getClasses()
-            }
+            print(classes)
         }
-        .navigationTitle("Create Accounts")
     }
 }
 
 struct MassCreateUsersView_Previews: PreviewProvider {
     static var previews: some View {
-        MassCreateUsersView(isSheetPresented: .constant(true), MM: MemberManager(), CM: ClassManager())
+        MassCreateUsersView(isSheetPresented: .constant(false), MM: MemberManager(), classes: [])
     }
 }

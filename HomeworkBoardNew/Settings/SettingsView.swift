@@ -20,6 +20,7 @@ struct SettingsView: View {
     @State var sendableClas = Class(name: "", date: "")
     @State var entries: [Entry] = []
     @State var members: [Member] = []
+    @State var classes: [String] = []
     @State var createNewSubject = false
     @State var massCreateUsers = false
     
@@ -60,10 +61,11 @@ struct SettingsView: View {
                             }
 
                         }
-                        .onChange(of: clas) { newValue in
+                        .onAppear {
                             Task(priority: .high) {
                                 await CM.getClasses()
                                 await SM.getSubjects()
+                                classes = CM.classes?.map() { $0.name } ?? []
                             }
                         }
                         .navigationTitle("Settings")
@@ -71,7 +73,7 @@ struct SettingsView: View {
                             CreateSubjectView(isSheetPresented: $createNewSubject, SM: SM)
                         }
                         .sheet(isPresented: $massCreateUsers) {
-                            MassCreateUsersView(isSheetPresented: $massCreateUsers, MM: MM, CM: CM)
+                            MassCreateUsersView(isSheetPresented: $massCreateUsers, MM: MM, classes: classes)
                         }
                     }
                 }
