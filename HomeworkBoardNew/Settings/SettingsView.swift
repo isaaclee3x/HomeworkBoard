@@ -47,7 +47,7 @@ struct SettingsView: View {
                         }
                         
                         Section("Members") {
-                            MembersView(members: $members)
+                            MembersView(members: $members, clas: clas, MM: MM)
                         }
                         
                         Section("Subjects") {
@@ -60,7 +60,7 @@ struct SettingsView: View {
                             } label: {
                                 Text("Mass Create Account")
                             }
-
+                            
                         }
                         .onAppear {
                             Task(priority: .high) {
@@ -139,6 +139,10 @@ struct MembersView: View {
     
     @Binding var members: [Member]
     
+    var clas: String
+    
+    @ObservedObject var MM: MemberManager
+    
     var body: some View {
         if members != [] {
             ForEach(members) { member in
@@ -154,6 +158,29 @@ struct MembersView: View {
                     .opacity(0.5)
                     .font(.system(size: 10))
                     .foregroundColor(.gray)
+                }
+                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                    Button {
+                        Task {
+                            await MM.deleteMember(username: member.name)
+                            let members = await MM.getMembers(of: clas)
+                            for i in members {
+                                guard let member = await MM.findAccount(username: i) else {
+                                    let ref = DatabaseReference()
+                                    
+                                    try! await ref.child(clas).child(i).setValue(nil)
+                                    return
+                                    
+                                }
+                                self.members = []
+                                self.members.append(member)
+                            }
+                        }
+                    } label: {
+                        Text("Delete")
+                    }
+                    .tint(.red)
+                    
                 }
             }
         } else {

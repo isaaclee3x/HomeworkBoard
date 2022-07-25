@@ -28,12 +28,15 @@ struct ChangeDefaultPassword: View {
             Text("Please change your password")
                 .bold()
                 .frame(width: 150)
+                .padding()
             
             TextField("Password", text: $newPassword)
                 .credStyle(width: 300, height: 60)
+                .disableAutocorrection(true)
             
             TextField("Confirm Password:", text: $confirmPassword)
                 .credStyle(width: 300, height: 60)
+                .disableAutocorrection(true)
             
             Button {
                 if newPassword == confirmPassword {
