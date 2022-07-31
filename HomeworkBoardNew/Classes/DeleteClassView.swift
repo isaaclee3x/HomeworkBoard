@@ -14,7 +14,7 @@ struct DeleteClassView: View {
     @State var name = ""
     
     @Binding var isSheetPresented: Bool
-    @ObservedObject var CM: ClassManager
+    var CM: ClassManager
     
     var body: some View {
         VStack {

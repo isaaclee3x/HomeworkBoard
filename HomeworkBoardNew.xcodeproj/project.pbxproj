@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		FF163121285C0EE200DB8A6E /* ClassesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF163120285C0EE200DB8A6E /* ClassesView.swift */; };
-		FF163123285C0EEA00DB8A6E /* ClassManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF163122285C0EEA00DB8A6E /* ClassManager.swift */; };
 		FF163125285C1E9600DB8A6E /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF163124285C1E9600DB8A6E /* Enums.swift */; };
 		FF374CC2285B81D10035891F /* NewAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF374CC1285B81D10035891F /* NewAccountView.swift */; };
 		FF4287722866ACA300FB33DB /* CreateEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4287712866ACA300FB33DB /* CreateEntryView.swift */; };
@@ -20,15 +19,17 @@
 		FF4F5A6A285B622A000E727A /* HomeworkBoardNewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A69285B622A000E727A /* HomeworkBoardNewUITests.swift */; };
 		FF4F5A6C285B622A000E727A /* HomeworkBoardNewUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A6B285B622A000E727A /* HomeworkBoardNewUITestsLaunchTests.swift */; };
 		FF4F5A7B285B647F000E727A /* AuthenticateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A7A285B647F000E727A /* AuthenticateView.swift */; };
-		FF4F5A7D285B6487000E727A /* MemberManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A7C285B6487000E727A /* MemberManager.swift */; };
 		FF4F5A85285B6606000E727A /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A84285B6606000E727A /* Structs.swift */; };
 		FF5216522894220A00885CE5 /* CoreXLSX in Frameworks */ = {isa = PBXBuildFile; productRef = FF5216512894220A00885CE5 /* CoreXLSX */; };
 		FF5216552894224A00885CE5 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = FF5216542894224A00885CE5 /* FirebaseDatabase */; };
 		FF5216572894224A00885CE5 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FF5216562894224A00885CE5 /* FirebaseDatabaseSwift */; };
 		FF52165A2894229800885CE5 /* SwiftDate in Frameworks */ = {isa = PBXBuildFile; productRef = FF5216592894229800885CE5 /* SwiftDate */; };
-		FF66DC2C287FC57E00AB77E0 /* ClientManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF66DC2B287FC57D00AB77E0 /* ClientManager.swift */; };
 		FF74B754287AA0F5008684A5 /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF74B753287AA0F5008684A5 /* Modifiers.swift */; };
 		FF84E3A3288E56D0007AA142 /* ChangeDefaultPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF84E3A2288E56D0007AA142 /* ChangeDefaultPassword.swift */; };
+		FF90F92C2896E5DD002D2879 /* ClassManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF90F9282896E5DD002D2879 /* ClassManager.swift */; };
+		FF90F92D2896E5DD002D2879 /* SubjectManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF90F9292896E5DD002D2879 /* SubjectManager.swift */; };
+		FF90F92E2896E5DD002D2879 /* MemberManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF90F92A2896E5DD002D2879 /* MemberManager.swift */; };
+		FF90F92F2896E5DD002D2879 /* BoardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF90F92B2896E5DD002D2879 /* BoardManager.swift */; };
 		FF9A8F97285DF68C009F363F /* CreateClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A8F96285DF68C009F363F /* CreateClassView.swift */; };
 		FF9A8F99285E21F6009F363F /* DeleteClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A8F98285E21F6009F363F /* DeleteClassView.swift */; };
 		FF9A8F9D285E2377009F363F /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A8F9C285E2377009F363F /* BoardView.swift */; };
@@ -36,9 +37,7 @@
 		FFC1281A287C3CCB002EF761 /* NoClassChooseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC12819287C3CCB002EF761 /* NoClassChooseView.swift */; };
 		FFEDA8AB286F3F7D00E59BF3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FFEDA8AA286F3F7D00E59BF3 /* GoogleService-Info.plist */; };
 		FFEF34122874242A00E578A7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEF34112874242A00E578A7 /* SettingsView.swift */; };
-		FFEF3414287447A300E578A7 /* BoardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEF3413287447A300E578A7 /* BoardManager.swift */; };
 		FFEF341728744ECF00E578A7 /* CreateSubjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEF341628744ECF00E578A7 /* CreateSubjectView.swift */; };
-		FFEF34192874704F00E578A7 /* SubjectManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEF34182874704F00E578A7 /* SubjectManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,7 +72,6 @@
 
 /* Begin PBXFileReference section */
 		FF163120285C0EE200DB8A6E /* ClassesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassesView.swift; sourceTree = "<group>"; };
-		FF163122285C0EEA00DB8A6E /* ClassManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassManager.swift; sourceTree = "<group>"; };
 		FF163124285C1E9600DB8A6E /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		FF374CC1285B81D10035891F /* NewAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAccountView.swift; sourceTree = "<group>"; };
 		FF4287712866ACA300FB33DB /* CreateEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEntryView.swift; sourceTree = "<group>"; };
@@ -88,11 +86,13 @@
 		FF4F5A69285B622A000E727A /* HomeworkBoardNewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeworkBoardNewUITests.swift; sourceTree = "<group>"; };
 		FF4F5A6B285B622A000E727A /* HomeworkBoardNewUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeworkBoardNewUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		FF4F5A7A285B647F000E727A /* AuthenticateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticateView.swift; sourceTree = "<group>"; };
-		FF4F5A7C285B6487000E727A /* MemberManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberManager.swift; sourceTree = "<group>"; };
 		FF4F5A84285B6606000E727A /* Structs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Structs.swift; sourceTree = "<group>"; };
-		FF66DC2B287FC57D00AB77E0 /* ClientManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientManager.swift; sourceTree = "<group>"; };
 		FF74B753287AA0F5008684A5 /* Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
 		FF84E3A2288E56D0007AA142 /* ChangeDefaultPassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeDefaultPassword.swift; sourceTree = "<group>"; };
+		FF90F9282896E5DD002D2879 /* ClassManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassManager.swift; sourceTree = "<group>"; };
+		FF90F9292896E5DD002D2879 /* SubjectManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubjectManager.swift; sourceTree = "<group>"; };
+		FF90F92A2896E5DD002D2879 /* MemberManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemberManager.swift; sourceTree = "<group>"; };
+		FF90F92B2896E5DD002D2879 /* BoardManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardManager.swift; sourceTree = "<group>"; };
 		FF9A8F96285DF68C009F363F /* CreateClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateClassView.swift; sourceTree = "<group>"; };
 		FF9A8F98285E21F6009F363F /* DeleteClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteClassView.swift; sourceTree = "<group>"; };
 		FF9A8F9C285E2377009F363F /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
@@ -100,9 +100,7 @@
 		FFC12819287C3CCB002EF761 /* NoClassChooseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoClassChooseView.swift; sourceTree = "<group>"; };
 		FFEDA8AA286F3F7D00E59BF3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "../../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FFEF34112874242A00E578A7 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		FFEF3413287447A300E578A7 /* BoardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardManager.swift; sourceTree = "<group>"; };
 		FFEF341628744ECF00E578A7 /* CreateSubjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSubjectView.swift; sourceTree = "<group>"; };
-		FFEF34182874704F00E578A7 /* SubjectManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,18 +162,6 @@
 			path = Board;
 			sourceTree = "<group>";
 		};
-		FF42877B2866C6FE00FB33DB /* Managers */ = {
-			isa = PBXGroup;
-			children = (
-				FF4F5A7C285B6487000E727A /* MemberManager.swift */,
-				FF66DC2B287FC57D00AB77E0 /* ClientManager.swift */,
-				FF163122285C0EEA00DB8A6E /* ClassManager.swift */,
-				FFEF3413287447A300E578A7 /* BoardManager.swift */,
-				FFEF34182874704F00E578A7 /* SubjectManager.swift */,
-			);
-			path = Managers;
-			sourceTree = "<group>";
-		};
 		FF4F5A42285B6226000E727A = {
 			isa = PBXGroup;
 			children = (
@@ -206,8 +192,8 @@
 				FFEF341528744EB800E578A7 /* Settings */,
 				FF4287772866C69700FB33DB /* Authenticate */,
 				FF4287782866C6A300FB33DB /* Classes */,
+				FF90F9272896E5DD002D2879 /* Managers */,
 				FF4287792866C6A800FB33DB /* Board */,
-				FF42877B2866C6FE00FB33DB /* Managers */,
 				FF4F5A84285B6606000E727A /* Structs.swift */,
 				FF163124285C1E9600DB8A6E /* Enums.swift */,
 				FF4F5A52285B6229000E727A /* Assets.xcassets */,
@@ -239,6 +225,17 @@
 				FF4F5A6B285B622A000E727A /* HomeworkBoardNewUITestsLaunchTests.swift */,
 			);
 			path = HomeworkBoardNewUITests;
+			sourceTree = "<group>";
+		};
+		FF90F9272896E5DD002D2879 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				FF90F9282896E5DD002D2879 /* ClassManager.swift */,
+				FF90F9292896E5DD002D2879 /* SubjectManager.swift */,
+				FF90F92A2896E5DD002D2879 /* MemberManager.swift */,
+				FF90F92B2896E5DD002D2879 /* BoardManager.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 		FFEF341528744EB800E578A7 /* Settings */ = {
@@ -394,25 +391,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FFEF3414287447A300E578A7 /* BoardManager.swift in Sources */,
 				FF9A8F99285E21F6009F363F /* DeleteClassView.swift in Sources */,
-				FF66DC2C287FC57E00AB77E0 /* ClientManager.swift in Sources */,
-				FF163123285C0EEA00DB8A6E /* ClassManager.swift in Sources */,
 				FF74B754287AA0F5008684A5 /* Modifiers.swift in Sources */,
 				FF4F5A51285B6226000E727A /* ContentView.swift in Sources */,
 				FF374CC2285B81D10035891F /* NewAccountView.swift in Sources */,
 				FFC1281A287C3CCB002EF761 /* NoClassChooseView.swift in Sources */,
+				FF90F92E2896E5DD002D2879 /* MemberManager.swift in Sources */,
 				FFEF34122874242A00E578A7 /* SettingsView.swift in Sources */,
 				FF4287722866ACA300FB33DB /* CreateEntryView.swift in Sources */,
 				FFEF341728744ECF00E578A7 /* CreateSubjectView.swift in Sources */,
+				FF90F92F2896E5DD002D2879 /* BoardManager.swift in Sources */,
 				FF84E3A3288E56D0007AA142 /* ChangeDefaultPassword.swift in Sources */,
 				FF4F5A4F285B6226000E727A /* HomeworkBoardNewApp.swift in Sources */,
 				FF9A8F97285DF68C009F363F /* CreateClassView.swift in Sources */,
 				FF4F5A85285B6606000E727A /* Structs.swift in Sources */,
+				FF90F92C2896E5DD002D2879 /* ClassManager.swift in Sources */,
 				FF4F5A7B285B647F000E727A /* AuthenticateView.swift in Sources */,
-				FFEF34192874704F00E578A7 /* SubjectManager.swift in Sources */,
-				FF4F5A7D285B6487000E727A /* MemberManager.swift in Sources */,
 				FF9A8F9D285E2377009F363F /* BoardView.swift in Sources */,
+				FF90F92D2896E5DD002D2879 /* SubjectManager.swift in Sources */,
 				FF163125285C1E9600DB8A6E /* Enums.swift in Sources */,
 				FF163121285C0EE200DB8A6E /* ClassesView.swift in Sources */,
 				FFAEC5072887FD8D005F7862 /* MassCreateUsersView.swift in Sources */,

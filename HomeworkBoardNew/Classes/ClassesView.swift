@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct ClassesView: View {
     
@@ -16,38 +17,29 @@ struct ClassesView: View {
     @State var showSettings = false
     
     @State var classes = [Class(name: "", date: "")]
+    @State var subjects: [Subject] = []
     @State var entriesWeek: [Entry] = []
     
+    @Binding var member: Member
     @Binding var success: Bool
     @Binding var chooseClassView: Bool
     
-    @ObservedObject var MM: MemberManager
-    @StateObject var CM = ClassManager()
-    @StateObject var SM = SubjectManager()
+    var MM = MemberManager()
+    var CM = ClassManager()
+    var SM = SubjectManager()
     let BM = BoardManager()
-
+    
     var body: some View {
         VStack {
-            if MM.member?.perm == .member || MM.member?.perm == .leader || MM.member?.perm == .teacher {
-                SummaryView(clas: $classes[0], CM: CM, SM: SM, BM: BM, member: MM.member!)
+            if member.perm == .member || member.perm == .leader || member.perm == .teacher {
+                SummaryView(clas: $classes[0], subjects: $subjects, CM: CM, SM: SM, BM: BM, member: member)
             }
-            ShowClassesView(classes: $classes, CM: CM, MM: MM, SM: SM, BM: BM)
-        }
-        .onAppear {
-            Task(priority: .high) {
-                if MM.member?.perm == .admin || MM.member?.perm == .teacher {
-                    await CM.getClass()
-                    classes = CM.classes ?? []
-                } else {
-                    await CM.getClass(name: MM.member!.clas)
-                    classes = CM.classes ?? []
-                }
-            }
+            ShowClassesView(member: member, classes: $classes, subjects: $subjects, CM: CM, MM: MM, SM: SM, BM: BM)
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {
-                    if MM.member!.perm == .admin || MM.member!.perm == .teacher {
+                    if member.perm == .admin || member.perm == .teacher {
                         Button {
                             createClass = true
                         } label: {
@@ -63,80 +55,98 @@ struct ClassesView: View {
                                 .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
                                 .bold()
                         }
-                    }
-                    Button {
-                        Task {
-                            if MM.member?.perm == .admin || MM.member?.perm == .teacher {
-                                await CM.getClass()
-                                classes = CM.classes ?? []
-                            } else {
-                                await CM.getClass(name: MM.member!.clas)
-                                classes = CM.classes ?? []
-                            }
+                        
+                        Button {
+                            success = false
+                        } label: {
+                            Text("Logout")
+                                .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
+                                .bold()
                         }
-                    } label: {
-                        Text("Reload")
-                            .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
-                            .bold()
+                        
+                        Button {
+                            showSettings = true
+                        } label: {
+                            Text("Settings")
+                        }
+                        
                     }
-                    
-                    Button {
-                        success = false
-                    } label: {
-                        Text("Logout")
-                            .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
-                            .bold()
-                    }
-                    
-                    Button {
-                        showSettings = true
-                    } label: {
-                        Text("Settings")
-                    }
-                    
                 } label: {
                     Image(systemName: "ellipsis.circle")
                         .foregroundColor(Color(colorScheme == .light ? "murkyBlue" : "lightestBlue"))
+                    
                 }
-                
             }
         }
-        .navigationTitle(MM.member?.perm == .member || MM.member?.perm == .leader ? "Classes" : "Class")
+        .navigationTitle(member.perm == .member || member.perm == .leader ? "Classes" : "Class")
         .sheet(isPresented: $createClass) {
-            Task {
-                await CM.getClass()
-                classes = CM.classes!
-            }
-        } content: {
             CreateClassView(CM: CM, isSheetPresented: $createClass)
         }
         .sheet(isPresented: $deleteClass) {
-            Task {
-                await CM.getClass()
-                classes = CM.classes ?? []
-            }
-        } content: {
             DeleteClassView(isSheetPresented: $deleteClass, CM: CM)
         }
         .sheet(isPresented: $showSettings) {
-            SettingsView(MM: MM, CM: CM, SM: SM, member: MM.member!)
+            SettingsView(classes: $classes, subjects: $subjects, MM: MM, CM: CM, SM: SM, member: member)
         }
         .background(color: colorScheme == .light ? "lightestBlue" : "murkyBlue")
-        .onChange(of: MM.member?.clas) { newValue in
+        .onChange(of: member.clas) { newValue in
             if newValue == "" {
                 success = false
                 chooseClassView = false
             }
         }
+        .onAppear {
+            let ref = Database.database().reference()
+            let anotherPath = ref.child("subjects")
+            anotherPath.observe(.value) { snapshot in
+                let value = snapshot.value as? NSDictionary
+                
+                guard value?.allValues != nil else { subjects = []; return }
+                
+                let subjects = value?.allValues as! [String]
+                let decodedSubjects = subjects.map { subj -> Subject in
+                    let decoder = JSONDecoder()
+                    let decoded = try? decoder.decode(Subject.self, from: subj.data(using: .utf8)!)
+                    return decoded!
+                }
+                self.subjects = []
+                self.subjects = decodedSubjects
+            }
+            
+            let path = (member.perm == .member ? ref.child("classes").child(member.clas) : ref.child("classes"))
+            path.observe(.value) { snapshot in
+                let value = snapshot.value as? NSDictionary
+                
+                guard value?.allValues != nil else { classes = []; return }
+                let classes = value?.allValues as! [String]
+                let decodedClasses = classes.map { clas -> Class in
+                    let decoder = JSONDecoder()
+                    let decoded = try? decoder.decode(Class.self, from: clas.data(using: .utf8)!)
+                    return decoded!
+                }
+                self.classes = decodedClasses
+            }
+            
+            let newPath = ref.child("users").child(member.name)
+            newPath.observe(.value) { snapshot in
+                let value = snapshot.value as? String
+                
+                let decoder = JSONDecoder()
+                self.member = try! decoder.decode(Member.self, from: value!.data(using: .utf8)!)
+                
+            }
+        }
     }
 }
+
 
 struct SummaryView: View {
     
     @Binding var clas: Class
+    @Binding var subjects: [Subject]
     
-    @ObservedObject var CM: ClassManager
-    @ObservedObject var SM: SubjectManager
+    var CM: ClassManager
+    var SM: SubjectManager
     
     @State var date = ""
     @State var entriesWeek: [Entry] = []
@@ -178,7 +188,7 @@ struct SummaryView: View {
                         List {
                             ForEach(entriesWeek) { entry in
                                 NavigationLink {
-                                    BoardView(date: $date, clas: $clas, CM: CM, SM: SM, BM: BM, member: member)
+                                    BoardView(date: $date, subjects: $subjects, clas: $clas, CM: CM, SM: SM, BM: BM, member: member)
                                 } label: {
                                     HStack {
                                         if let subject = entry.subject {
@@ -228,12 +238,14 @@ struct SummaryView: View {
 struct ShowClassesView: View {
     
     @State var date = ""
+    var member: Member
     
     @Binding var classes: [Class]
+    @Binding var subjects: [Subject]
     
-    @ObservedObject var CM: ClassManager
-    @ObservedObject var MM: MemberManager
-    @ObservedObject var SM: SubjectManager
+    var CM: ClassManager
+    var MM: MemberManager
+    var SM: SubjectManager
     
     let columns = [
         GridItem(.flexible()),
@@ -249,16 +261,14 @@ struct ShowClassesView: View {
                 .opacity(0.4)
             
         } else {
-            if MM.member != nil {
-                LazyVGrid(columns: columns) {
-                    ForEach($classes) { $clas in
-                        NavigationLink {
-                            BoardView(date: $date, clas: $clas, CM: CM, SM: SM, BM: BM, member: MM.member!)
-                        } label: {
-                            Text(clas.name)
-                                .bold()
-                                .blockDisplay()
-                        }
+            LazyVGrid(columns: columns) {
+                ForEach($classes) { $clas in
+                    NavigationLink {
+                        BoardView(date: $date, subjects: $subjects, clas: $clas, CM: CM, SM: SM, BM: BM, member: member)
+                    } label: {
+                        Text(clas.name)
+                            .bold()
+                            .blockDisplay()
                     }
                 }
                 .onAppear {

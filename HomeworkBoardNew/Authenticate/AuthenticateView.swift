@@ -6,15 +6,17 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct AuthenticateView: View {
     
     @State var username = ""
     @State var password = ""
+    @Binding var member: Member
     
     @Binding var success: Bool
-    @ObservedObject var MM: MemberManager
-    @ObservedObject var CM: ClassManager
+    var MM = MemberManager()
+    var CM = ClassManager()
     
     @State var createNewAccount = false
     @State var chooseClass = false
@@ -34,20 +36,28 @@ struct AuthenticateView: View {
                 .credStyle(width: 300, height: 60)
             
             Button {
-                Task {
-                    await MM.auth(username: username, password: password) {
-                        if MM.member?.clas == "" {
-                            if MM.member?.perm == .member || MM.member?.perm == .leader {
-                                chooseClass = true                                
+                let ref = Database.database().reference()
+                
+                ref.child("users").child(username).observeSingleEvent(of: .value) { snapshot in
+                    guard snapshot.value != nil else { loginFail = true; return }
+                    let value = snapshot.value as! String
+                    let decoder = JSONDecoder()
+                    
+                    var member = try? decoder.decode(Member.self, from: value.data(using: .utf8)!)
+                    let edit = member
+                    member?.password = (edit?.password.fromBase64())!
+                    self.member = member!
+                    if member?.name == username && member?.password == password {
+                        if member?.clas == "" {
+                            if member?.perm == .member || member?.perm == .leader {
+                                chooseClass = true
                             } else {
                                 success = true
                             }
-                        } else if MM.member?.password == MM.defaultPassword {
-                            resetDefaultPassword = true
-                        } else {
-                            success = true
                         }
-                    } not: {
+                    } else if member?.password == MM.defaultPassword {
+                        resetDefaultPassword = true
+                    } else {
                         loginFail = true
                     }
                 }
@@ -78,10 +88,7 @@ struct AuthenticateView: View {
         .sheet(isPresented: $resetDefaultPassword) {
             success = true
         } content: {
-            ChangeDefaultPassword(isSheetPresented: $resetDefaultPassword, username: username, MM: MM)
-        }
-        .onAppear {
-            MM.member = nil
+            ChangeDefaultPassword(isSheetPresented: $resetDefaultPassword, member: $member, MM: MM)
         }
         .alert("Login Failed", isPresented: $loginFail) {
             Button("Cancel", role: .destructive) {

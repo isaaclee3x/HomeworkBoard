@@ -15,13 +15,18 @@ import CoreXLSX
 ///
 ///  This manager allows the user to create an account, and to authenticate their account.
 ///  It would also allow them to recall back their password if they forget
-class MemberManager: ObservableObject {
+class MemberManager {
     
     /// Value is changed based on the account's username
-    @Published var member: Member?
-    @ObservedObject var CLM = ClientManager()
     let ref = Database.database().reference()
-    var defaultPassword = "YTSS2022"
+    var defaultPassword: String {
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.dateFormat = "yyyy"
+        
+        let year = dateFormatter.string(from: Date())
+        return "YTSS\(year)"
+    }
     
     /// Saves a member (with an encrypted password) to the /users/(username) path
     ///x
@@ -35,7 +40,9 @@ class MemberManager: ObservableObject {
         
         var member = member
         member.password = member.password.toBase64()
-        await CLM.saveData(type: "users", item: member, bypass: bypass)
+        let encoder = JSONEncoder()
+        let json = try? encoder.encode(member)
+        try! await ref.child("users").child(member.name).setValue(String(data: json!, encoding: .utf8))
     }
     
     /// Checks whether the username and password the user entered matches the username and password saved in the cloud
@@ -44,7 +51,7 @@ class MemberManager: ObservableObject {
     ///   - password: Locally inputed password
     ///   - what: What to do if the authentication is successful
     func auth(username: String, password: String, do what: (() -> Void)..., not fail: (() -> Void)...) async {
-        await self.getAccount(username: username)
+        let member = await getAccount(username: username)
         if member?.name == username && member?.password == password {
             for i in what { i() }
         } else {
@@ -52,25 +59,23 @@ class MemberManager: ObservableObject {
         }
     }
     
-    /// Gets the account's data from the database
-    ///
-    /// Decodes the data into the Member struct
-    /// - Parameter username: The account to pull
-    func getAccount(username: String) async {
-        let members = await CLM.pullData(pull: Member(), name: username)
-        let member = members.first
-        var editableMem = member
-        editableMem?.password = (member?.password.fromBase64())!
-        self.member = editableMem
-    }
     
     /// Same functionality as getMember(), except that it returns the Member gotten except of updating @Published member
     /// This is used in limited occasions, where admin controls require user data but admin's own data cannot be updated
     /// - Parameter username: The account to pull
     /// - Returns: Returns the member's value
-    func findAccount(username: String) async -> Member? {
-        let data = await CLM.pullData(pull: Member(), name: username)
-        return data.first
+    func getAccount(username: String) async -> Member? {
+        var member: Member? = nil
+        ref.child("users").observeSingleEvent(of: .value) { snapshot in
+            guard snapshot.value != nil else { return }
+            let value = snapshot.value as? String
+            
+            let decoder = JSONDecoder()
+            member = try! decoder.decode(Member.self, from: value!.data(using: .utf8)!)
+        }
+        
+        try? await Task.sleep(nanoseconds: 100_000_000)
+        return member
     }
     
     /// Returns the names of members in a class
@@ -93,9 +98,9 @@ class MemberManager: ObservableObject {
     }
     
     func deleteMember(username: String) async {
-        let member = await self.findAccount(username: username)!
-        try? await ref.child(member.clas).child(member.name).setValue(nil)
-        try? await ref.child("users").child(member.name).setValue(nil)
+        let member = await self.getAccount(username: username)!
+        try! await ref.child(member.clas).child(member.name).setValue(nil)
+        try! await ref.child("users").child(member.name).setValue(nil)
         
     }
 }
@@ -119,18 +124,18 @@ extension String {
         if the == "class" {
             let CM = await ClassManager()
             
-            await CM.getClass()
-            var classes: [String] = []
-            for clas in await CM.classes! {
-                classes.append(clas.name)
+            let classes = await CM.getClass()
+            var classNames: [String] = []
+            for clas in await classes {
+                classNames.append(clas.name)
             }
             
-            if classes.contains(self) { return true }
+            if classNames.contains(self) { return true }
             return false
         } else {
             let MM = await MemberManager()
             
-            if await MM.findAccount(username: self) == nil { return false }
+            if await MM.getAccount(username: self) == nil { return false }
         }
         return true
     }

@@ -13,11 +13,10 @@ struct ChangeDefaultPassword: View {
     @State var confirmPassword = ""
     
     @State var notEqualPassword = false
-    @State var member = Member()
     @Binding var isSheetPresented: Bool
+    @Binding var member: Member
     
-    var username: String
-    @ObservedObject var MM: MemberManager
+    var MM: MemberManager
     
     
     var body: some View {
@@ -43,7 +42,6 @@ struct ChangeDefaultPassword: View {
                     member.password = newPassword
                     Task {
                         await MM.saveAccount(member: member, bypass: false)
-                        await MM.getAccount(username: member.name)
                     }
                     isSheetPresented = false
                 }
@@ -52,12 +50,6 @@ struct ChangeDefaultPassword: View {
                     .bold()
             }
             .bottomButton()
-            .onAppear {
-                Task {
-                    member = await MM.findAccount(username: username)!
-                    await MM.deleteMember(username: username)
-                }
-            }
         }
         .background(color: "lightestBlue")
     }

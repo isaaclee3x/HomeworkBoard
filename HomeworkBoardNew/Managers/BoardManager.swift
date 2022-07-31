@@ -10,8 +10,6 @@ import SwiftUI
 
 class BoardManager {
     
-    @StateObject var CM = ClassManager()
-    
     /// Creates a new board if the clas.board[date] value is nil
     /// - Parameters:
     ///   - clas: The class to save the new entries in
@@ -22,7 +20,7 @@ class BoardManager {
         for _ in 0 ..< 9 {
             clas.board.entries[date]?.append(Entry(entry: nil, due: nil, subject: nil))
         }
-        await CM.saveClass(clas: clas)
+        await ClassManager().saveClass(clas: clas)
         return clas
     }
     
@@ -73,6 +71,6 @@ class BoardManager {
             }
         }
         
-        await CM.saveClass(clas: clas)
+        await ClassManager().saveClass(clas: clas)
     }
 }

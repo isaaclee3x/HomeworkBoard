@@ -10,9 +10,12 @@ import Firebase
 
 struct SettingsView: View {
     
-    @ObservedObject var MM = MemberManager()
-    @ObservedObject var CM: ClassManager
-    @ObservedObject var SM: SubjectManager
+    @Binding var classes: [Class]
+    @Binding var subjects: [Subject]
+    
+    var MM = MemberManager()
+    var CM: ClassManager
+    var SM: SubjectManager
     
     let BM = BoardManager()
     var member: Member
@@ -21,28 +24,29 @@ struct SettingsView: View {
     @State var sendableClas = Class(name: "", date: "")
     @State var entries: [Entry] = []
     @State var members: [Member] = []
-    @State var classes: [String] = []
+    @State var classNames: [String] = []
     @State var createNewSubject = false
     @State var massCreateUsers = false
     
     var body: some View {
         NavigationView {
             VStack {
-                if MM.member?.perm == .admin || MM.member?.perm == .teacher {
+                if member.perm == .admin || member.perm == .teacher {
                     if clas != "" {
-                        let index = (CM.classes?.firstIndex() { clas in
+                        let index = (classes.firstIndex() { clas in
                             return clas.name == self.clas
-                        })!
+                        })
                         if let $clas = Binding<Class>(
-                            get: { CM.classes![index] },
-                            set: { newValue in CM.classes![index] = newValue}) {
+                            get: { classes[index!] },
+                            set: { newValue in
+                                classes[index!] = newValue}) {
                             
-                            SummaryView(clas: $clas, CM: CM, SM: SM, BM: BM, member: member)
+                            SummaryView(clas: $clas, subjects: $subjects, CM: CM, SM: SM, BM: BM, member: member)
                         }
                     }
                     
                     Form {
-                        if let classes = CM.classes {
+                        if let classes = classes {
                             SelectClassView(clas: $clas, members: $members, entries: $entries, classes: classes, member: member, MM: MM, CM: CM)
                         }
                         
@@ -51,7 +55,7 @@ struct SettingsView: View {
                         }
                         
                         Section("Subjects") {
-                            SubjectsView(SM: SM, createNewSubject: $createNewSubject)
+                            SubjectsView(subjects: $subjects, SM: SM, createNewSubject: $createNewSubject)
                         }
                         
                         Section("Batch") {
@@ -63,10 +67,8 @@ struct SettingsView: View {
                             
                         }
                         .onAppear {
-                            Task(priority: .high) {
-                                await CM.getClass()
-                                await SM.getSubjects()
-                                classes = CM.classes?.map() { $0.name } ?? []
+                            for i in classes {
+                                classNames.append(i.name)
                             }
                         }
                         .navigationTitle("Settings")
@@ -92,15 +94,15 @@ struct SelectClassView: View {
     var classes: [Class]
     var member: Member
     
-    @ObservedObject var MM: MemberManager
-    @ObservedObject var CM: ClassManager
+    var MM: MemberManager
+    var CM: ClassManager
     let BM = BoardManager()
     
     fileprivate func findMembersOf(clas: String) async {
         let members = await MM.getMembers(of: clas)
         self.members = []
         for i in members {
-            guard let member = await MM.findAccount(username: i) else {
+            guard let member = await MM.getAccount(username: i) else {
                 let ref = DatabaseReference()
                 
                 try! await ref.child(clas).child(i).setValue(nil)
@@ -155,7 +157,7 @@ struct MembersView: View {
     
     var clas: String
     
-    @ObservedObject var MM: MemberManager
+    var MM: MemberManager
     
     var body: some View {
         if members != [] {
@@ -179,7 +181,7 @@ struct MembersView: View {
                             await MM.deleteMember(username: member.name)
                             let members = await MM.getMembers(of: clas)
                             for i in members {
-                                guard let member = await MM.findAccount(username: i) else {
+                                guard let member = await MM.getAccount(username: i) else {
                                     let ref = DatabaseReference()
                                     
                                     try! await ref.child(clas).child(i).setValue(nil)
@@ -205,27 +207,28 @@ struct MembersView: View {
 
 struct SubjectsView: View {
     
-    @ObservedObject var SM: SubjectManager
+    @Binding var subjects: [Subject]
+    var SM: SubjectManager
     @Binding var createNewSubject: Bool
     
     var body: some View {
-        if let subjects = SM.subjects {
+        if subjects == [] {
             ForEach(subjects) { subject in
-                HStack {
-                    Circle()
-                        .frame(width: 10)
-                        .foregroundColor(Color.init(red: subject.colour.r, green: subject.colour.g, blue: subject.colour.b))
-                    
-                    Text(subject.name)
-                        .bold()
-                }
-            }
-            .onDelete { offsets in
-                Task {
-                    let index = offsets[offsets.startIndex]
-                    await SM.deleteSubject(subj: subjects[index])
-                    
-                }
+//                HStack {
+//                    Circle()
+//                        .frame(width: 10)
+//                        .foregroundColor(Color.init(red: subject.colour.r, green: subject.colour.g, blue: subject.colour.b))
+//
+//                    Text(subject.name)
+//                        .bold()
+//                }
+//                .onDelete { offsets in
+//                    Task {
+//                        let index = offsets[offsets.startIndex]
+//                        await SM.deleteSubject(subj: subjects[index])
+//
+//                    }
+//                }
             }
         } else {
             Text("Go create a new subject")

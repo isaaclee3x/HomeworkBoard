@@ -15,20 +15,20 @@ struct MassCreateUsersView: View {
     @State var mutableMember = Member()
     
     @Binding var isSheetPresented: Bool
-    @ObservedObject var MM: MemberManager
+    var MM: MemberManager
     
-    var classes: [String]
+    var classes: [Class]
     
     var body: some View {
         Form {
-            ForEach(classes, id: \.self) { clas in
-                Section(clas) {
-                    if let members = members[clas] {
+            ForEach(classes) { clas in
+                Section(clas.name) {
+                    if let members = members[clas.name] {
                         ForEach(0 ..< members.count, id: \.self) { member in
                             let binding = Binding {
                                 return members[member].name
                             } set: { newValue in
-                                self.members[clas]![member].name = newValue
+                                self.members[clas.name]![member].name = newValue
                             }
                             
                             TextField("Name", text: binding)
@@ -36,9 +36,9 @@ struct MassCreateUsersView: View {
                                 .onSubmit {
                                     var member = Member()
                                     member.perm = .member
-                                    member.clas = clas
+                                    member.clas = clas.name
                                     member.password = MM.defaultPassword
-                                    self.members[clas]?.append(member)
+                                    self.members[clas.name]?.append(member)
                                 }
                         }
                     }
@@ -65,12 +65,12 @@ struct MassCreateUsersView: View {
         }
         .onAppear {
             for clas in classes {
-                if members[clas] == nil { members[clas] = [] }
+                if members[clas.name] == nil { members[clas.name] = [] }
                 var member = Member()
                 member.perm = .member
-                member.clas = clas
+                member.clas = clas.name
                 member.password = MM.defaultPassword
-                members[clas]?.append(member)
+                members[clas.name]?.append(member)
             }
         }
     }

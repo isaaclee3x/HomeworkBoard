@@ -14,16 +14,18 @@ struct NoClassChooseView: View {
     @Binding var isSheetPresented: Bool
     
     @State var clas = ""
+    @State var classes: [Class] = []
+    @State var member = Member()
     
-    @ObservedObject var MM: MemberManager
-    @ObservedObject var CM: ClassManager
+    var MM: MemberManager
+    var CM: ClassManager
     
     var body: some View {
         VStack {
             Text("**Choose** your class")
                 .header()
             
-            if let classes = CM.classes {
+            if let classes = classes {
                 Menu {
                     ForEach(classes) { clas in
                         Button {
@@ -45,8 +47,8 @@ struct NoClassChooseView: View {
             
             Button {
                 Task {
-                    MM.member?.clas = clas
-                    await MM.saveAccount(member: MM.member!, bypass: false)
+                    member.clas = clas
+                    await MM.saveAccount(member: member, bypass: false)
                     isSheetPresented = false
                     success = false
                 }
@@ -58,7 +60,11 @@ struct NoClassChooseView: View {
         }
         .background(color: "lightestBlue")
         .onAppear {
-            Task { await CM.getClass(); await MM.getAccount(username: username) }
+            Task {
+                classes = await CM.getClass()
+                member = await MM.getAccount(username: username)!
+                
+            }
         }
     }
 }

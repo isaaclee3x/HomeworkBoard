@@ -10,9 +10,10 @@ import SwiftUI
 struct NewAccountView: View {
     
     @State var member = Member()
+    @State var classes: [Class] = []
     @Binding var isSheetPresented: Bool
-    @ObservedObject var MM: MemberManager
-    @ObservedObject var CM: ClassManager
+    var MM: MemberManager
+    var CM: ClassManager
     
     @State var isAdmin = false
     
@@ -30,7 +31,7 @@ struct NewAccountView: View {
             SecureField("Password", text: $member.password)
                 .credStyle(width: 300, height: 60)
             
-            if let classes = CM.classes {
+            if let classes = classes {
                 Menu {
                     ForEach(classes) { clas in
                         Button {
@@ -68,7 +69,7 @@ struct NewAccountView: View {
         }
         .background(color: "lightestBlue")
         .onAppear {
-            Task { await CM.getClass() }
+            Task { classes = await CM.getClass()}
         }
     }
 }

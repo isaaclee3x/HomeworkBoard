@@ -10,7 +10,7 @@ import SwiftUI
 struct CreateClassView: View {
     
     @State var name = ""
-    @ObservedObject var CM: ClassManager
+    var CM: ClassManager
     
     @Binding var isSheetPresented: Bool
     
@@ -26,13 +26,6 @@ struct CreateClassView: View {
             Button {
                 Task {
                     await CM.createClass(name: name)
-                    await CM.getClass()
-                    if let classes = CM.classes {
-                        let i = classes.firstIndex(where: { clas in
-                            clas.name == name
-                        })
-                        let index: Int = classes.distance(from: classes.startIndex, to: i!)
-                    }
                     isSheetPresented = false
                 }
             } label: {

@@ -13,6 +13,7 @@ struct BoardView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @Binding var date: String
+    @Binding var subjects: [Subject]
     @State var daysFromToday = 0
     
     @State var createEntry = false
@@ -22,8 +23,8 @@ struct BoardView: View {
     
     @Binding var clas: Class
     
-    @ObservedObject var CM: ClassManager
-    @ObservedObject var SM: SubjectManager
+    var CM: ClassManager
+    var SM: SubjectManager
     
     let BM: BoardManager
     
@@ -38,32 +39,11 @@ struct BoardView: View {
         .navigationTitle(clas.name)
         .onAppear {
             Task {
-                await CM.getClass(name: clas.name)
                 await BM.cleanBoard(clas: clas)
             }
         }
         .sheet(isPresented: $createEntry) {
-            Task {
-                await CM.getClass(name: clas.name)
-            }
-        } content: {
-            CreateEntryView(username: member.name ,date: date, index: index, isSheetPresented: $createEntry, clas: $clas, CM: CM, SM: SM)
-        }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Menu {
-                    Button {
-                        Task { await CM.getClass(name: clas.name) }
-                    } label: {
-                        Text("Reload")
-                            .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
-                            .bold()
-                    }
-                } label: {
-                    Image(systemName: "ellipsis.circle")
-                        .foregroundColor(Color("lightestBlue"))
-                }
-            }
+            CreateEntryView(username: member.name ,date: date, index: index, isSheetPresented: $createEntry, clas: $clas, subjects: $subjects, CM: CM, SM: SM)
         }
         .onChange(of: daysFromToday) { newValue in
             Task {
@@ -74,9 +54,14 @@ struct BoardView: View {
                 self.date = date
                 if clas.board.entries[date] == nil {
                     self.clas = await BM.createBoard(clas: clas, date: date)
-                    await CM.getClass(name: clas.name)
+                    await CM.saveClass(clas: clas)
                     
                 }
+            }
+        }
+        .onChange(of: clas) { newValue in
+            Task {
+                await CM.saveClass(clas: newValue)
             }
         }
     }
@@ -125,7 +110,7 @@ struct EntriesView: View {
     @Binding var createEntry: Bool
     @Binding var index: Int
     
-    @ObservedObject var CM: ClassManager
+    var CM: ClassManager
     
     var body: some View {
         List {
@@ -164,6 +149,7 @@ struct EntriesView: View {
                                 clas.board.entries[date]![index].entry = " "
                                 clas.board.entries[date]![index].due = nil
                                 clas.board.entries[date]![index].subject = nil
+                                clas.board.entries[date]![index].author = ""
                                 
                                 await CM.saveClass(clas: clas)
                             }

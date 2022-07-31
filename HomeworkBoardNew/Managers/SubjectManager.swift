@@ -10,30 +10,22 @@ import SwiftUI
 import Firebase
 import FirebaseDatabaseSwift
 
-class SubjectManager: ObservableObject {
-    
-    @Published var subjects: [Subject]?
+class SubjectManager {
     
     var ref = Database.database().reference()
     var encoder = JSONEncoder()
     var decoder = JSONDecoder()
-    @ObservedObject var CLM = ClientManager()
-    
-    /// Gets subjects from ./subject dir
-    func getSubjects() async {
-        self.subjects = await CLM.pullData(pull: Subject())
-    }
     
     /// Appends a new subject to the ./subject path
     /// - Parameter subj: Subject to add
     func addSubject(subj: Subject) async {
-        await CLM.saveData(type: "subjects", item: subj)
+        let json = try? encoder.encode(subj)
+        try! await ref.child("subjects").child(subj.name).setValue(String(data: json!, encoding: .utf8))
     }
     
     /// Deletes the subject
     /// - Parameter subj: Subject to remove
     func deleteSubject(subj: Subject) async {
         try! await ref.child("subjects").child(subj.name).removeValue()
-        await getSubjects()
     }
 }

@@ -14,26 +14,10 @@ import FirebaseDatabase
 
 /// Manages the classes and their boards
 /// Used to be two different managers (board manager and class managers)
-class ClassManager: ObservableObject {
+class ClassManager {
     
-    @Published var classes: [Class]?
-    
-    let MM = MemberManager()
-    let BM = BoardManager()
     var ref = Database.database().reference()
     var encoder = JSONEncoder()
-    var CLM = ClientManager()
-    
-    /// Getting the JSON object for all /one the class
-    ///
-    /// It also decodes the JSON object into the Class Struct (can be injected into other views)
-    func getClass(name: String? = nil) async {
-        if let name = name {
-            self.classes = await CLM.pullData(pull: Class(name: "", date: ""), name: name)
-        } else {
-            self.classes = await CLM.pullData(pull: Class(name: "", date: ""))
-        }
-    }
     
     /// Creates a new class
     ///
@@ -43,16 +27,42 @@ class ClassManager: ObservableObject {
         var date = Date()
         var clas = Class(name: name, date: Date().toFormat("dd MMMM yyyy"))
         for i in 0 ..< 2 {
-            clas = await BM.createBoard(clas: clas, date: date.toFormat("dd MMMM yyyy"))
+            clas = await BoardManager().createBoard(clas: clas, date: date.toFormat("dd MMMM yyyy"))
             date = date.advanced(by: Double(86400 * i))
         }
-        await CLM.saveData(type: "classes", item: clas)
+        await saveClass(clas: clas)
+    }
+    
+    func getClass(name: String = "") async -> [Class] {
+        var returnClas: [Class] = []
+        if name == "" {
+            ref.child("classes").observeSingleEvent(of: .value) { snapshot in
+                let value = snapshot.value as? String
+                
+                let decoder = JSONDecoder()
+                returnClas = try! decoder.decode([Class].self, from: value!.data(using: .utf8)!)
+            }
+        } else {
+            ref.child("classes").child(name).observeSingleEvent(of: .value) { snapshot in
+                let value = snapshot.value as? String
+                
+                let decoder = JSONDecoder()
+                let clas = try! decoder.decode(Class.self, from: value!.data(using: .utf8)!)
+                returnClas = [clas]
+                
+            }
+        }
+        
+        try? await Task.sleep(nanoseconds: 100_000_000)
+        return returnClas
     }
     
     /// Takes the data of an updated class and saves it under the class' path
     /// - Parameter clas: The class' data to encode
     func saveClass(clas: Class) async {
-        await CLM.saveData(type: "classes", item: clas)
+        let encoder = JSONEncoder()
+        let json = try! encoder.encode(clas)
+        try! await ref.child("classes").child(clas.name).setValue(String(data: json, encoding: .utf8))
     }
     
     /// Deletes all instances of a member being in a class
@@ -63,14 +73,14 @@ class ClassManager: ObservableObject {
     func deleteClass(name: String) async {
         try! await ref.child("classes").child(name).removeValue()
         
-        let fetchName = await MM.getMembers(of: name)
+        let fetchName = await MemberManager().getMembers(of: name)
         
         try? await Task.sleep(nanoseconds: 100_000_000)
         
         guard fetchName != [] else { return }
         
         for name in fetchName {
-            if let member = await self.MM.findAccount(username: name) {
+            if let member = await MemberManager().getAccount(username: name) {
                 var member = member
                 member.clas = ""
                 member.password = member.password.toBase64()

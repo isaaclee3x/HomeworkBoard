@@ -11,7 +11,7 @@ struct CreateSubjectView: View {
     
     @State var subject = Subject()
     @Binding var isSheetPresented: Bool
-    @ObservedObject var SM: SubjectManager
+    var SM: SubjectManager
     
     var body: some View {
         NavigationView {
@@ -46,7 +46,6 @@ struct CreateSubjectView: View {
                 Button {
                     Task {
                         await SM.addSubject(subj: subject)
-                        await SM.getSubjects()
                         isSheetPresented = false
                     }
                 } label: {

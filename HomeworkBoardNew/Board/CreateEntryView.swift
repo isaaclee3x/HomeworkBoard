@@ -20,9 +20,10 @@ struct CreateEntryView: View {
     
     @Binding var isSheetPresented: Bool
     @Binding var clas: Class
+    @Binding var subjects: [Subject]
     
-    @ObservedObject var CM: ClassManager
-    @ObservedObject var SM: SubjectManager
+    var CM: ClassManager
+    var SM: SubjectManager
     
     var body: some View {
         VStack {
@@ -31,7 +32,7 @@ struct CreateEntryView: View {
                 .header()
             
             Menu {
-                if let subjects = SM.subjects {
+                if let subjects = subjects {
                     ForEach(subjects) { subject in
                         Button {
                             self.subject = subject
@@ -74,11 +75,6 @@ struct CreateEntryView: View {
                 Text("Submit")
                     .bold()
                     .bottomButton()
-            }
-        }
-        .onAppear {
-            Task {
-                await SM.getSubjects()
             }
         }
         .background(color: "lightestBlue")
