@@ -18,7 +18,6 @@ struct BoardView: View {
     @State var createEntry = false
     @State var index = 0
     @State var deleteEntry = false
-    @State var showCache = false
     @State var dueDates: [String] = []
     
     @Binding var clas: Class
@@ -27,7 +26,6 @@ struct BoardView: View {
     @ObservedObject var SM: SubjectManager
     
     let BM: BoardManager
-    let CCM = CacheManager()
     
     var member: Member
     
@@ -35,7 +33,7 @@ struct BoardView: View {
         VStack {
             ChangeDateView(date: $date, daysFromToday: $daysFromToday )
             
-            EntriesView(date: date, member: member, clas: $clas, createEntry: $createEntry, index: $index, CM: CM, CCM: CCM)
+            EntriesView(date: date, member: member, clas: $clas, createEntry: $createEntry, index: $index, CM: CM)
         }
         .navigationTitle(clas.name)
         .onAppear {
@@ -51,9 +49,6 @@ struct BoardView: View {
         } content: {
             CreateEntryView(username: member.name ,date: date, index: index, isSheetPresented: $createEntry, clas: $clas, CM: CM, SM: SM)
         }
-        .sheet(isPresented: $showCache) {
-            CacheView(board: clas.board)
-        }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {
@@ -63,16 +58,6 @@ struct BoardView: View {
                         Text("Reload")
                             .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
                             .bold()
-                    }
-                    
-                    if member.perm == .admin || member.perm == .teacher {
-                        Button {
-                            showCache = true
-                        } label: {
-                            Text("Cache")
-                                .foregroundColor(colorScheme == .light ? Color("murkyBlue") : Color("lightestBlue"))
-                                .bold()
-                        }
                     }
                 } label: {
                     Image(systemName: "ellipsis.circle")
@@ -141,7 +126,6 @@ struct EntriesView: View {
     @Binding var index: Int
     
     @ObservedObject var CM: ClassManager
-    let CCM: CacheManager
     
     var body: some View {
         List {
@@ -161,6 +145,12 @@ struct EntriesView: View {
                         }
                         Text(entry.entry)
                             .bold()
+                        
+                        Spacer()
+                        
+                        Text(entry.author)
+                            .italic()
+                            .font(.system(size: 10))
                     }
                     .swipeActions(edge: .trailing) {
                         Button("Create") {
@@ -175,7 +165,6 @@ struct EntriesView: View {
                                 clas.board.entries[date]![index].due = nil
                                 clas.board.entries[date]![index].subject = nil
                                 
-                                await CCM.updateCache(clas: clas, did: "\(member.name) REMOVED ENTRY \(entries[index])")
                                 await CM.saveClass(clas: clas)
                             }
                         }

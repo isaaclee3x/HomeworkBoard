@@ -43,7 +43,7 @@ struct SettingsView: View {
                     
                     Form {
                         if let classes = CM.classes {
-                            SelectClassView(clas: $clas, members: $members, entries: $entries, classes: classes, MM: MM, CM: CM)
+                            SelectClassView(clas: $clas, members: $members, entries: $entries, classes: classes, member: member, MM: MM, CM: CM)
                         }
                         
                         Section("Members") {
@@ -64,7 +64,7 @@ struct SettingsView: View {
                         }
                         .onAppear {
                             Task(priority: .high) {
-                                await CM.getClasses()
+                                await CM.getClass()
                                 await SM.getSubjects()
                                 classes = CM.classes?.map() { $0.name } ?? []
                             }
@@ -90,46 +90,60 @@ struct SelectClassView: View {
     @Binding var entries: [Entry]
     
     var classes: [Class]
+    var member: Member
     
     @ObservedObject var MM: MemberManager
     @ObservedObject var CM: ClassManager
     let BM = BoardManager()
+    
+    fileprivate func findMembersOf(clas: String) async {
+        let members = await MM.getMembers(of: clas)
+        self.members = []
+        for i in members {
+            guard let member = await MM.findAccount(username: i) else {
+                let ref = DatabaseReference()
+                
+                try! await ref.child(clas).child(i).setValue(nil)
+                return
+                
+            }
+            self.members.append(member)
+        }
+    }
     
     var body: some View {
         HStack {
             Text("Choose a Class")
                 .bold()
             
-            Menu {
-                ForEach(classes) { clas in
-                    Button(clas.name) {
-                        Task {
-                            self.clas = clas.name
-                            if self.clas != "" {
-                                let members = await MM.getMembers(of: self.clas)
-                                self.members = []
-                                for i in members {
-                                    guard let member = await MM.findAccount(username: i) else {
-                                        let ref = DatabaseReference()
-                                        
-                                        try! await ref.child(clas.name).child(i).setValue(nil)
-                                        return
-                                        
-                                    }
-                                    self.members.append(member)
+            if member.perm == .admin {
+                Menu {
+                    ForEach(classes) { clas in
+                        Button(clas.name) {
+                            Task {
+                                self.clas = clas.name
+                                if self.clas != "" {
+                                    await findMembersOf(clas: self.clas)
                                 }
                             }
                         }
                     }
+                } label: {
+                    if clas.isEmpty {
+                        Text("Here")
+                            .foregroundColor(.blue)
+                    } else {
+                        Text(clas)
+                            .foregroundColor(.blue)
+                    }
                 }
-            } label: {
-                if clas.isEmpty {
-                    Text("Here")
-                        .foregroundColor(.blue)
-                } else {
-                    Text(clas)
-                        .foregroundColor(.blue)
-                }
+            } else if member.perm == .teacher {
+                Text(member.clas)
+                    .onAppear {
+                        Task {
+                            await findMembersOf(clas: member.clas)
+                        }
+                    }
             }
         }
     }

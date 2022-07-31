@@ -7,13 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FF03D7E1285F5EB800D8DACD /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF03D7E0285F5EB800D8DACD /* CacheManager.swift */; };
 		FF163121285C0EE200DB8A6E /* ClassesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF163120285C0EE200DB8A6E /* ClassesView.swift */; };
 		FF163123285C0EEA00DB8A6E /* ClassManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF163122285C0EEA00DB8A6E /* ClassManager.swift */; };
 		FF163125285C1E9600DB8A6E /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF163124285C1E9600DB8A6E /* Enums.swift */; };
 		FF374CC2285B81D10035891F /* NewAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF374CC1285B81D10035891F /* NewAccountView.swift */; };
 		FF4287722866ACA300FB33DB /* CreateEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4287712866ACA300FB33DB /* CreateEntryView.swift */; };
-		FF4287742866BCC200FB33DB /* CacheView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4287732866BCC200FB33DB /* CacheView.swift */; };
 		FF4F5A4F285B6226000E727A /* HomeworkBoardNewApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A4E285B6226000E727A /* HomeworkBoardNewApp.swift */; };
 		FF4F5A51285B6226000E727A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A50285B6226000E727A /* ContentView.swift */; };
 		FF4F5A53285B6229000E727A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF4F5A52285B6229000E727A /* Assets.xcassets */; };
@@ -24,6 +22,10 @@
 		FF4F5A7B285B647F000E727A /* AuthenticateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A7A285B647F000E727A /* AuthenticateView.swift */; };
 		FF4F5A7D285B6487000E727A /* MemberManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A7C285B6487000E727A /* MemberManager.swift */; };
 		FF4F5A85285B6606000E727A /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4F5A84285B6606000E727A /* Structs.swift */; };
+		FF5216522894220A00885CE5 /* CoreXLSX in Frameworks */ = {isa = PBXBuildFile; productRef = FF5216512894220A00885CE5 /* CoreXLSX */; };
+		FF5216552894224A00885CE5 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = FF5216542894224A00885CE5 /* FirebaseDatabase */; };
+		FF5216572894224A00885CE5 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FF5216562894224A00885CE5 /* FirebaseDatabaseSwift */; };
+		FF52165A2894229800885CE5 /* SwiftDate in Frameworks */ = {isa = PBXBuildFile; productRef = FF5216592894229800885CE5 /* SwiftDate */; };
 		FF66DC2C287FC57E00AB77E0 /* ClientManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF66DC2B287FC57D00AB77E0 /* ClientManager.swift */; };
 		FF74B754287AA0F5008684A5 /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF74B753287AA0F5008684A5 /* Modifiers.swift */; };
 		FF84E3A3288E56D0007AA142 /* ChangeDefaultPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF84E3A2288E56D0007AA142 /* ChangeDefaultPassword.swift */; };
@@ -31,11 +33,7 @@
 		FF9A8F99285E21F6009F363F /* DeleteClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A8F98285E21F6009F363F /* DeleteClassView.swift */; };
 		FF9A8F9D285E2377009F363F /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A8F9C285E2377009F363F /* BoardView.swift */; };
 		FFAEC5072887FD8D005F7862 /* MassCreateUsersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAEC5062887FD8D005F7862 /* MassCreateUsersView.swift */; };
-		FFAEC50A2887FE21005F7862 /* CoreXLSX in Frameworks */ = {isa = PBXBuildFile; productRef = FFAEC5092887FE21005F7862 /* CoreXLSX */; };
 		FFC1281A287C3CCB002EF761 /* NoClassChooseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC12819287C3CCB002EF761 /* NoClassChooseView.swift */; };
-		FFE171A6287AA9CA00304237 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = FFE171A5287AA9CA00304237 /* FirebaseDatabase */; };
-		FFE171A8287AA9CA00304237 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FFE171A7287AA9CA00304237 /* FirebaseDatabaseSwift */; };
-		FFE171AE287AAA4400304237 /* SwiftDate in Frameworks */ = {isa = PBXBuildFile; productRef = FFE171AD287AAA4400304237 /* SwiftDate */; };
 		FFEDA8AB286F3F7D00E59BF3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FFEDA8AA286F3F7D00E59BF3 /* GoogleService-Info.plist */; };
 		FFEF34122874242A00E578A7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEF34112874242A00E578A7 /* SettingsView.swift */; };
 		FFEF3414287447A300E578A7 /* BoardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFEF3413287447A300E578A7 /* BoardManager.swift */; };
@@ -74,13 +72,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		FF03D7E0285F5EB800D8DACD /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		FF163120285C0EE200DB8A6E /* ClassesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassesView.swift; sourceTree = "<group>"; };
 		FF163122285C0EEA00DB8A6E /* ClassManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassManager.swift; sourceTree = "<group>"; };
 		FF163124285C1E9600DB8A6E /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		FF374CC1285B81D10035891F /* NewAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAccountView.swift; sourceTree = "<group>"; };
 		FF4287712866ACA300FB33DB /* CreateEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEntryView.swift; sourceTree = "<group>"; };
-		FF4287732866BCC200FB33DB /* CacheView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheView.swift; sourceTree = "<group>"; };
 		FF4F5A4B285B6226000E727A /* HomeworkBoardNew.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HomeworkBoardNew.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF4F5A4E285B6226000E727A /* HomeworkBoardNewApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeworkBoardNewApp.swift; sourceTree = "<group>"; };
 		FF4F5A50285B6226000E727A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -114,10 +110,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FFAEC50A2887FE21005F7862 /* CoreXLSX in Frameworks */,
-				FFE171AE287AAA4400304237 /* SwiftDate in Frameworks */,
-				FFE171A8287AA9CA00304237 /* FirebaseDatabaseSwift in Frameworks */,
-				FFE171A6287AA9CA00304237 /* FirebaseDatabase in Frameworks */,
+				FF52165A2894229800885CE5 /* SwiftDate in Frameworks */,
+				FF5216572894224A00885CE5 /* FirebaseDatabaseSwift in Frameworks */,
+				FF5216552894224A00885CE5 /* FirebaseDatabase in Frameworks */,
+				FF5216522894220A00885CE5 /* CoreXLSX in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,17 +160,8 @@
 			children = (
 				FF9A8F9C285E2377009F363F /* BoardView.swift */,
 				FF4287712866ACA300FB33DB /* CreateEntryView.swift */,
-				FF42877A2866C6B100FB33DB /* Cache */,
 			);
 			path = Board;
-			sourceTree = "<group>";
-		};
-		FF42877A2866C6B100FB33DB /* Cache */ = {
-			isa = PBXGroup;
-			children = (
-				FF4287732866BCC200FB33DB /* CacheView.swift */,
-			);
-			path = Cache;
 			sourceTree = "<group>";
 		};
 		FF42877B2866C6FE00FB33DB /* Managers */ = {
@@ -185,7 +172,6 @@
 				FF163122285C0EEA00DB8A6E /* ClassManager.swift */,
 				FFEF3413287447A300E578A7 /* BoardManager.swift */,
 				FFEF34182874704F00E578A7 /* SubjectManager.swift */,
-				FF03D7E0285F5EB800D8DACD /* CacheManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -283,10 +269,10 @@
 			);
 			name = HomeworkBoardNew;
 			packageProductDependencies = (
-				FFE171A5287AA9CA00304237 /* FirebaseDatabase */,
-				FFE171A7287AA9CA00304237 /* FirebaseDatabaseSwift */,
-				FFE171AD287AAA4400304237 /* SwiftDate */,
-				FFAEC5092887FE21005F7862 /* CoreXLSX */,
+				FF5216512894220A00885CE5 /* CoreXLSX */,
+				FF5216542894224A00885CE5 /* FirebaseDatabase */,
+				FF5216562894224A00885CE5 /* FirebaseDatabaseSwift */,
+				FF5216592894229800885CE5 /* SwiftDate */,
 			);
 			productName = HomeworkBoardNew;
 			productReference = FF4F5A4B285B6226000E727A /* HomeworkBoardNew.app */;
@@ -361,9 +347,9 @@
 			);
 			mainGroup = FF4F5A42285B6226000E727A;
 			packageReferences = (
-				FFE171A4287AA9CA00304237 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				FFE171AC287AAA4400304237 /* XCRemoteSwiftPackageReference "SwiftDate" */,
-				FFAEC5082887FE21005F7862 /* XCRemoteSwiftPackageReference "CoreXLSX" */,
+				FF5216502894220A00885CE5 /* XCRemoteSwiftPackageReference "CoreXLSX" */,
+				FF5216532894224A00885CE5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				FF5216582894229700885CE5 /* XCRemoteSwiftPackageReference "SwiftDate" */,
 			);
 			productRefGroup = FF4F5A4C285B6226000E727A /* Products */;
 			projectDirPath = "";
@@ -412,7 +398,6 @@
 				FF9A8F99285E21F6009F363F /* DeleteClassView.swift in Sources */,
 				FF66DC2C287FC57E00AB77E0 /* ClientManager.swift in Sources */,
 				FF163123285C0EEA00DB8A6E /* ClassManager.swift in Sources */,
-				FF03D7E1285F5EB800D8DACD /* CacheManager.swift in Sources */,
 				FF74B754287AA0F5008684A5 /* Modifiers.swift in Sources */,
 				FF4F5A51285B6226000E727A /* ContentView.swift in Sources */,
 				FF374CC2285B81D10035891F /* NewAccountView.swift in Sources */,
@@ -425,7 +410,6 @@
 				FF9A8F97285DF68C009F363F /* CreateClassView.swift in Sources */,
 				FF4F5A85285B6606000E727A /* Structs.swift in Sources */,
 				FF4F5A7B285B647F000E727A /* AuthenticateView.swift in Sources */,
-				FF4287742866BCC200FB33DB /* CacheView.swift in Sources */,
 				FFEF34192874704F00E578A7 /* SubjectManager.swift in Sources */,
 				FF4F5A7D285B6487000E727A /* MemberManager.swift in Sources */,
 				FF9A8F9D285E2377009F363F /* BoardView.swift in Sources */,
@@ -783,15 +767,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		FFAEC5082887FE21005F7862 /* XCRemoteSwiftPackageReference "CoreXLSX" */ = {
+		FF5216502894220A00885CE5 /* XCRemoteSwiftPackageReference "CoreXLSX" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/CoreOffice/CoreXLSX";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.1;
+				branch = main;
+				kind = branch;
 			};
 		};
-		FFE171A4287AA9CA00304237 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+		FF5216532894224A00885CE5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
@@ -799,35 +783,35 @@
 				minimumVersion = 9.0.0;
 			};
 		};
-		FFE171AC287AAA4400304237 /* XCRemoteSwiftPackageReference "SwiftDate" */ = {
+		FF5216582894229700885CE5 /* XCRemoteSwiftPackageReference "SwiftDate" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/malcommac/SwiftDate";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		FFAEC5092887FE21005F7862 /* CoreXLSX */ = {
+		FF5216512894220A00885CE5 /* CoreXLSX */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = FFAEC5082887FE21005F7862 /* XCRemoteSwiftPackageReference "CoreXLSX" */;
+			package = FF5216502894220A00885CE5 /* XCRemoteSwiftPackageReference "CoreXLSX" */;
 			productName = CoreXLSX;
 		};
-		FFE171A5287AA9CA00304237 /* FirebaseDatabase */ = {
+		FF5216542894224A00885CE5 /* FirebaseDatabase */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = FFE171A4287AA9CA00304237 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = FF5216532894224A00885CE5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseDatabase;
 		};
-		FFE171A7287AA9CA00304237 /* FirebaseDatabaseSwift */ = {
+		FF5216562894224A00885CE5 /* FirebaseDatabaseSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = FFE171A4287AA9CA00304237 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = FF5216532894224A00885CE5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseDatabaseSwift;
 		};
-		FFE171AD287AAA4400304237 /* SwiftDate */ = {
+		FF5216592894229800885CE5 /* SwiftDate */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = FFE171AC287AAA4400304237 /* XCRemoteSwiftPackageReference "SwiftDate" */;
+			package = FF5216582894229700885CE5 /* XCRemoteSwiftPackageReference "SwiftDate" */;
 			productName = SwiftDate;
 		};
 /* End XCSwiftPackageProductDependency section */

@@ -57,9 +57,9 @@ struct NewAccountView: View {
             
             Button {
                 Task {
-                    await MM.saveAccount(member: member, perm: isAdmin ? .admin : .member)
-                    isSheetPresented = false
+                    await MM.saveAccount(member: member, bypass: (isAdmin ? true : false))
                 }
+                isSheetPresented = false
             } label: {
                 Text("Save")
                     .bold()
@@ -68,10 +68,7 @@ struct NewAccountView: View {
         }
         .background(color: "lightestBlue")
         .onAppear {
-            Task { await CM.getClasses() }
-        }
-        .onChange(of: isAdmin) { newValue in
-            print(newValue)
+            Task { await CM.getClass() }
         }
     }
 }

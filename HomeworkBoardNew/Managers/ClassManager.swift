@@ -10,7 +10,7 @@ import SwiftUI
 import Foundation
 import Firebase
 import FirebaseDatabase
-import FirebaseDatabaseSwift
+
 
 /// Manages the classes and their boards
 /// Used to be two different managers (board manager and class managers)
@@ -19,25 +19,20 @@ class ClassManager: ObservableObject {
     @Published var classes: [Class]?
     
     let MM = MemberManager()
-    private var ref = Database.database().reference()
-    private var encoder = JSONEncoder()
-    private var decoder = JSONDecoder()
-    @ObservedObject var CLM = ClientManager()
+    let BM = BoardManager()
+    var ref = Database.database().reference()
+    var encoder = JSONEncoder()
+    var CLM = ClientManager()
     
-    /// Getting the JSON object for all the class
+    /// Getting the JSON object for all /one the class
     ///
     /// It also decodes the JSON object into the Class Struct (can be injected into other views)
-    func getClasses() async {
-        self.classes = await CLM.pullData(pull: Class(name: "", date: ""))
-    }
-    
-    /// Gets the JSON object from one class
-    ///
-    /// It also decodes the JSON object into the Class Struct (can be injected into other views)
-    ///  - Parameter name: Name of the class
-    func getClass(name: String) async {
-        self.classes = await CLM.pullData(pull: Class(name: "", date: ""), name: name)
-        
+    func getClass(name: String? = nil) async {
+        if let name = name {
+            self.classes = await CLM.pullData(pull: Class(name: "", date: ""), name: name)
+        } else {
+            self.classes = await CLM.pullData(pull: Class(name: "", date: ""))
+        }
     }
     
     /// Creates a new class
@@ -46,14 +41,10 @@ class ClassManager: ObservableObject {
     /// - Parameter name: Name of the class
     func createClass(name: String) async {
         var date = Date()
-        var clas = Class(name: name, date: date.toFormat("dd MMMM yyyy"))
+        var clas = Class(name: name, date: Date().toFormat("dd MMMM yyyy"))
         for i in 0 ..< 2 {
-            let formattedDate = date.toFormat("dd MMMM yyyy")
-            clas.board.entries[formattedDate] = []
-            for _ in 0 ..< 10 {
-                clas.board.entries[formattedDate]?.append(Entry(entry: nil, due: nil, subject: nil))
-            }
-            date = Date().addingTimeInterval(TimeInterval(86400 * i))
+            clas = await BM.createBoard(clas: clas, date: date.toFormat("dd MMMM yyyy"))
+            date = date.advanced(by: Double(86400 * i))
         }
         await CLM.saveData(type: "classes", item: clas)
     }
@@ -72,12 +63,7 @@ class ClassManager: ObservableObject {
     func deleteClass(name: String) async {
         try! await ref.child("classes").child(name).removeValue()
         
-        var fetchName: [String] = []
-        ref.child(name).observeSingleEvent(of: .value) { snapshot in
-            let value = snapshot.value as! NSDictionary
-            let names = value.allKeys as? [String]
-            fetchName = names!
-        }
+        let fetchName = await MM.getMembers(of: name)
         
         try? await Task.sleep(nanoseconds: 100_000_000)
         
@@ -88,7 +74,7 @@ class ClassManager: ObservableObject {
                 var member = member
                 member.clas = ""
                 member.password = member.password.toBase64()
-                let encodedMember = try? JSONEncoder().encode(member)
+                let encodedMember = try? encoder.encode(member)
                 try! await ref.child("users").child(member.name).child("data").setValue(String(data: encodedMember!, encoding: .utf8))
             }
         }

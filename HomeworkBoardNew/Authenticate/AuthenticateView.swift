@@ -84,12 +84,12 @@ struct AuthenticateView: View {
             MM.member = nil
         }
         .alert("Login Failed", isPresented: $loginFail) {
-            Button("Create", role: .cancel) {
-                createNewAccount = true
-            }
-            
             Button("Cancel", role: .destructive) {
                 loginFail = false
+            }
+            
+            Button("Create", role: .cancel) {
+                createNewAccount = true
             }
         }
     }

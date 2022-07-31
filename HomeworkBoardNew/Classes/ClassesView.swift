@@ -28,7 +28,7 @@ struct ClassesView: View {
 
     var body: some View {
         VStack {
-            if MM.member?.perm == .member || MM.member?.perm == .leader {
+            if MM.member?.perm == .member || MM.member?.perm == .leader || MM.member?.perm == .teacher {
                 SummaryView(clas: $classes[0], CM: CM, SM: SM, BM: BM, member: MM.member!)
             }
             ShowClassesView(classes: $classes, CM: CM, MM: MM, SM: SM, BM: BM)
@@ -36,7 +36,7 @@ struct ClassesView: View {
         .onAppear {
             Task(priority: .high) {
                 if MM.member?.perm == .admin || MM.member?.perm == .teacher {
-                    await CM.getClasses()
+                    await CM.getClass()
                     classes = CM.classes ?? []
                 } else {
                     await CM.getClass(name: MM.member!.clas)
@@ -67,7 +67,7 @@ struct ClassesView: View {
                     Button {
                         Task {
                             if MM.member?.perm == .admin || MM.member?.perm == .teacher {
-                                await CM.getClasses()
+                                await CM.getClass()
                                 classes = CM.classes ?? []
                             } else {
                                 await CM.getClass(name: MM.member!.clas)
@@ -104,7 +104,7 @@ struct ClassesView: View {
         .navigationTitle(MM.member?.perm == .member || MM.member?.perm == .leader ? "Classes" : "Class")
         .sheet(isPresented: $createClass) {
             Task {
-                await CM.getClasses()
+                await CM.getClass()
                 classes = CM.classes!
             }
         } content: {
@@ -112,7 +112,7 @@ struct ClassesView: View {
         }
         .sheet(isPresented: $deleteClass) {
             Task {
-                await CM.getClasses()
+                await CM.getClass()
                 classes = CM.classes ?? []
             }
         } content: {

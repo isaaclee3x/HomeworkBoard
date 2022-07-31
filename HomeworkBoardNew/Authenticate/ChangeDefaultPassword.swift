@@ -42,7 +42,7 @@ struct ChangeDefaultPassword: View {
                 if newPassword == confirmPassword {
                     member.password = newPassword
                     Task {
-                        await MM.saveAccount(member: member, perm: .member)
+                        await MM.saveAccount(member: member, bypass: false)
                         await MM.getAccount(username: member.name)
                     }
                     isSheetPresented = false

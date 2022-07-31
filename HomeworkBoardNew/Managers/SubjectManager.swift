@@ -14,9 +14,9 @@ class SubjectManager: ObservableObject {
     
     @Published var subjects: [Subject]?
     
-    private var ref = Database.database().reference()
-    private var encoder = JSONEncoder()
-    private var decoder = JSONDecoder()
+    var ref = Database.database().reference()
+    var encoder = JSONEncoder()
+    var decoder = JSONDecoder()
     @ObservedObject var CLM = ClientManager()
     
     /// Gets subjects from ./subject dir

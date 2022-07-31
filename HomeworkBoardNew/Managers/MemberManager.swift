@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 import Firebase
 import FirebaseDatabase
-import FirebaseDatabaseSwift
 import CoreXLSX
 
 /// Manages the account details for each user
@@ -21,30 +20,22 @@ class MemberManager: ObservableObject {
     /// Value is changed based on the account's username
     @Published var member: Member?
     @ObservedObject var CLM = ClientManager()
-    private var ref = Database.database().reference()
-    var defaultPassword: String {
-        let date = Date()
-        let dateFormatter = DateFormatter()
-        
-        dateFormatter.dateFormat = "yyyy"
-        dateFormatter.locale = .current
-        
-        return "YTSS\(dateFormatter.string(from: date))"
-    }
+    let ref = Database.database().reference()
+    var defaultPassword = "YTSS2022"
     
     /// Saves a member (with an encrypted password) to the /users/(username) path
-    ///
+    ///x
     /// It also encodes it using JSONEncoder so that it can be more easily parsed into the right struct
     /// - Parameter member: The member to save
-    func saveAccount(member: Member, perm: Permissions) async {
-        if perm == .member || perm == .leader {
+    func saveAccount(member: Member, bypass: Bool) async {
+        if !bypass {
             guard await !member.name.exists(in: "member") else { return }
             guard await member.clas.exists(in: "class") else { return }
         }
         
         var member = member
         member.password = member.password.toBase64()
-        await CLM.saveData(type: "users", item: member, perm: perm)
+        await CLM.saveData(type: "users", item: member, bypass: bypass)
     }
     
     /// Checks whether the username and password the user entered matches the username and password saved in the cloud
@@ -107,8 +98,9 @@ class MemberManager: ObservableObject {
         try? await ref.child("users").child(member.name).setValue(nil)
         
     }
-    
 }
+
+
 
 extension String {
     func fromBase64() -> String? {
@@ -127,7 +119,7 @@ extension String {
         if the == "class" {
             let CM = await ClassManager()
             
-            await CM.getClasses()
+            await CM.getClass()
             var classes: [String] = []
             for clas in await CM.classes! {
                 classes.append(clas.name)

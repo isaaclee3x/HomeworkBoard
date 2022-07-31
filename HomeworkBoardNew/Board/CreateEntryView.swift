@@ -24,8 +24,6 @@ struct CreateEntryView: View {
     @ObservedObject var CM: ClassManager
     @ObservedObject var SM: SubjectManager
     
-    var CCM = CacheManager()
-    
     var body: some View {
         VStack {
             
@@ -66,8 +64,7 @@ struct CreateEntryView: View {
                         didNotChooseSubject = true
                     } else {
                         clas.board.entries[self.date]![index] = Entry(entry: name, due: date, subject: subject)
-                        
-                        await CCM.updateCache(clas: clas, did: "\(username) CREATED ENTRY \(name)")
+                        clas.board.entries[self.date]![index].author = username
                         await CM.saveClass(clas: clas)
                         
                         isSheetPresented = false                        

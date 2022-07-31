@@ -7,12 +7,10 @@
 
 import Foundation
 import SwiftUI
-import Firebase
-import FirebaseDatabaseSwift
 
 class BoardManager {
     
-    private var CM = ClassManager()
+    @StateObject var CM = ClassManager()
     
     /// Creates a new board if the clas.board[date] value is nil
     /// - Parameters:

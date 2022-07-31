@@ -46,7 +46,7 @@ struct NoClassChooseView: View {
             Button {
                 Task {
                     MM.member?.clas = clas
-                    await MM.saveAccount(member: MM.member!, perm: .member)
+                    await MM.saveAccount(member: MM.member!, bypass: false)
                     isSheetPresented = false
                     success = false
                 }
@@ -58,7 +58,7 @@ struct NoClassChooseView: View {
         }
         .background(color: "lightestBlue")
         .onAppear {
-            Task { await CM.getClasses(); await MM.getAccount(username: username) }
+            Task { await CM.getClass(); await MM.getAccount(username: username) }
         }
     }
 }

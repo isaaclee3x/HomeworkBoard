@@ -53,7 +53,7 @@ struct MassCreateUsersView: View {
                 let members = value[0]
                 Task {
                     for member in members {
-                        await MM.saveAccount(member: member, perm: .member)
+                        await MM.saveAccount(member: member, bypass: false)
                     }
                 }
                 

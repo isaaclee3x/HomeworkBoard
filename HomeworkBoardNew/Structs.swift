@@ -77,7 +77,6 @@ struct Board: Identifiable, Equatable, Codable, Item {
     ///Creates an empty class
     init(date: String) {
         self.entries = [date:[]]
-        self.cache = []
         self.subjects = []
     }
     
@@ -87,7 +86,6 @@ struct Board: Identifiable, Equatable, Codable, Item {
     var name: String = ""
     
     var entries: [String: [Entry]]
-    var cache: [String]
     var subjects: [Subject]
 }
 
@@ -105,12 +103,14 @@ struct Entry: Identifiable, Equatable, Codable, Item {
             self.entry = entry!
             self.due = due
         }
+        self.author = ""
     }
     
     var id = UUID()
     
     var type: String? = nil
     var name: String = ""
+    var author: String
     
     var subject: Subject?
     var entry: String
