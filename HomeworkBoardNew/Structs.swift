@@ -8,17 +8,7 @@
 import Foundation
 import SwiftUI
 
-protocol Item {
-    var type: String? { get }
-    var name: String { get set }
-    
-    func getProp() -> String
-}
-
-struct Member: Identifiable, Equatable, Codable, Item {
-    func getProp() -> String {
-        return self.clas
-    }
+struct Member: Identifiable, Equatable, Codable {
     
     /// Creates an empty Member
     
@@ -26,12 +16,11 @@ struct Member: Identifiable, Equatable, Codable, Item {
         self.name = ""
         self.password = ""
         self.clas = ""
-        self.perm = .admin
+        self.perm = .member
     }
     
     var id = UUID()
     
-    var type: String? = "users"
     /// The account's username
     var name: String
     
@@ -46,11 +35,8 @@ struct Member: Identifiable, Equatable, Codable, Item {
     
 }
 
-struct Class: Identifiable, Equatable, Codable, Item {
-    
-    func getProp() -> String {
-        return ""
-    }
+struct Class: Identifiable, Equatable, Codable {
+
     ///Creates and empty class
     init(name: String, date: String) {
         self.name = name
@@ -58,7 +44,6 @@ struct Class: Identifiable, Equatable, Codable, Item {
     }
     
     var id = UUID()
-    var type: String? = "classes"
     
     ///Name of the class
     var name: String
@@ -67,13 +52,7 @@ struct Class: Identifiable, Equatable, Codable, Item {
     var board: Board
 }
 
-struct Board: Identifiable, Equatable, Codable, Item {
-    
-    func getProp() -> String {
-        return ""
-    }
-    
-    
+struct Board: Identifiable, Equatable, Codable {
     ///Creates an empty class
     init(date: String) {
         self.entries = [date:[]]
@@ -81,19 +60,12 @@ struct Board: Identifiable, Equatable, Codable, Item {
     }
     
     var id = UUID()
-
-    var type: String? = nil
-    var name: String = ""
     
     var entries: [String: [Entry]]
     var subjects: [Subject]
 }
 
-struct Entry: Identifiable, Equatable, Codable, Item {
-    
-    func getProp() -> String {
-        return ""
-    }
+struct Entry: Identifiable, Equatable, Codable {
     
     init(entry: String?, due: String?, subject: Subject?) {
         if entry == nil {
@@ -107,9 +79,7 @@ struct Entry: Identifiable, Equatable, Codable, Item {
     }
     
     var id = UUID()
-    
-    var type: String? = nil
-    var name: String = ""
+
     var author: String
     
     var subject: Subject?
@@ -117,34 +87,21 @@ struct Entry: Identifiable, Equatable, Codable, Item {
     var due: String?
 }
 
-struct Subject: Identifiable, Equatable, Codable, Hashable, Item {
-    
-    func getProp() -> String {
-        return ""
-    }
+struct Subject: Identifiable, Equatable, Codable, Hashable {
     
     init() {
-        self.name = ""
         self.colour = RGB(r: 0, g: 0, b: 0)
+        self.name = ""
     }
     var id = UUID()
     
-    var type: String? = "subjects"
     var name: String
-    
     var colour: RGB
 }
 
-struct RGB: Identifiable, Equatable, Codable, Hashable, Item {
-    
-    func getProp() -> String {
-        return ""
-    }
-    
+struct RGB: Identifiable, Equatable, Codable, Hashable {
+        
     var id = UUID()
-    
-    var type: String? = nil
-    var name: String = ""
     
     var r: Double
     var g: Double

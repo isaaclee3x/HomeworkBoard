@@ -69,7 +69,7 @@ struct NewAccountView: View {
         }
         .background(color: "lightestBlue")
         .onAppear {
-            Task { classes = await CM.getClass()}
+            Task { classes = await CM.getClass() }
         }
     }
 }

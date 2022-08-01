@@ -9,21 +9,7 @@ import Foundation
 import SwiftUI
 
 class BoardManager {
-    
-    /// Creates a new board if the clas.board[date] value is nil
-    /// - Parameters:
-    ///   - clas: The class to save the new entries in
-    ///   - date: The key to save in
-    func createBoard(clas: Class, date: String) async -> Class {
-        var clas = clas
-        clas.board.entries[date] = [Entry(entry: nil, due: nil, subject: nil)]
-        for _ in 0 ..< 9 {
-            clas.board.entries[date]?.append(Entry(entry: nil, due: nil, subject: nil))
-        }
-        await ClassManager().saveClass(clas: clas)
-        return clas
-    }
-    
+
     /// Shows which entries are due by x number of days
     /// - Parameter clas: The class to check the entries from
     /// - Parameter days: The number of days from today

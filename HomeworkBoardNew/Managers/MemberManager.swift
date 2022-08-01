@@ -43,6 +43,7 @@ class MemberManager {
         let encoder = JSONEncoder()
         let json = try? encoder.encode(member)
         try! await ref.child("users").child(member.name).setValue(String(data: json!, encoding: .utf8))
+        try! await ref.child(member.clas).child(member.name).setValue(member.name)
     }
     
     /// Checks whether the username and password the user entered matches the username and password saved in the cloud
@@ -51,7 +52,7 @@ class MemberManager {
     ///   - password: Locally inputed password
     ///   - what: What to do if the authentication is successful
     func auth(username: String, password: String, do what: (() -> Void)..., not fail: (() -> Void)...) async {
-        let member = await getAccount(username: username)
+        let member = getAccount(username: username)
         if member?.name == username && member?.password == password {
             for i in what { i() }
         } else {
@@ -64,17 +65,14 @@ class MemberManager {
     /// This is used in limited occasions, where admin controls require user data but admin's own data cannot be updated
     /// - Parameter username: The account to pull
     /// - Returns: Returns the member's value
-    func getAccount(username: String) async -> Member? {
+    func getAccount(username: String) -> Member? {
         var member: Member? = nil
         ref.child("users").observeSingleEvent(of: .value) { snapshot in
-            guard snapshot.value != nil else { return }
-            let value = snapshot.value as? String
+            guard let value = snapshot.value as? String else { return }
             
             let decoder = JSONDecoder()
-            member = try! decoder.decode(Member.self, from: value!.data(using: .utf8)!)
+            member = try! decoder.decode(Member.self, from: value.data(using: .utf8)!)
         }
-        
-        try? await Task.sleep(nanoseconds: 100_000_000)
         return member
     }
     
@@ -98,7 +96,7 @@ class MemberManager {
     }
     
     func deleteMember(username: String) async {
-        let member = await self.getAccount(username: username)!
+        let member = self.getAccount(username: username)!
         try! await ref.child(member.clas).child(member.name).setValue(nil)
         try! await ref.child("users").child(member.name).setValue(nil)
         
@@ -135,7 +133,7 @@ extension String {
         } else {
             let MM = await MemberManager()
             
-            if await MM.getAccount(username: self) == nil { return false }
+            if MM.getAccount(username: self) == nil { return false }
         }
         return true
     }

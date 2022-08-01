@@ -102,7 +102,7 @@ struct SelectClassView: View {
         let members = await MM.getMembers(of: clas)
         self.members = []
         for i in members {
-            guard let member = await MM.getAccount(username: i) else {
+            guard let member = MM.getAccount(username: i) else {
                 let ref = DatabaseReference()
                 
                 try! await ref.child(clas).child(i).setValue(nil)
@@ -181,7 +181,7 @@ struct MembersView: View {
                             await MM.deleteMember(username: member.name)
                             let members = await MM.getMembers(of: clas)
                             for i in members {
-                                guard let member = await MM.getAccount(username: i) else {
+                                guard let member = MM.getAccount(username: i) else {
                                     let ref = DatabaseReference()
                                     
                                     try! await ref.child(clas).child(i).setValue(nil)

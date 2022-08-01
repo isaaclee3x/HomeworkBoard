@@ -24,12 +24,7 @@ class ClassManager {
     /// Note that it saves the class as a JSON object so that it can be more easily decoded into the Class struct
     /// - Parameter name: Name of the class
     func createClass(name: String) async {
-        var date = Date()
-        var clas = Class(name: name, date: Date().toFormat("dd MMMM yyyy"))
-        for i in 0 ..< 2 {
-            clas = await BoardManager().createBoard(clas: clas, date: date.toFormat("dd MMMM yyyy"))
-            date = date.advanced(by: Double(86400 * i))
-        }
+        let clas = Class(name: name, date: Date().toFormat("dd MMMM yyyy"))
         await saveClass(clas: clas)
     }
     
@@ -37,10 +32,15 @@ class ClassManager {
         var returnClas: [Class] = []
         if name == "" {
             ref.child("classes").observeSingleEvent(of: .value) { snapshot in
-                let value = snapshot.value as? String
+                guard let value = snapshot.value as? NSDictionary else { return }
                 
+                let keys = value.allValues as? [String]
                 let decoder = JSONDecoder()
-                returnClas = try! decoder.decode([Class].self, from: value!.data(using: .utf8)!)
+                for key in keys! {
+                    let result = try? decoder.decode(Class.self, from: key.data(using: .utf8)!)
+                    returnClas.append(result!)
+                }
+                
             }
         } else {
             ref.child("classes").child(name).observeSingleEvent(of: .value) { snapshot in
@@ -74,8 +74,6 @@ class ClassManager {
         try! await ref.child("classes").child(name).removeValue()
         
         let fetchName = await MemberManager().getMembers(of: name)
-        
-        try? await Task.sleep(nanoseconds: 100_000_000)
         
         guard fetchName != [] else { return }
         

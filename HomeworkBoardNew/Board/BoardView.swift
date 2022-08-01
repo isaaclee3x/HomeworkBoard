@@ -32,36 +32,43 @@ struct BoardView: View {
     
     var body: some View {
         VStack {
-            ChangeDateView(date: $date, daysFromToday: $daysFromToday )
+            ChangeDateView(date: $date, daysFromToday: $daysFromToday)
+                
+            Spacer()
             
             EntriesView(date: date, member: member, clas: $clas, createEntry: $createEntry, index: $index, CM: CM)
         }
+        .background(color: colorScheme == .dark ? "murkyBlue" : "lightestBlue")
         .navigationTitle(clas.name)
         .onAppear {
             Task {
                 await BM.cleanBoard(clas: clas)
             }
         }
-        .sheet(isPresented: $createEntry) {
-            CreateEntryView(username: member.name ,date: date, index: index, isSheetPresented: $createEntry, clas: $clas, subjects: $subjects, CM: CM, SM: SM)
-        }
-        .onChange(of: daysFromToday) { newValue in
-            Task {
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "dd MMMM yyyy"
-                let tomorrow = Date().addingTimeInterval(TimeInterval(newValue * 86400))
-                let date = tomorrow.toFormat("dd MMMM yyyy")
-                self.date = date
-                if clas.board.entries[date] == nil {
-                    self.clas = await BM.createBoard(clas: clas, date: date)
-                    await CM.saveClass(clas: clas)
-                    
+        .toolbar() {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    createEntry = true
+                } label: {
+                    Text("Add Entry")
+                        .bold()
+                        .foregroundColor(.black)
                 }
             }
         }
-        .onChange(of: clas) { newValue in
-            Task {
-                await CM.saveClass(clas: newValue)
+        .sheet(isPresented: $createEntry) {
+            CreateEntryView(username: member.name, index: index, isSheetPresented: $createEntry, clas: $clas, subjects: $subjects, CM: CM, SM: SM)
+        }
+        .onAppear {
+            clas.board.entries[date] = []
+        }
+        .onChange(of: daysFromToday) { newValue in
+            let dateFormatter = DateFormatter()
+            dateFormatter.locale = .current
+            dateFormatter.dateFormat = "dd MMM yyyy"
+            date = dateFormatter.string(from: Date().addingTimeInterval(Double(newValue*86400)))
+            if clas.board.entries[date] == nil {
+                clas.board.entries[date] = []
             }
         }
     }
@@ -113,50 +120,48 @@ struct EntriesView: View {
     var CM: ClassManager
     
     var body: some View {
-        List {
-            if let entries = clas.board.entries[date] {
-                ForEach(entries) { entry in
-                    HStack {
-                        if let subject = entry.subject {
-                            VStack {
-                                Circle()
-                                    .frame(width: 10)
-                                    .foregroundColor(Color.init(red: subject.colour.r, green: subject.colour.g, blue: subject.colour.b))
-                                
-                                Text(subject.name)
-                                    .font(.system(size: 10))
-                                    .foregroundColor(.gray)
+        if let entries = clas.board.entries[date] {
+            if !entries.isEmpty {
+                List {
+                    ForEach(entries) { entry in
+                        HStack {
+                            if let subject = entry.subject {
+                                VStack {
+                                    Circle()
+                                        .frame(width: 10)
+                                        .foregroundColor(Color.init(red: subject.colour.r, green: subject.colour.g, blue: subject.colour.b))
+                                    
+                                    Text(subject.name)
+                                        .font(.system(size: 10))
+                                        .foregroundColor(.gray)
+                                }
                             }
+                            Text(entry.entry)
+                                .bold()
+                            
+                            Spacer()
+                            
+                            Text(entry.author)
+                                .italic()
+                                .font(.system(size: 10))
                         }
-                        Text(entry.entry)
-                            .bold()
-                        
-                        Spacer()
-                        
-                        Text(entry.author)
-                            .italic()
-                            .font(.system(size: 10))
-                    }
-                    .swipeActions(edge: .trailing) {
-                        Button("Create") {
-                            createEntry = true
-                            index = entries.firstIndex(of: entry)!
-                        }
-                        
-                        Button("Delete") {
-                            Task {
-                                index = entries.firstIndex(of: entry)!
-                                clas.board.entries[date]![index].entry = " "
-                                clas.board.entries[date]![index].due = nil
-                                clas.board.entries[date]![index].subject = nil
-                                clas.board.entries[date]![index].author = ""
-                                
-                                await CM.saveClass(clas: clas)
+                        .swipeActions(edge: .trailing) {
+                            Button("Delete") {
+                                Task {
+                                    index = entries.firstIndex(of: entry)!
+                                    clas.board.entries[date] = nil
+                                    
+                                    await CM.saveClass(clas: clas)
+                                }
                             }
+                            .tint(.red)
                         }
-                        .tint(.red)
                     }
                 }
+            } else {
+                Text("There is no homework today")
+                    .foregroundColor(.gray)
+                    .font(.system(size: 15))
             }
         }
     }

@@ -96,45 +96,49 @@ struct ClassesView: View {
             }
         }
         .onAppear {
-            let ref = Database.database().reference()
-            let anotherPath = ref.child("subjects")
-            anotherPath.observe(.value) { snapshot in
-                let value = snapshot.value as? NSDictionary
-                
-                guard value?.allValues != nil else { subjects = []; return }
-                
-                let subjects = value?.allValues as! [String]
-                let decodedSubjects = subjects.map { subj -> Subject in
-                    let decoder = JSONDecoder()
-                    let decoded = try? decoder.decode(Subject.self, from: subj.data(using: .utf8)!)
-                    return decoded!
-                }
-                self.subjects = []
-                self.subjects = decodedSubjects
-            }
+            setObservers()
+        }
+        
+    }
+    func setObservers() {
+        let ref = Database.database().reference()
+        let anotherPath = ref.child("subjects")
+        anotherPath.observe(.value) { snapshot in
+            let value = snapshot.value as? NSDictionary
             
-            let path = (member.perm == .member ? ref.child("classes").child(member.clas) : ref.child("classes"))
-            path.observe(.value) { snapshot in
-                let value = snapshot.value as? NSDictionary
-                
-                guard value?.allValues != nil else { classes = []; return }
-                let classes = value?.allValues as! [String]
-                let decodedClasses = classes.map { clas -> Class in
-                    let decoder = JSONDecoder()
-                    let decoded = try? decoder.decode(Class.self, from: clas.data(using: .utf8)!)
-                    return decoded!
-                }
-                self.classes = decodedClasses
-            }
+            guard value?.allValues != nil else { subjects = []; return }
             
-            let newPath = ref.child("users").child(member.name)
-            newPath.observe(.value) { snapshot in
-                let value = snapshot.value as? String
-                
+            let subjects = value?.allValues as! [String]
+            let decodedSubjects = subjects.map { subj -> Subject in
                 let decoder = JSONDecoder()
-                self.member = try! decoder.decode(Member.self, from: value!.data(using: .utf8)!)
-                
+                let decoded = try? decoder.decode(Subject.self, from: subj.data(using: .utf8)!)
+                return decoded!
             }
+            self.subjects = []
+            self.subjects = decodedSubjects
+        }
+        
+        let path = (member.perm == .member ? ref.child("classes").child(member.clas) : ref.child("classes"))
+        path.observe(.value) { snapshot in
+            let value = snapshot.value as? NSDictionary
+            
+            guard value?.allValues != nil else { classes = []; return }
+            let classes = value?.allValues as! [String]
+            let decodedClasses = classes.map { clas -> Class in
+                let decoder = JSONDecoder()
+                let decoded = try? decoder.decode(Class.self, from: clas.data(using: .utf8)!)
+                return decoded!
+            }
+            self.classes = decodedClasses
+        }
+        
+        let newPath = ref.child("users").child(member.name)
+        newPath.observe(.value) { snapshot in
+            let value = snapshot.value as? String
+            
+            let decoder = JSONDecoder()
+            self.member = try! decoder.decode(Member.self, from: value!.data(using: .utf8)!)
+            
         }
     }
 }
@@ -269,12 +273,12 @@ struct ShowClassesView: View {
                         Text(clas.name)
                             .bold()
                             .blockDisplay()
-                    }
+           }
                 }
                 .onAppear {
                     let dateFormatter = DateFormatter()
                     dateFormatter.locale = .current
-                    dateFormatter.dateFormat = "dd MMMM yyyy"
+                    dateFormatter.dateFormat = "dd MMM yyyy"
                     date = dateFormatter.string(from: Date().addingTimeInterval(86400))
                 }
             }

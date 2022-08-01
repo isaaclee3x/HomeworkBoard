@@ -46,12 +46,12 @@ struct MassCreateUsersView: View {
             }
             
             Button {
-                let values = self.members as NSDictionary
-                
-                let value = values.allValues as? [[Member]] ?? []
-                guard value != [] else { return }
-                let members = value[0]
                 Task {
+                    let values = self.members as NSDictionary
+                    
+                    let value = values.allValues as? [[Member]] ?? []
+                    guard value != [] else { return }
+                    let members = value[0]
                     for member in members {
                         await MM.saveAccount(member: member, bypass: false)
                     }

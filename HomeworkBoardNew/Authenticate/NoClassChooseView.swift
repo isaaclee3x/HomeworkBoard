@@ -62,7 +62,7 @@ struct NoClassChooseView: View {
         .onAppear {
             Task {
                 classes = await CM.getClass()
-                member = await MM.getAccount(username: username)!
+                member = MM.getAccount(username: username)!
                 
             }
         }

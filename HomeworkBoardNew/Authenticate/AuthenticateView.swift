@@ -39,11 +39,11 @@ struct AuthenticateView: View {
                 let ref = Database.database().reference()
                 
                 ref.child("users").child(username).observeSingleEvent(of: .value) { snapshot in
-                    guard snapshot.value != nil else { loginFail = true; return }
-                    let value = snapshot.value as! String
+                    let value = snapshot.value as? String
+                    guard value != nil else { loginFail = true; return }
                     let decoder = JSONDecoder()
                     
-                    var member = try? decoder.decode(Member.self, from: value.data(using: .utf8)!)
+                    var member = try? decoder.decode(Member.self, from: value!.data(using: .utf8)!)
                     let edit = member
                     member?.password = (edit?.password.fromBase64())!
                     self.member = member!
@@ -54,8 +54,11 @@ struct AuthenticateView: View {
                             } else {
                                 success = true
                             }
+                        } else {
+                            success = true
                         }
-                    } else if member?.password == MM.defaultPassword {
+                    }
+                    else if member?.password == MM.defaultPassword {
                         resetDefaultPassword = true
                     } else {
                         loginFail = true
